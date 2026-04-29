@@ -5,20 +5,19 @@ import { COMPONENT_REGISTRY } from './ComponentRegistry.jsx';
 
 export const SovereignRouter = () => {
     const { state } = useSovereign();
-    const [path, setPath] = useState(window.location.pathname);
+    const [path, setPath] = useState(window.location.hash.replace('#', '') || '/');
     const [routeConfig, setRouteConfig] = useState(null);
     const [params, setParams] = useState({});
 
     useEffect(() => {
-        const handlePopState = () => setPath(window.location.pathname);
-        window.addEventListener('popstate', handlePopState);
+        const handleHashChange = () => setPath(window.location.hash.replace('#', '') || '/');
+        window.addEventListener('hashchange', handleHashChange);
         
         window.Router = { navigate: (newPath) => {
-            window.history.pushState({}, '', newPath);
-            setPath(newPath);
+            window.location.hash = newPath;
         }};
 
-        return () => window.removeEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('hashchange', handleHashChange);
     }, []);
 
     useEffect(() => {

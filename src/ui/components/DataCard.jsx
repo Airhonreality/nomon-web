@@ -28,7 +28,7 @@ export const DataCard = ({ definition }) => {
 
     const handleNavigate = () => {
         if (definition.slug) {
-            window.location.pathname = `/materia/${definition.slug}`;
+            window.location.hash = `/materia/${definition.slug}`;
         }
     };
 

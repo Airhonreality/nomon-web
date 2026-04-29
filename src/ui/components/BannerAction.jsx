@@ -19,7 +19,7 @@ export const BannerAction = ({ definition }) => {
     const summary = content.summary?.es || content.summary || "";
 
     const handleAction = () => {
-        window.location.pathname = `/materia/${materia.slug}`;
+        window.location.hash = `/materia/${materia.slug}`;
     };
 
     return (
