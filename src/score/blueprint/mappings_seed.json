@@ -1,0 +1,16 @@
+{
+  "NOMON_MAPPINGS": [
+    {
+      "parent_id": "ent_home",
+      "child_id": "ent_simposio_2024",
+      "relation_type": "CHILD_OF",
+      "weight": 1
+    },
+    {
+      "parent_id": "ent_home",
+      "child_id": "ent_libro_nomon",
+      "relation_type": "CHILD_OF",
+      "weight": 2
+    }
+  ]
+}

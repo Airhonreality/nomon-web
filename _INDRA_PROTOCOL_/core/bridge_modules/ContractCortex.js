@@ -91,16 +91,32 @@ export class ContractCortex {
                 }
             }
 
-            // --- FASE 3: RESONANCIA AXIAL (OPCIONAL) ---
+            // --- FASE 3: RESONANCIA AXIAL (HIPER-IGNICIÓN v20.0) ---
             if (this.bridge.coreUrl && this.bridge.satelliteToken && contract.schemas.length === 0) {
                 try {
-                    console.log("📡 [Cortex] Iniciando Resonancia Axial para actualizar ADN...");
+                    console.log("📡 [Cortex] Iniciando Hiper-Ignición (Batch v20.0)...");
                     
-                    // Optimización: Llamadas en paralelo para reducir latencia de ignición
-                    const [liveManifest, liveSchemas] = await Promise.all([
-                        this.bridge.execute({ protocol: 'SYSTEM_MANIFEST', provider: 'system' }),
-                        this.bridge.execute({ protocol: 'SYSTEM_CONFIG_SCHEMA', provider: 'system' })
-                    ]);
+                    const operations = [
+                        { protocol: 'SYSTEM_MANIFEST', provider: 'system' },
+                        { protocol: 'SYSTEM_CONFIG_SCHEMA', provider: 'system' },
+                        { protocol: 'SYSTEM_SATELLITE_DISCOVER', provider: 'system' }
+                    ];
+
+                    const wsId = this.bridge.activeWorkspaceId;
+                    if (wsId) {
+                        operations.push({ protocol: 'SYSTEM_PINS_READ', workspace_id: wsId, provider: 'system' });
+                    }
+
+                    const batchRes = await this.bridge.execute({ 
+                        protocol: 'SYSTEM_BATCH_EXECUTE', 
+                        data: { operations } 
+                    });
+
+                    const results = batchRes.items || [];
+                    const liveManifest = results[0] || { metadata: {}, items: [] };
+                    const liveSchemas  = results[1] || { items: [] };
+                    const discovery    = results[2] || { items: [] };
+                    const pinsRes      = results[3] || { items: [] };
 
                     contract = {
                         synced_at: new Date().toISOString(),
@@ -113,14 +129,16 @@ export class ContractCortex {
                         workflows: []
                     };
                     
-                    // AXIOMA DE COLABORACIÓN: Inyectamos el pulso en el bridge para evitar re-calls
+                    // Inyectamos el pulso completo en el bridge para que IndraBridge.init sea instantáneo
                     this.bridge.capabilities = liveManifest.metadata || {};
                     this.bridge.manifest_items = liveManifest.items || [];
+                    this.bridge.preloaded_discovery = discovery;
+                    this.bridge.preloaded_pins = pinsRes;
                     
                     usedLiveSync = true;
-                    console.log("⚡ [Cortex] ADN actualizado y compartido con el Bridge.");
+                    console.log("⚡ [Cortex] ADN completo cristalizado en un solo viaje.");
                 } catch (liveErr) {
-                    console.error("⚠️ [Cortex] Falló Resonancia Axial. Usando materia local.");
+                    console.error("⚠️ [Cortex] Falló Hiper-Ignición. Usando materia local.", liveErr);
                 }
             }
 

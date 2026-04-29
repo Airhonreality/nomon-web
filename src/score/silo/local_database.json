@@ -1,0 +1,88 @@
+{
+    "NOMON_ENTRIES": [
+        {
+            "slug": "ideas-que-echan-raíces,-acciones-que-transforman.-",
+            "meta": {
+                "component_type": "BANNER_INFO"
+            },
+            "data": {
+                "content": {
+                    "title": {
+                        "es": "Ideas que echan raíces, acciones que transforman."
+                    },
+                    "summary": {
+                        "es": "Ayudamos a empresas y grupos a evolucionar. Lo hacemos con tres herramientas: ética aplicada que funciona en el mundo real, formación de líderes que inspiran con el ejemplo y arte que une a las comunidades. Construimos el éxito sobre la base de la integridad.\"\n"
+                    },
+                    "image": "",
+                    "body": ""
+                }
+            }
+        },
+        {
+            "slug": "despertar-nomon",
+            "meta": {
+                "component_type": "ENTITY_PROJECT"
+            },
+            "data": {
+                "content": {
+                    "title": {
+                        "es": "NOMON: El Despertar de la Red"
+                    },
+                    "summary": {
+                        "es": "Iniciamos la fase de sincronización humana, holobiontica."
+                    },
+                    "image": "",
+                    "body": ""
+                }
+            }
+        },
+        {
+            "slug": "simposio-alpha",
+            "meta": {
+                "component_type": "DATA_CARD"
+            },
+            "data": {
+                "content": {
+                    "title": {
+                        "es": "Simposio Alpha: Arquitectura de Realidad"
+                    },
+                    "summary": {
+                        "es": "Encuentro virtual para definir los protocolos de la próxima década."
+                    },
+                    "image": "",
+                    "body": ""
+                }
+            }
+        },
+        {
+            "slug": "libro-de-indra",
+            "meta": {
+                "component_type": "DATA_CARD"
+            },
+            "data": {
+                "content": {
+                    "title": {
+                        "es": "El Libro de Indra: Códice Digital"
+                    },
+                    "summary": {
+                        "es": "Publicación de los manuscritos originales de la red de soberanía."
+                    },
+                    "image": "",
+                    "body": ""
+                }
+            }
+        }
+    ],
+    "NOMON_ALLY": [
+        {
+            "id": "ally_1",
+            "name": "Colectivo Menta",
+            "role": "Validador"
+        },
+        {
+            "id": "ally_2",
+            "name": "Red Cian",
+            "role": "Nodo de Almacenamiento"
+        }
+    ]
+}

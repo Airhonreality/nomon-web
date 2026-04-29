@@ -6,6 +6,34 @@
 
 Esta sección define el **cómo** — la sintaxis exacta verificada en sesión de depuración.
 
+### §0.0: LEYES DE RENDIMIENTO (HIPER-IGNICIÓN)
+> **Axioma del Cold Start**: En entornos Serverless (Google Apps Script), cada petición HTTP tiene un coste de arranque (latencia). 
+> **Ley Hyper-Request**: Nunca dispares peticiones secuenciales si puedes agruparlas en un Batch. El objetivo es **1 Acción del Usuario = 1 Petición al Core**.
+
+#### `SYSTEM_BATCH_EXECUTE` — El Patrón de Carga Masiva
+**Caso de uso**: Optimizar la ignición del satélite o realizar múltiples mutaciones en un solo viaje de red.
+
+```javascript
+// UQO de Hiper-Ignición (Ejemplo de carga en 1.5s en lugar de 5s)
+const res = await bridge.execute({
+    protocol: 'SYSTEM_BATCH_EXECUTE',
+    data: {
+        operations: [
+            { protocol: 'SYSTEM_MANIFEST', provider: 'system' },
+            { protocol: 'SYSTEM_CONFIG_SCHEMA', provider: 'system' },
+            { protocol: 'SYSTEM_SATELLITE_DISCOVER', provider: 'system' }
+        ]
+    }
+});
+
+// Los resultados vienen en el mismo orden que las operaciones
+const manifest  = res.items[0];
+const schemas   = res.items[1];
+const discovery = res.items[2];
+```
+
+---
+
 ### `ATOM_READ` — Leer un átomo por ID
 **Caso de uso**: Traer los campos de un esquema, los datos de un workspace, o cualquier átomo conocido.
 
@@ -241,7 +269,7 @@ const ignorados = res.metadata.ignored_fields; // [] si el mapeo fue 100% perfec
 - `PULSE_WAKEUP`
 
 ## 12. SPECIALIZED & OTHERS
-- `SYSTEM_BATCH_EXECUTE` — Ejecución secuencial de múltiples UQOs distintos (Meta-Protocolo).
+- `SYSTEM_BATCH_EXECUTE` — Ejecución secuencial de múltiples UQOs distintos (Meta-Protocolo). **Ver §0.0 para Optimización.**
 - `SEARCH_DEEP`
 - `MEDIA_INGEST_START`
 - `MEDIA_INGEST_PULSE`

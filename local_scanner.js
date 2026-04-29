@@ -22,7 +22,7 @@ async function harvestAssets(folderName) {
         return [];
     }
     
-    const files = fs.readdirSync(fullPath);
+    const files = fs.readdirSync(fullPath).filter(f => f.endsWith('.js'));
     const assets = [];
 
     for (const file of files) {
@@ -34,7 +34,7 @@ async function harvestAssets(folderName) {
             const module = await import(`${modulePath}?t=${Date.now()}`);
             
             // Detección de exportación (schema, default o puras)
-            const data = module.default || module.schema || module.workflow || module;
+            const data = module.default || module.schema || module.SCHEMA || module.workflow || module;
             
             if (data && (data.id || data.handle?.alias)) {
                 assets.push({

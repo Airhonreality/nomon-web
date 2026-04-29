@@ -71,10 +71,10 @@ class IndraBridge {
                 return;
             }
 
-            // --- FASE 3: RESONANCIA AXIAL (EL PULSO OPTIMIZADO v18.5) ---
-            notifyStep('SYNC_CORE', { message: 'Invocando Manifiesto Real...' });
+            // --- FASE 3: RESONANCIA AXIAL (EL PULSO OPTIMIZADO v20.0) ---
+            notifyStep('SYNC_CORE', { message: 'Sincronizando ADN Soberano...' });
 
-            // 1. DEDUPLICACIÓN: Si el Cortex ya descargó las capacidades, no repetimos el Manifiesto
+            // 1. DEDUPLICACIÓN: Usamos datos precargados por el Cortex (Hiper-Ignición)
             if (!this.capabilities || !this.capabilities.core_id) {
                 const statusPulse = await this.execute({ protocol: 'SYSTEM_MANIFEST', provider: 'system' });
                 this.capabilities = statusPulse.metadata || {};
@@ -84,31 +84,21 @@ class IndraBridge {
             if (!this.contract) this.contract = {};
             this.contract.owner_email = this.capabilities.owner_email || this.capabilities.core_id;
 
-            // 2. BATCHING DE JURISDICCIÓN: Descubrimiento y Lectura de Pins en un solo viaje
-            const operations = [
-                { protocol: 'SYSTEM_SATELLITE_DISCOVER', provider: 'system' }
-            ];
-
-            // Si ya conocemos el Workspace (vía L0 o L2), incluimos los Pins en el lote
-            const targetWorkspace = this.activeWorkspaceId || this.capabilities.primary_workspace;
-            if (targetWorkspace) {
-                operations.push({ protocol: 'SYSTEM_PINS_READ', workspace_id: targetWorkspace, provider: 'system' });
-            }
-
-            const batchResponse = await this.execute({ 
-                protocol: 'SYSTEM_BATCH_EXECUTE', 
-                data: { operations } 
-            });
-
-            const results = batchResponse.items || [];
-            
-            // FASE 3.1: HIDRATACIÓN DE TERRITORIO (Workspaces)
-            const discovery = results[0] || { items: [] };
+            // 2. CONSUMO DE HIPER-IGNICIÓN: Evitamos peticiones si el Cortex ya las hizo
+            const discovery = this.preloaded_discovery || await this.execute({ protocol: 'SYSTEM_SATELLITE_DISCOVER', provider: 'system' });
             this.availableWorkspaces = (discovery.items || []).filter(i => i.class === 'WORKSPACE');
             
+            const targetWorkspace = this.activeWorkspaceId || this.capabilities.primary_workspace;
             if (targetWorkspace) {
                 this.activeWorkspaceId = targetWorkspace;
-                const pinsRes = results[1] || { items: [] };
+                
+                // Si no hay pins precargados, los pedimos, de lo contrario los usamos
+                const pinsRes = this.preloaded_pins?.items?.length ? this.preloaded_pins : await this.execute({ 
+                    protocol: 'SYSTEM_PINS_READ', 
+                    workspace_id: targetWorkspace, 
+                    provider: 'system' 
+                });
+                
                 this.contract.remote_schemas = (pinsRes.items || []).filter(i => i.class === 'DATA_SCHEMA');
                 console.log(`⚡ [Bridge] Jurisdicción sincronizada: ${this.activeWorkspaceId} (${this.contract.remote_schemas.length} esquemas).`);
             }

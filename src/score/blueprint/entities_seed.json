@@ -1,0 +1,41 @@
+{
+  "NOMON_ENTITIES": [
+    {
+      "id": "ent_home",
+      "slug": "inicio",
+      "type": "news",
+      "status": "active",
+      "metadata": {
+        "title": "NOMON: Soberanía en la Malla",
+        "subtitle": "Tu Satélite Indra operando en el borde de la realidad.",
+        "summary": "Bienvenido a la terminal de control del Satélite NOMON.",
+        "body_markdown": "# Bienvenidos a la Realidad Agnóstica\nEste es el punto de inicio de tu satélite.",
+        "media_url": "https://api.indra.os/assets/quantum_gate.webp"
+      }
+    },
+    {
+      "id": "ent_simposio_2024",
+      "slug": "simposio-realidad",
+      "type": "event",
+      "status": "active",
+      "metadata": {
+        "title": "Simposio sobre Realidad Aumentada",
+        "summary": "Explorando los límites de la percepción digital.",
+        "body_markdown": "## Crónica del Simposio\nContenido profundo sobre el evento...",
+        "media_url": "https://api.indra.os/assets/simposium_cover.webp"
+      }
+    },
+    {
+      "id": "ent_libro_nomon",
+      "slug": "libro-nomon-vol1",
+      "type": "project",
+      "status": "active",
+      "metadata": {
+        "title": "NOMON Vol. 1: El Despertar",
+        "summary": "La obra literaria que define el origen del Satélite.",
+        "body_markdown": "### El Manuscrito\nEste libro detalla el proceso de creación de la malla...",
+        "media_url": "https://api.indra.os/assets/book_cover.webp"
+      }
+    }
+  ]
+}

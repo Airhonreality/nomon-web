@@ -304,7 +304,8 @@ class IndraBridgeHUD extends HTMLElement {
                     // Importación dinámica con bust-caching para romper la inercia del navegador
                     // Subimos dos niveles (ui/ -> _INDRA_PROTOCOL_/ -> root) para llegar a src/score/schemas/
                     const mod = await import(`../../src/score/schemas/${fileName}?t=${Date.now()}`);
-                    if (mod.SCHEMA) discoveredSchemas.push(mod.SCHEMA);
+                    const schemaData = mod.default || mod.schema || mod.SCHEMA;
+                    if (schemaData) discoveredSchemas.push(schemaData);
                 } catch (e) {
                     console.warn(`[HUD:Discovery] Fallo al importar materia en ${fileName}:`, e);
                 }
@@ -529,41 +530,38 @@ export const SCHEMA = ${JSON.stringify(deepNode, null, 4)};`;
     async pushSchemaToCore(node) {
         if (!this._bridge || this._bridge.status !== 'READY') return;
         
-        // EXTRAER MATERIA: Usamos el objeto original preservado en 'raw'
+        // AXIOMA: Usamos la materia original preservada sin filtros
         const schemaNode = node.raw || node;
         
-        // INTELIGENCIA DE ORIGEN: ¿Este ID pertenece al Core o es una invención local?
-        const isRemote = this._bridge.contract.remote_schemas?.some(s => s.id === schemaNode.id);
+        // Usamos el alias como ID si el ID no existe
+        const effectiveId = schemaNode.id || schemaNode.handle?.alias;
+        
+        const isRemote = this._bridge.contract.remote_schemas?.some(s => (s.id === effectiveId || s.handle?.alias === effectiveId));
         const action = isRemote ? 'ATOM_UPDATE' : 'ATOM_CREATE';
         
-        if (!confirm(`¿${isRemote ? 'ACTUALIZAR' : 'EXPORTAR NUEVO'} esquema [${schemaNode.handle?.alias || schemaNode.id}] en el Core remoto?`)) return;
+        if (!confirm(`¿${isRemote ? 'ACTUALIZAR' : 'EXPORTAR NUEVO'} esquema [${effectiveId}] en el Core remoto?`)) return;
 
-        console.log(`📤 [IndraSync] Ejecutando ${action} para: ${schemaNode.id}`);
+        console.log(`📤 [IndraSync] Ejecutando ${action} para: ${effectiveId}`);
         
         try {
-            // LEY DE SINCERIDAD: Solo enviamos el Blueprint purificado
+            // LEY DE SINCERIDAD TOTAL: Enviamos el objeto tal cual, 
+            // asegurándonos solo de que la clase sea DATA_SCHEMA si no tiene una.
             const payload = {
                 protocol: action,
-                provider: 'system', // AXIOMA: El Core es el proveedor, el Satélite es el consumidor
-                context_id: isRemote ? schemaNode.id : this._bridge.activeWorkspaceId,
+                provider: 'system',
+                context_id: isRemote ? effectiveId : this._bridge.activeWorkspaceId,
                 data: {
-                    class: 'DATA_SCHEMA',
-                    handle: { 
-                        label: schemaNode.handle?.label, 
-                        alias: schemaNode.handle?.alias
-                    },
-                    payload: { 
-                        fields: schemaNode.payload?.fields || [],
-                        target_silo_id: schemaNode.payload?.target_silo_id,
-                        target_provider: schemaNode.payload?.target_provider
-                    }
+                    ...schemaNode,
+                    class: schemaNode.class || 'DATA_SCHEMA'
                 }
             };
             
+            console.log("📡 [Push:Wire] Materia enviada:", JSON.stringify(payload, null, 2));
+
             const res = await this._bridge.execute(payload);
 
             if (res.metadata?.status === 'OK') {
-                alert(`✅ ÉXITO: Esquema [${schemaNode.id}] exportado y materializado en el Core.`);
+                alert(`✅ ÉXITO: Esquema [${effectiveId}] materializado con éxito.`);
                 this.sync(); 
             }
         } catch (e) {

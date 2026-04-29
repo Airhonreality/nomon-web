@@ -29,10 +29,10 @@ export class IndraAuth {
 
         if (response.metadata.status === 'OK') {
             const session = response.items[0];
-            
+
             // Mutación del ContractCortex vía Bridge (Persistiendo Perfil L2)
             this.bridge.setSessionToken(session.token, session.profile);
-            
+
             console.log(`✅ Soberanía reconocida: ${session.profile.email} [${session.profile.role}]`);
             return session.profile;
         } else if (response.metadata.status === 'PENDING_REGISTRATION') {
@@ -56,7 +56,7 @@ export class IndraAuth {
         if (!idToken) throw new Error("Se requiere el idToken para completar el registro.");
 
         console.log("🚀 Iniciando ignición de identidad en el Core...");
-        
+
         const response = await this.bridge.execute({
             protocol: 'SYSTEM_IDENTITY_REGISTER',
             workspace_id: this.bridge.activeWorkspaceId,

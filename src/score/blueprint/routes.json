@@ -1,0 +1,36 @@
+{
+  "NOMON_ROUTES": [
+    {
+      "path": "/",
+      "component_id": "hero_main",
+      "context_entity_id": "ent_home",
+      "view_mode": "hero",
+      "roles_allowed": ["GUEST", "ALLY"],
+      "is_active": true
+    },
+    {
+      "path": "/simposio",
+      "component_id": "article_reader",
+      "context_entity_id": "ent_simposio_2024",
+      "view_mode": "full_page",
+      "roles_allowed": ["GUEST", "ALLY"],
+      "is_active": true
+    },
+    {
+      "path": "/libro",
+      "component_id": "article_reader",
+      "context_entity_id": "ent_libro_nomon",
+      "view_mode": "full_page",
+      "roles_allowed": ["GUEST", "ALLY"],
+      "is_active": true
+    },
+    {
+      "path": "/proyectos",
+      "component_id": "project_grid",
+      "context_entity_id": "all_projects",
+      "view_mode": "card",
+      "roles_allowed": ["GUEST", "ALLY"],
+      "is_active": true
+    }
+  ]
+}

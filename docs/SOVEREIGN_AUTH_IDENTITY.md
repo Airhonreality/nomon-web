@@ -20,25 +20,25 @@ En la arquitectura SUH de Indra, la identidad es jerárquica y delegada. Nunca s
 ### Paso 1: El Registro Atómico y Santuarios Tabulares (En el Core)
 Para que un usuario pueda loguearse, debe existir previamente un átomo de clase `IDENTITY` en el Ledger del Core. Tras la reforma v18.0, las identidades **no se mezclan** con la infraestructura.
 - **Santuario Tabular**: El usuario debe estar registrado en la pestaña **`Entidades`** del Workspace.
-- **Campos Vitales**: `email` (debe coincidir con el de Google), `name` y el campo de metadatos `payload` (JSON con detalles extendidos como el rol).
-- **Hidratación de Rango**: El rol definido en el `payload` (ej: `AUDITOR_REAL`) es inyectado directamente en el Ticket de Sesión L2. El Satélite recibe este rango de forma oficial.
+- **Campos Vitales**: 
+    - **`id` (Anclaje Soberano)**: Es el identificador único del usuario (ej: su email). Tras la v19.0, Indra descubre este campo automáticamente.
+    - **`handle`**: Etiqueta visual y alias para la malla lógica.
+    - **`class`**: Siempre `IDENTITY`.
+    - **`payload`**: JSON con detalles extendidos (rol, bio, etc.).
+- **Hidratación de Rango**: El rol definido en el `payload` (ej: `AUDITOR_REAL`) es inyectado directamente en el Ticket de Sesión L2.
 
-#### 📄 Átomo Canónico de Usuario (Template)
-Si necesitas sembrar un usuario manualmente en la Sheet `Entidades`, usa esta estructura:
+#### 📄 Átomo Canónico de Usuario (Template v19.0)
+Si necesitas sembrar un usuario manualmente en la Sheet `Entidades`, usa esta estructura limpia:
 ```json
 {
-  "id": "USR_GENESIS_XXXX",
-  "handle": { "alias": "handle-del-usuario", "label": "Nombre Visible" },
+  "id": "usuario@indra-os.com",
+  "handle": { "alias": "usuario", "label": "Nombre Visible" },
   "class": "IDENTITY",
   "payload": {
-    "email": "usuario@ejemplo.com", 
-    "role": "AUDITOR_REAL",        
-    "name": "Nombre Completo",
-    "avatar_url": "...",
-    "preferences": { "theme": "dark" }
-  },
-  "status": "VALIDATED",
-  "provider": "google"
+    "email": "usuario@indra-os.com", 
+    "role": "GUEST",        
+    "name": "Nombre Completo"
+  }
 }
 ```
 
@@ -147,9 +147,9 @@ Gracias a la mutación en `ContractCortex.js`, el Satélite ya no olvida quién 
 
 Para mantener la homeostasis, el desarrollador debe respetar estas cuatro leyes fundamentales:
 
-### ⚖️ Ley A: Jerarquía de la Verdad (El Nombre)
-El Core ignora las etiquetas de infraestructura para la identidad humana. La fuente de verdad absoluta es el campo **`payload.name`** dentro de la pestaña `Entidades`. 
-*   **Consecuencia**: Si cambias el nombre en el payload, el Satélite lo reflejará tras el próximo sync. El `handle.label` es solo un fallback de sistema.
+### ⚖️ Ley A: Jerarquía de la Verdad (El Anclaje)
+El Core ignora las etiquetas de infraestructura para la identidad humana. La fuente de verdad absoluta es el campo **`id`** (Anclaje Soberano) y el campo **`payload.name`** dentro de la pestaña `Entidades`. 
+*   **Consecuencia**: El ID que recibe el satélite ya no es un puntero físico (`row_x`), sino la identidad real del sujeto. Si cambias el nombre en el payload, el Satélite lo reflejará tras el próximo sync.
 
 ### ☢️ Ley B: La Extinción Física (Logout Asíncrono)
 El método `auth.logout()` no es solo amnesia local; es una **orden de ejecución** que viaja al Core para invalidar el token en el Llavero (`SYSTEM_SESSION_REVOKE`).

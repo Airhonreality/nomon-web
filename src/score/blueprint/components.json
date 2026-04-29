@@ -1,0 +1,31 @@
+{
+  "NOMON_COMPONENTS": [
+    {
+      "id": "hero_main",
+      "type": "hero_projection",
+      "props_schema": {
+        "fields": ["title", "subtitle", "media_url", "cta_label"],
+        "styles": "fullscreen glass-morph"
+      },
+      "actions": { "type": "NAVIGATE" }
+    },
+    {
+      "id": "project_grid",
+      "type": "data_grid",
+      "props_schema": {
+        "fields": ["title", "summary", "media_url"],
+        "styles": "grid-cols-3 gap-10"
+      },
+      "actions": { "type": "NAVIGATE" }
+    },
+    {
+      "id": "article_reader",
+      "type": "markdown_block",
+      "props_schema": {
+        "fields": ["title", "body_markdown", "media_url"],
+        "styles": "max-w-800 mx-auto p-20"
+      },
+      "actions": { "type": "TRIGGER_WORKFLOW" }
+    }
+  ]
+}

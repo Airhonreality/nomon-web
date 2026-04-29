@@ -1,152 +1,59 @@
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import fs from 'fs';
 import path from 'path';
-import { exec } from 'child_process';
-import { fileURLToPath } from 'url';
-
-// --- ANCLAJE DETERMINISTA ---
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Plugin de Vite Crudo para el Daemon Soberano
-const indraDevServerPlugin = () => {
-  return {
-    name: 'indra-satellite-local-fs',
-    configureServer(server) {
-      
-      // 1. Guardar Workflows Individuales
-      server.middlewares.use('/api/save-score', (req, res) => {
-        if (req.method === 'POST') {
-          let body = '';
-          req.on('data', chunk => body += chunk.toString());
-          req.on('end', () => {
-            try {
-              const data = JSON.parse(body);
-              const id = data.id || 'draft_workflow';
-              const targetPath = path.resolve(__dirname, `src/score/workflows/${id}.json`);
-              if (!fs.existsSync(path.dirname(targetPath))) fs.mkdirSync(path.dirname(targetPath), { recursive: true });
-              fs.writeFileSync(targetPath, JSON.stringify(data, null, 4));
-              res.statusCode = 200;
-              res.end(JSON.stringify({ status: 'ok', file: `${id}.json` }));
-            } catch (err) {
-              res.statusCode = 500;
-              res.end(JSON.stringify({ status: 'error', message: err.message }));
-            }
-          });
-        }
-      });
-
-      // 2. Persistencia de Configuración (AGNÓSTICO JS MODULE)
-      server.middlewares.use('/api/indra/metadata', (req, res) => {
-        if (req.method === 'POST') {
-          let body = '';
-          req.on('data', chunk => body += chunk.toString());
-          req.on('end', () => {
-            try {
-              const data = JSON.parse(body);
-              const targetPath = path.resolve(__dirname, `indra_config.js`);
-              
-              // Envolver en Módulo ES nativo
-              const fileContent = `/** INDRA SATELLITE CONFIG (Agnostic JS Module) */\nexport const INDRA_CONFIG = ${JSON.stringify(data, null, 2)};`;
-              
-              fs.writeFileSync(targetPath, fileContent);
-              res.statusCode = 200;
-              res.setHeader('Content-Type', 'application/json');
-              res.end(JSON.stringify({ status: 'ok', message: 'Configuración guardada como Módulo JS' }));
-            } catch (err) {
-              res.statusCode = 500;
-              res.end(JSON.stringify({ status: 'error', message: err.message }));
-            }
-          });
-        }
-      });
-
-      // 3. Sincronía Soberana (Indra Sync Protocol)
-      server.middlewares.use('/indra-sync/save-file', (req, res) => {
-        if (req.method === 'POST') {
-          let body = '';
-          req.on('data', chunk => body += chunk.toString());
-          req.on('end', () => {
-            try {
-              const { filePath, content } = JSON.parse(body);
-              
-              // RESOLUCIÓN HOMESTÁTICA: Relativo a la raíz del protocolo
-              const absolutePath = path.resolve(__dirname, filePath);
-              
-              if (!fs.existsSync(path.dirname(absolutePath))) fs.mkdirSync(path.dirname(absolutePath), { recursive: true });
-              fs.writeFileSync(absolutePath, content, 'utf8');
-              
-              console.log(`[SovereignSync] ✅ Materia sellada en: ${absolutePath}`);
-
-              // RESONANCIA VITE: Notificar al HUD vía WebSocket
-              server.ws.send({
-                type: 'custom',
-                event: 'indra-sync-complete',
-                data: { file: path.basename(filePath), timestamp: Date.now() }
-              });
-
-              res.statusCode = 200;
-              res.setHeader('Content-Type', 'application/json');
-              res.end(JSON.stringify({ status: 'ok', path: absolutePath }));
-            } catch (err) {
-              console.error(`[SovereignSync] ❌ ERROR: ${err.message}`);
-              res.statusCode = 500;
-              res.end(JSON.stringify({ status: 'error', message: err.message }));
-            }
-          });
-        }
-      });
-
-      // 4. Escaneo de ADN (Cosecha Local)
-      server.middlewares.use('/api/indra/scan', (req, res) => {
-        if (req.method === 'POST') {
-          exec('node local_scanner.js', (error, stdout) => {
-            if (error) {
-              res.statusCode = 500;
-              res.end(JSON.stringify({ status: 'error', message: error.message }));
-              return;
-            }
-            res.statusCode = 200;
-            res.end(JSON.stringify({ status: 'ok', output: stdout }));
-          });
-        }
-      });
-
-      // 5. Listado Determinista de Esquemas (Indra Sync Protocol)
-      server.middlewares.use('/indra-sync/list-schemas', (req, res) => {
-        const scoresPath = path.resolve(__dirname, 'src/score/schemas');
-        if (req.method === 'GET') {
-          try {
-            const scoresDir = scoresPath;
-            if (!fs.existsSync(scoresDir)) {
-              res.statusCode = 200;
-              res.setHeader('Content-Type', 'application/json');
-              res.end(JSON.stringify([]));
-              return;
-            }
-            const files = fs.readdirSync(scoresDir)
-              .filter(file => file.endsWith('.js'));
-            
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify(files));
-          } catch (err) {
-            res.statusCode = 500;
-            res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify({ status: 'error', message: err.message }));
-          }
-        }
-      });
-    }
-  };
-};
 
 export default defineConfig({
-  plugins: [indraDevServerPlugin()],
-  server: {
-    port: 3005, // Puerto independiente virgen para evitar colisión de caché
-    watch: {
-      ignored: ['**/indra_config.js', '**/score/**']
+  plugins: [
+    react(),
+    {
+      name: 'indra-persistence-middleware',
+      configureServer(server) {
+        server.middlewares.use('/api/persist', (req, res, next) => {
+          if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk.toString(); });
+            req.on('end', () => {
+              try {
+                const { context_id, materia } = JSON.parse(body);
+                const dbPath = path.resolve(__dirname, 'src/score/silo/local_database.json');
+                
+                // 1. Leer el Silo actual
+                const db = JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
+                
+                // 2. Inyectar o Actualizar la materia
+                if (!db[context_id]) db[context_id] = [];
+                
+                const existingIndex = db[context_id].findIndex(item => item.slug === materia.slug);
+                if (existingIndex !== -1) {
+                    console.log(`📝 [Indra:Silo] Actualizando materia existente: ${materia.slug}`);
+                    db[context_id][existingIndex] = materia;
+                } else {
+                    console.log(`🆕 [Indra:Silo] Creando nueva materia: ${materia.slug}`);
+                    db[context_id].unshift(materia); 
+                }
+
+                // 3. Escribir físicamente en el disco
+                fs.writeFileSync(dbPath, JSON.stringify(db, null, 4));
+                
+                console.log(`💾 [Indra:Silo] Materia cristalizada en ${context_id}: ${materia.slug}`);
+                
+                res.statusCode = 200;
+                res.end(JSON.stringify({ status: 'OK', msg: 'Materia cristalizada en el Silo Físico.' }));
+              } catch (err) {
+                res.statusCode = 500;
+                res.end(JSON.stringify({ status: 'ERROR', msg: err.message }));
+              }
+            });
+          } else {
+            next();
+          }
+        });
+      }
     }
+  ],
+  server: {
+    port: 3000,
+    strictPort: true
   }
 });

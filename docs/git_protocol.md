@@ -15,7 +15,19 @@ cd MiSatelite
 # 3. Instalación de Dependencias (Motor Vite)
 npm install
 
-# 4. Ignición
+## 2. Anatomía de la Soberanía (Estructura Sagrada)
+Para que tu satélite sea 100% agnóstico y escalable, respeta esta jerarquía:
+
+*   **`src/score/schemas/`**: Los planos de tu realidad (JSON de entidades).
+*   **`src/score/workflows/`**: Los pulmones del sistema (Funciones y Triggers).
+*   **`src/score/ui/`**: El sistema de diseño (CSS y Componentes).
+*   **`_INDRA_PROTOCOL_`**: El chasis inmutable (Bridge y Cortex).
+
+---
+
+# 3. Ignición
+```bash
+npm install
 npm run dev
 ```
 
