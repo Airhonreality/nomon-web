@@ -6,6 +6,7 @@ import { Navbar } from './components/Navbar.jsx';
 import { MateriaForge } from './components/MateriaForge.jsx';
 import { MateriaDetail } from './components/MateriaDetail.jsx';
 import { BannerInfo } from './components/BannerInfo.jsx';
+import { BannerAction } from './components/BannerAction.jsx';
 import { useIndraResonance } from '../score/hooks/useIndraResonance.js';
 import { useSovereign } from '../score/SovereignContext.jsx';
 
@@ -43,5 +44,6 @@ export const COMPONENT_REGISTRY = {
     'hero_forge': Hero,
     'materia_forge': MateriaForge,
     'materia_detail': MateriaDetail,
-    'banner_info': BannerInfo
+    'banner_info': BannerInfo,
+    'banner_action': BannerAction
 };

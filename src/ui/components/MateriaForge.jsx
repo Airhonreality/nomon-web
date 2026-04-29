@@ -23,6 +23,23 @@ export const MateriaForge = () => {
         return acc;
     }, {});
 
+    const generateSlug = (text) => {
+        return text
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "") // Elimina tildes
+            .replace(/[^a-z0-9]/g, '-') // Reemplaza no-alfanumérico por guiones
+            .replace(/-+/g, '-') // Elimina guiones dobles
+            .replace(/^-|-$/g, ''); // Elimina guiones al inicio/final
+    };
+
+    // 🧬 Efecto de Auto-Slug
+    useEffect(() => {
+        if (!isEditing && formData.title) {
+            setFormData(prev => ({ ...prev, slug: generateSlug(formData.title) }));
+        }
+    }, [formData.title, isEditing]);
+
     const handleSelectForEdit = (item) => {
         const title = item.data?.content?.title?.es || item.metadata?.title || item.name || '';
         const summary = item.data?.content?.summary?.es || item.metadata?.summary || item.description || '';
@@ -43,9 +60,7 @@ export const MateriaForge = () => {
 
     const handleSave = async (e) => {
         e.preventDefault();
-        const cleanSlug = (formData.slug || formData.title)
-            .toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        const cleanSlug = generateSlug(formData.slug || formData.title);
 
         const uqo = {
             protocol: 'CREATE',
@@ -94,7 +109,8 @@ export const MateriaForge = () => {
                         <option value="ENTITY_NEWS">Entidad: Noticia</option>
                         <option value="ENTITY_PROJECT">Entidad: Proyecto</option>
                         <option value="ENTITY_ALLY">Entidad: Aliado</option>
-                        <option value="BANNER_INFO">Estructura: Banner Intermedio</option>
+                        <option value="BANNER_INFO">Estructura: Banner Informativo</option>
+                        <option value="BANNER_ACTION">Estructura: Banner de Acción (Landing)</option>
                     </select>
                     <button className="new-btn" onClick={resetForm}>+ NUEVA ENTIDAD</button>
                 </div>
@@ -113,8 +129,8 @@ export const MateriaForge = () => {
                     </div>
                     <textarea placeholder="Resumen / Subtítulo" value={formData.summary} onChange={e => setFormData({...formData, summary: e.target.value})} />
                     
-                    {/* El cuerpo ahora es universal para cualquier Entidad o Card */}
-                    {(selectedClass.startsWith('ENTITY_') || selectedClass === 'DATA_CARD') && (
+                    {/* El cuerpo ahora es universal para cualquier Entidad, Card o Banner de Acción */}
+                    {(selectedClass.startsWith('ENTITY_') || selectedClass === 'DATA_CARD' || selectedClass === 'BANNER_ACTION') && (
                         <textarea placeholder="Cuerpo Completo (Vista Expandida / Markdown / HTML)" value={formData.body} onChange={e => setFormData({...formData, body: e.target.value})} className="body-editor" />
                     )}
                     <div className="forge-actions">
