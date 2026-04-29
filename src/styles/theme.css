@@ -37,7 +37,7 @@ body {
     font-weight: 400;
     font-size: 1.2rem;
     letter-spacing: 0.15em;
-    text-transform: lowercase;
+    text-transform: uppercase;
     cursor: pointer;
 }
 
@@ -62,7 +62,8 @@ body {
     line-height: 1;
     font-weight: 300; /* Light/Normal como en la imagen */
     letter-spacing: -0.02em;
-    text-transform: lowercase;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     margin: 0;
 }
 
@@ -113,8 +114,12 @@ body {
     font-size: 1.5rem;
     line-height: 1.2;
     font-weight: 400;
-    text-transform: lowercase;
+    text-transform: lowercase; /* Forzamos todo a minúsculas primero */
     margin: 0 0 0.5rem 0;
+}
+
+.card-title::first-letter {
+    text-transform: uppercase; /* Y luego rescatamos la primera letra */
 }
 
 .card-summary {
@@ -157,7 +162,8 @@ body {
     font-family: 'Outfit', sans-serif;
     font-size: 2.2rem;
     font-weight: 300;
-    text-transform: lowercase;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     margin-bottom: 3rem;
     border-bottom: 1px solid var(--text-primary);
     padding-bottom: 1rem;
@@ -249,6 +255,22 @@ body {
 .forge-actions {
     display: flex;
     gap: 1rem;
+}
+
+.forge-btn-delete {
+    padding: 1.5rem;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.forge-btn-delete:hover {
+    background-color: #cc0000;
 }
 
 .forge-btn-cancel {
@@ -349,7 +371,8 @@ body {
     line-height: 1.1;
     color: var(--text-primary);
     margin: 0 0 2rem 0;
-    letter-spacing: -0.04em;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
 }
 
 .banner-text {
@@ -396,7 +419,8 @@ body {
     line-height: 1.1;
     margin-bottom: 2rem;
     letter-spacing: -0.04em;
-    text-transform: lowercase;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .banner-action-summary {
@@ -485,7 +509,8 @@ body {
     font-size: 3rem;
     line-height: 1.1;
     font-weight: 500;
-    letter-spacing: -0.03em;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
     margin: 0;
 }
 

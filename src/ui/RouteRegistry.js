@@ -10,7 +10,7 @@ export const ROUTE_MAP = {
             { 
                 meta: { 
                     component_type: 'banner_action', 
-                    materia_id: 'somos-nomon-y-esta-es-nuestra-forma-de-navegar' 
+                    materia_id: 'somos-nomon' 
                 } 
             },
             'grid_entries_newsfeed',
@@ -18,7 +18,7 @@ export const ROUTE_MAP = {
                 meta: { 
                     component_id: 'banner_info_footer', 
                     component_type: 'banner_info',
-                    materia_id: 'ideas-que-echan-raices-acciones-que-transforman' 
+                    materia_id: 'ideas-que-echan-raices' 
                 } 
             }
         ]
@@ -26,6 +26,13 @@ export const ROUTE_MAP = {
     '/materia/:slug': {
         id: 'materia_detail',
         components: ['materia_detail']
+    },
+    '/quienes-somos': {
+        id: 'quienes_somos',
+        components: [
+            { meta: { component_type: 'banner_info', materia_id: 'quienes-somos-intro' } },
+            { meta: { component_type: 'banner_info', materia_id: 'nuestra-filosofia' } }
+        ]
     },
     '/admin/forge': {
         id: 'forge',

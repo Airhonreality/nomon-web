@@ -25,14 +25,14 @@ export const ComponentMap = [
             content: { 
                 links: [
                     { label: 'Inicio', path: '/' },
-                    { label: 'Proyectos', path: '/' }
+                    { label: 'Quiénes Somos', path: '/quienes-somos' }
                 ] 
             } 
         }
     },
     {
         meta: { component_type: 'HERO_PROJECTION', component_id: 'hero_portal_home' },
-        data: { content: { title: { es: 'REDNOMON' }, subtitle: { es: 'Nodo de información del protocolo Indra.' } } }
+        data: { content: { title: { es: 'REDNOMON' }, subtitle: { es: 'Red de colaboración hacia los futuros eutópicos' } } }
     },
     {
         meta: { component_type: 'GRID_CONTAINER', component_id: 'grid_entries_newsfeed' },
@@ -71,6 +71,23 @@ class NomonBridgeClass {
                 return await response.json();
             } catch (err) {
                 console.error("❌ [Bridge:Persist] Fallo de conexión con el Silo:", err);
+                throw err;
+            }
+        }
+
+        if (uqo.protocol === 'DELETE') {
+            try {
+                const response = await fetch('/api/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        context_id: uqo.context_id || 'NOMON_ENTRIES',
+                        slug: uqo.data.slug
+                    })
+                });
+                return await response.json();
+            } catch (err) {
+                console.error("❌ [Bridge:Delete] Fallo en la disolución de materia:", err);
                 throw err;
             }
         }

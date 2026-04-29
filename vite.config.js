@@ -33,6 +33,47 @@ export default defineConfig({
           }
         });
 
+        server.middlewares.use('/api/delete', (req, res, next) => {
+          if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk.toString(); });
+            req.on('end', () => {
+              try {
+                const { context_id, slug } = JSON.parse(body);
+                console.log(`🧨 [Indra:Middleware] Petición de disolución: ${slug} en ${context_id}`);
+                
+                const dbPath = path.resolve(__dirname, 'src/score/silo/local_database.json');
+                const db = JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
+                
+                if (db[context_id]) {
+                  const initialCount = db[context_id].length;
+                  db[context_id] = db[context_id].filter(item => item.slug !== slug);
+                  
+                  if (db[context_id].length < initialCount) {
+                    fs.writeFileSync(dbPath, JSON.stringify(db, null, 4));
+                    console.log(`🔥 [Indra:Silo] Materia disuelta con éxito: ${slug}`);
+                    res.statusCode = 200;
+                    res.end(JSON.stringify({ status: 'OK', msg: 'Disuelto.' }));
+                  } else {
+                    console.warn(`⚠️ [Indra:Silo] No se encontró materia con slug: ${slug}`);
+                    res.statusCode = 404;
+                    res.end(JSON.stringify({ status: 'NOT_FOUND', msg: 'No encontrado.' }));
+                  }
+                } else {
+                  res.statusCode = 400;
+                  res.end(JSON.stringify({ status: 'ERROR', msg: 'Contexto no válido.' }));
+                }
+              } catch (err) {
+                console.error("❌ [Indra:Middleware] Error en DELETE:", err.message);
+                res.statusCode = 500;
+                res.end(JSON.stringify({ status: 'ERROR', msg: err.message }));
+              }
+            });
+          } else {
+            next();
+          }
+        });
+
         server.middlewares.use('/api/persist', (req, res, next) => {
           if (req.method === 'POST') {
             let body = '';

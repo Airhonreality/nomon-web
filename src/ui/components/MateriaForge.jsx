@@ -58,6 +58,23 @@ export const MateriaForge = () => {
         setIsEditing(false);
     };
 
+    const handleDelete = async () => {
+        if (!window.confirm("¿Estás seguro de que deseas disolver esta materia? Esta acción es irreversible en el Silo local.")) return;
+        
+        try {
+            const response = await bridge.execute({
+                protocol: 'DELETE',
+                context_id: 'NOMON_ENTRIES',
+                data: { slug: formData.slug }
+            });
+            console.log("🔥 [Forge] Materia disuelta:", response);
+            resetForm();
+            window.location.reload(); // Recarga para sincronizar inventario
+        } catch (err) {
+            alert("Error al disolver materia: " + err.message);
+        }
+    };
+
     const handleSave = async (e) => {
         e.preventDefault();
         const cleanSlug = generateSlug(formData.slug || formData.title);
@@ -134,7 +151,15 @@ export const MateriaForge = () => {
                         <textarea placeholder="Cuerpo Completo (Vista Expandida / Markdown / HTML)" value={formData.body} onChange={e => setFormData({...formData, body: e.target.value})} className="body-editor" />
                     )}
                     <div className="forge-actions">
-                        <button type="submit" className="forge-btn">{isEditing ? 'ACTUALIZAR' : 'CRISTALIZAR'}</button>
+                        <button type="submit" className="forge-btn">
+                            {isEditing ? 'ACTUALIZAR' : 'CRISTALIZAR'}
+                        </button>
+                        {isEditing && (
+                            <button type="button" onClick={handleDelete} className="forge-btn-delete">
+                                DISOLVER
+                            </button>
+                        )}
+                        <button type="button" onClick={resetForm} className="forge-btn-cancel">CANCELAR</button>
                     </div>
                 </form>
             </div>

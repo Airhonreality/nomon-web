@@ -1,7 +1,43 @@
 {
     "NOMON_ENTRIES": [
         {
-            "slug": "somos-nomon-y-esta-es-nuestra-forma-de-navegar",
+            "slug": "nuestra-filosofia",
+            "meta": {
+                "component_type": "BANNER_INFO"
+            },
+            "data": {
+                "content": {
+                    "title": {
+                        "es": "Nuestra Filosofía"
+                    },
+                    "summary": {
+                        "es": "Pragmatismo Ético: entendemos la integridad no como un dogma moral, sino como una herramienta de ingeniería indispensable para la supervivencia y la expansión.\n\nNos basamos en la Responsabilidad Total, donde el individuo es un faro capaz de estabilizar su entorno (familia, equipo, sociedad) mediante acciones que beneficien al mayor número de áreas de vida posibles. En NOMON, la ética es la tecnología que elimina la \"fricción\" social (corrupción, ineficiencia, caos) para permitir una navegación segura hacia la prosperidad y la libertad real.\n\nVuelve al origen: Bio-inspiración y Futuro Solar.\n\nNo diseñamos para un mundo de concreto frío, sino para una tierra viva. Nos inspiramos en la sabiduría de la naturaleza (biomímesis) y el buen vivir de nuestras raíces para construir un futuro Solarpunk: tecnológico pero verde, avanzado pero humano. La verdadera ingeniería no domina el entorno, se integra en él. Volver al origen no es retroceder, es recordar que el progreso solo vale la pena si nos permite vivir en armonía con el sol, el agua y la maloca que compartimos todos."
+                    },
+                    "image": "",
+                    "body": ""
+                }
+            }
+        },
+        {
+            "slug": "quienes-somos-intro",
+            "meta": {
+                "component_type": "BANNER_ACTION"
+            },
+            "data": {
+                "content": {
+                    "title": {
+                        "es": "SOMOS NOMON"
+                    },
+                    "summary": {
+                        "es": "NOMON es una organización de impacto bajo el modelo SAS BIC que funciona como un laboratorio de ingeniería de futuros, donde la ética y la integridad son nuestras tecnologías de supervivencia aplicadas. A través del, el arte, ciencia y la creación de nodos de acción técnica, diseñamos soluciones escalables para transformar los sistemas gubernamentales, corporativos, judiciales y académicos de Colombia, convirtiendo la resiliencia humana en un motor de prosperidad y soberanía."
+                    },
+                    "image": "",
+                    "body": ""
+                }
+            }
+        },
+        {
+            "slug": "somos-nomon",
             "meta": {
                 "component_type": "BANNER_ACTION"
             },
@@ -19,7 +55,7 @@
             }
         },
         {
-            "slug": "ideas-que-echan-raices-acciones-que-transforman",
+            "slug": "ideas-que-echan-raices",
             "meta": {
                 "component_type": "BANNER_INFO"
             },
@@ -37,7 +73,7 @@
             }
         },
         {
-            "slug": "despertar-nomon",
+            "slug": "semillero-bio-inspiracion",
             "meta": {
                 "component_type": "ENTITY_PROJECT"
             },
@@ -50,12 +86,12 @@
                         "es": "Semillero de Investigación en Bioinspiración y Diseño Regenerativo de la Universidad Nacional de Colombia\n"
                     },
                     "image": "/assets/materia/IMG_7531.JPG",
-                    "body": "Justificación\nEl semillero se fundamenta en la necesidad de abordar desafíos socioambientales desde una bioinspiración \"radical\", entendida como un \"acto político de descolonización material\". Busca generar soluciones creativas y sostenibles a través de un diálogo transdisciplinar que integra saberes científicos, ancestrales y comunitarios, con una ética que valora la abundancia y el bienestar colectivo.\nObjetivo General\nImaginar y co-crear futuros deseables a partir de una perspectiva de armonía con la Tierra y sus ritmos, promoviendo el diseño regenerativo.\nLíneas de Trabajo\nConexión Holística: Integración de saberes científicos, ancestrales y sensoriales para una comprensión profunda del entorno.\nÉtica y Colaboración: Fomento de una ética profesional y de procesos colaborativos que se nutren de la abundancia de la naturaleza.\nTecnología Crítica: Uso de herramientas digitales (IA, TICS) para la investigación y conceptualización de proyectos desde una perspectiva consciente.\nMaterialidad Regenerativa: Exploración de biomateriales y diseño de sistemas que imiten patrones de la vida.\nPreguntas de Investigación, Creación o Innovación\n¿Cómo podemos imaginar futuros deseables desde una perspectiva de armonía con la Tierra y sus ritmos?\n¿Qué rol juegan el cuerpo y la conciencia en el proceso creativo bioinspirado?\n¿Cómo se pueden integrar los saberes ancestrales y las tecnologías modernas para 0diseñar soluciones regenerativas?\n¿De qué manera una ética profesional inspirada en la abundancia natural puede transformar los sistemas productivos y sociales?\n¿Cómo se traduce el \"sentir bioinspirado\" en proyectos tangibles y colaborativos?\n"
+                    "body": "El semillero se fundamenta en la necesidad de abordar desafíos socioambientales desde una bioinspiración \"radical\", entendida como un \"acto político de descolonización material\". Busca generar soluciones creativas y sostenibles a través de un diálogo transdisciplinar que integra saberes científicos, ancestrales y comunitarios, con una ética que valora la abundancia y el bienestar colectivo.\n\nNuestro objetivo es Imaginar y co-crear futuros deseables a partir de una perspectiva de armonía con la Tierra y sus ritmos, promoviendo el diseño regenerativo. mediante la conexión Holística, integración de saberes científicos, ancestrales y sensoriales para una comprensión profunda del entorno. la tecnología crítica, usamos herramientas digitales para la investigación y conceptualización de proyectos desde una perspectiva consciente. La materialidad Regenerativa desde la exploración de biomateriales y diseño de sistemas que imiten patrones de la vida.\n\nNuestra preguntas\n\n¿Cómo podemos imaginar futuros deseables desde una perspectiva de armonía con la Tierra y sus ritmos?\n¿Qué rol juegan el cuerpo y la conciencia en el proceso creativo bioinspirado?\n¿Cómo se pueden integrar los saberes ancestrales y las tecnologías modernas para 0diseñar soluciones regenerativas?\n¿De qué manera una ética profesional inspirada en la abundancia natural puede transformar los sistemas productivos y sociales?\n¿Cómo se traduce el \"sentir bioinspirado\" en proyectos tangibles y colaborativos?\n"
                 }
             }
         },
         {
-            "slug": "simposio-alpha",
+            "slug": "simposio-etica-e-integridad",
             "meta": {
                 "component_type": "DATA_CARD"
             },
@@ -65,28 +101,28 @@
                         "es": "SIMPOSIO INTERNACIONAL DE INGENIERÍA DE FUTUROS \"Ética e Integridad como Tecnologías de Supervivencia Global\""
                     },
                     "summary": {
-                        "es": "Colombia requiere un cambio de paradigma para superar los costos sistémicos de la corrupción y la ineficiencia judicial. El Simposio posiciona la Ética y la Integridad no como conceptos abstractos, sino como Tecnologías de Supervivencia: herramientas de ingeniería social necesarias para diseñar un futuro de prosperidad, seguridad y competitividad global."
+                        "es": "El Simposio posiciona la Ética y la Integridad no como  sino como Tecnologías de Supervivencia: herramientas de ingeniería social necesarias para diseñar un futuro de prosperidad, seguridad y competitividad global."
                     },
-                    "image": "/assets/materia/descarga.png",
+                    "image": "/assets/materia/simposio.png",
                     "body": "El evento desglosa la integridad en cuatro sistemas críticos para la viabilidad del país:\n•\tSistemas Gubernamentales: Transparencia y rendición de cuentas como software de eficiencia estatal.\n•\tSistemas Corporativos: La integridad como activo financiero y motor de las Sociedades BIC\n•\tSistema Judicial: Ingeniería de la resocialización. Del castigo ineficiente a la restauración técnica.\n•\tSistemas Académicos: El papel de la Academia en el diseño de protocolos de integridad para la nueva generación de líderes.\n\n\n\nELIGE TU NODO Y EMPIEZA A DISEÑAR\n•\tNodo Gubernamental (Transparencia Operativa): Estamos diseñando protocolos de gestión pública para eliminar la ineficiencia. ¿Tienes ideas técnicas para un Estado más transparente? Aquí es.\n•\tNodo Corporativo (Integridad Rentable): La ética es un activo financiero. Trabajamos con empresas BIC y organizaciones que quieren ser referentes de alto rendimiento. ¿Quieres subir el estándar corporativo? Aquí es.\n•\tNodo Académico (Investigación Aplicada): La universidad es nuestro laboratorio. Estamos conectando investigadores y estudiantes para validar protocolos de integridad real. ¿Quieres llevar tu conocimiento a la calle? Aquí es.\n•\tNodo Jurídico (Ingeniería de la Restauración): Vamos a rediseñar cómo entendemos la justicia y la resocialización. Necesitamos mentes capaces de crear modelos de restauración humana eficaces. ¿Quieres cambiar el sistema desde adentro? Aquí es.\n"
                 }
             }
         },
         {
-            "slug": "libro-de-indra",
+            "slug": "el-guardian-del-sextante",
             "meta": {
                 "component_type": "ENTITY_PROJECT"
             },
             "data": {
                 "content": {
                     "title": {
-                        "es": "El guardián del sextante"
+                        "es": "EL GUARDIÁN DEL SEXTANTE: LA HISTORIA QUE FINANCIA EL MAÑANA"
                     },
                     "summary": {
-                        "es": "Publicación de los manuscritos originales de la red de soberanía."
+                        "es": "Un libro. Una misión. Un nuevo norte.\nEn NOMON no buscamos donaciones pasivas; buscamos socios en la creación de un nuevo estándar ético para Colombia."
                     },
                     "image": "/assets/materia/portada-guardian-sextante.png",
-                    "body": ""
+                    "body": "Un libro. Una misión. Un nuevo norte.\nEn NOMON no buscamos donaciones pasivas; buscamos socios en la creación de un nuevo estándar ético para Colombia. Por eso, nuestro principal motor de autofinanciación es esta obra: \"El Guardián del Sextante\".\nCada ejemplar que adquieres en la FILBo 2026 o a través de nuestro portal, deja de ser un objeto de estantería para convertirse en combustible directo para nuestros proyectos de impacto social. Al comprar este libro, estás financiando la logística de nuestros Nodos de Acción, la investigación técnica en ética aplicada y el desarrollo del programa \"Ciudadano Solar\".\n¿De qué trata la travesía?\nLa historia de F-E Orión es el espejo de nuestra propia capacidad de transformación. Es una invitación a dejar de ser \"pequeñas barquitas\" confinadas por miedos heredados y convertirnos en el velero portentoso que nuestra comunidad necesita. Es la prueba de que la adversidad no es el final, sino el detonante de nuestra verdadera resiliencia."
                 }
             }
         }
