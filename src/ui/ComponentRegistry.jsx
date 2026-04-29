@@ -4,6 +4,7 @@ import { Grid } from './components/Grid.jsx';
 import { DataCard } from './components/DataCard.jsx';
 import { Navbar } from './components/Navbar.jsx';
 import { MateriaForge } from './components/MateriaForge.jsx';
+import { MateriaDetail } from './components/MateriaDetail.jsx';
 import { BannerInfo } from './components/BannerInfo.jsx';
 import { useIndraResonance } from '../score/hooks/useIndraResonance.js';
 import { useSovereign } from '../score/SovereignContext.jsx';
