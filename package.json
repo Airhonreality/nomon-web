@@ -7,6 +7,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "sync": "node sync_core.js",
     "ignite": "npm install && npm run dev"
   },
@@ -19,6 +21,7 @@
   "author": "Indra Core Team",
   "license": "MIT",
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "vite": "^8.0.8"
   },
   "dependencies": {

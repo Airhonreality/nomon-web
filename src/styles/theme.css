@@ -42,7 +42,12 @@ body {
 }
 
 .nav-links {
-    display: none; /* Mobile first: ocultar links */
+    display: flex;
+    list-style: none;
+    gap: 2.5rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }
 
 /* 🦸 HERO (Responsive) */
@@ -317,4 +322,53 @@ body {
     color: var(--text-secondary);
     display: block;
     margin-top: 0.2rem;
+}
+
+/* --- 🚩 BANNER INFO (ESTRUCTURA EDITORIAL PREMIUM) --- */
+.banner-info {
+    width: 100%;
+    padding: 100px var(--p-mobile);
+    background-color: #ffffff;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    margin: 4rem 0;
+}
+
+.banner-content {
+    max-width: 900px;
+    text-align: left;
+}
+
+.banner-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin: 0 0 2rem 0;
+    letter-spacing: -0.04em;
+}
+
+.banner-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 0;
+}
+
+/* Adaptación Desktop para el Banner */
+@media (min-width: 768px) {
+    .banner-info {
+        padding-left: var(--p-desktop);
+        padding-right: var(--p-desktop);
+    }
+    .banner-title {
+        font-size: 4.5rem;
+    }
 }

@@ -51,12 +51,19 @@ export const SovereignRouter = () => {
 
     return (
         <main id="app-root-inner">
-            {routeConfig.components.map(compId => {
+            {routeConfig.components.map((actorDef, idx) => {
+                const isObject = typeof actorDef === 'object';
+                const compId = isObject ? (actorDef.meta?.component_type || actorDef.meta?.component_id) : actorDef;
+                
                 const Component = COMPONENT_REGISTRY[compId];
-                const definition = state.inventory?.find(ex => (ex?.meta?.component_id || ex?.metadata?.component_id) === compId) 
+                
+                // Si es objeto, lo usamos directamente. Si es string, buscamos en inventario.
+                const definition = isObject ? actorDef : state.inventory?.find(ex => (ex?.meta?.component_id || ex?.metadata?.component_id) === compId) 
                     || { meta: { component_id: compId } };
                 
-                return Component ? <Component key={compId} definition={definition} params={params} /> : null;
+                const key = isObject ? (actorDef.meta?.component_id || idx) : compId;
+                
+                return Component ? <Component key={key} definition={definition} params={params} /> : null;
             })}
         </main>
     );

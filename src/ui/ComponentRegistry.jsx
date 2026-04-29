@@ -41,5 +41,6 @@ export const COMPONENT_REGISTRY = {
     'main_navbar': Navbar,
     'hero_forge': Hero,
     'materia_forge': MateriaForge,
+    'materia_detail': MateriaDetail,
     'banner_info': BannerInfo
 };

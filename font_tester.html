@@ -3,101 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Font Tester - RED NOMON</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Importando 10 fuentes diversas -->
-    <link href="https://fonts.googleapis.com/css2?family=Metamorphous&family=Alice&family=Marcellus&family=Almendra+Display&family=Uncial+Antiqua&family=Fraunces:opsz,soft,wght@9..144,100,400&family=Philosopher:wght@700&family=Glass+Antiqua&family=Vollkorn:wght@900&family=Syne:wght@800&display=swap" rel="stylesheet">
+    <title>NOMON LABORATORY - Banner Isolation Test</title>
+    <link rel="stylesheet" href="/src/styles/theme.css">
     <style>
-        body {
-            background-color: #fdfdfd;
-            color: #1a1a1a;
-            font-family: 'Inter', sans-serif;
-            padding: 50px;
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-        }
-        .font-row {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 20px;
-        }
-        .label {
-            font-size: 12px;
-            text-transform: uppercase;
-            color: #888;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-        .sample {
-            font-size: 80px;
-            margin: 0;
-            line-height: 1;
-        }
-        /* Estilos específicos */
-        .f1 { font-family: 'Metamorphous', serif; }
-        .f2 { font-family: 'Alice', serif; }
-        .f3 { font-family: 'Marcellus', serif; }
-        .f4 { font-family: 'Almendra Display', serif; }
-        .f5 { font-family: 'Uncial Antiqua', serif; }
-        .f6 { font-family: 'Fraunces', serif; font-variation-settings: "SOFT" 100; }
-        .f7 { font-family: 'Philosopher', sans-serif; }
-        .f8 { font-family: 'Glass Antiqua', cursive; }
-        .f9 { font-family: 'Vollkorn', serif; }
-        .f10 { font-family: 'Syne', sans-serif; }
+        body { background: #fff; padding: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+        .lab-header { margin-bottom: 50px; text-align: center; font-family: 'Inter', sans-serif; }
+        .lab-status { color: #00ff00; font-family: monospace; margin-bottom: 20px; }
+        .banner-info { border: 2px dashed #ff00ff; width: 100%; max-width: 1000px; } /* Resaltamos el banner para verlo si está vacío */
     </style>
 </head>
 <body>
 
-    <div class="font-row">
-        <div class="label">1. Metamorphous (Art Nouveau / Mística)</div>
-        <h1 class="sample f1">RED NOMON</h1>
+    <div class="lab-header">
+        <div class="lab-status">● RESONANCE LABORATORY ACTIVE</div>
+        <h1>Aislamiento de Proyección: BANNER</h1>
+        <p>Si el recuadro punteado está vacío, la materia no está llegando al Actor.</p>
     </div>
 
-    <div class="font-row">
-        <div class="label">2. Alice (Orgánica / Curiosa)</div>
-        <h1 class="sample f2">RED NOMON</h1>
-    </div>
+    <!-- Contenedor para React -->
+    <div id="root"></div>
 
-    <div class="font-row">
-        <div class="label">3. Marcellus (Elegancia Clásica)</div>
-        <h1 class="sample f3">RED NOMON</h1>
-    </div>
+    <script type="module">
+        import React from 'react';
+        import ReactDOM from 'react-dom/client';
+        import { SovereignProvider } from '/src/score/SovereignContext.jsx';
+        import { BannerInfo } from '/src/ui/components/BannerInfo.jsx';
 
-    <div class="font-row">
-        <div class="label">4. Almendra Display (Fantasía / Épica)</div>
-        <h1 class="sample f4">RED NOMON</h1>
-    </div>
+        const TestApp = () => {
+            const mockDefinition = {
+                meta: {
+                    component_id: 'banner_info',
+                    component_type: 'banner_info',
+                    materia_id: 'ideas-que-echan-raices-acciones-que-transforman'
+                }
+            };
 
-    <div class="font-row">
-        <div class="label">5. Uncial Antiqua (Céltica / Ancestral)</div>
-        <h1 class="sample f5">RED NOMON</h1>
-    </div>
+            return React.createElement(SovereignProvider, null, 
+                React.createElement(BannerInfo, { definition: mockDefinition })
+            );
+        };
 
-    <div class="font-row">
-        <div class="label">6. Fraunces (Moderna "Soft" / Líquida)</div>
-        <h1 class="sample f6">RED NOMON</h1>
-    </div>
-
-    <div class="font-row">
-        <div class="label">7. Philosopher (Fluida / Futurista)</div>
-        <h1 class="sample f7">RED NOMON</h1>
-    </div>
-
-    <div class="font-row">
-        <div class="label">8. Glass Antiqua (Art Nouveau Puro / Vidriera)</div>
-        <h1 class="sample f8">RED NOMON</h1>
-    </div>
-
-    <div class="font-row">
-        <div class="label">9. Vollkorn (Pesada / Terrenal)</div>
-        <h1 class="sample f9">RED NOMON</h1>
-    </div>
-
-    <div class="font-row">
-        <div class="label">10. Syne (Brutalista / Vanguardia)</div>
-        <h1 class="sample f10">RED NOMON</h1>
-    </div>
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(TestApp));
+    </script>
 
 </body>
 </html>

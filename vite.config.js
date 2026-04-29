@@ -9,6 +9,30 @@ export default defineConfig({
     {
       name: 'indra-persistence-middleware',
       configureServer(server) {
+        server.middlewares.use('/api/upload', (req, res, next) => {
+          if (req.method === 'POST') {
+            const filename = req.headers['x-filename'];
+            if (!filename) return res.end("Missing filename");
+
+            const targetDir = path.resolve(__dirname, 'public/assets/materia');
+            if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true });
+
+            const filePath = path.join(targetDir, filename);
+            const fileStream = fs.createWriteStream(filePath);
+
+            req.pipe(fileStream);
+            req.on('end', () => {
+              res.statusCode = 200;
+              res.end(JSON.stringify({ 
+                url: `/assets/materia/${filename}`,
+                msg: "Activo cristalizado en el silo de medios." 
+              }));
+            });
+          } else {
+            next();
+          }
+        });
+
         server.middlewares.use('/api/persist', (req, res, next) => {
           if (req.method === 'POST') {
             let body = '';

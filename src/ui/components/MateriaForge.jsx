@@ -7,21 +7,14 @@ import { useIndraResonance } from '../../score/hooks/useIndraResonance.js';
  */
 export const MateriaForge = () => {
     const { bridge } = useSovereign();
-    // Resonamos con las entradas y con el mapa de componentes (Estructura)
     const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES');
     
     const [selectedClass, setSelectedClass] = useState('DATA_CARD');
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
-        title: '',
-        summary: '',
-        slug: '',
-        image: '',
-        body: '',
-        type: 'DATA_CARD'
+        title: '', summary: '', slug: '', image: '', body: '', type: 'DATA_CARD'
     });
 
-    // 📂 Agrupación de Inventario
     const inventory = entries || [];
     const groupedInventory = inventory.reduce((acc, item) => {
         const type = item.meta?.component_type || item.metadata?.type || 'OTRO';
@@ -50,11 +43,15 @@ export const MateriaForge = () => {
 
     const handleSave = async (e) => {
         e.preventDefault();
+        const cleanSlug = (formData.slug || formData.title)
+            .toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+
         const uqo = {
             protocol: 'CREATE',
             context_id: 'NOMON_ENTRIES',
             data: {
-                slug: formData.slug || formData.title.toLowerCase().replace(/ /g, '-'),
+                slug: cleanSlug,
                 meta: { component_type: selectedClass },
                 data: {
                     content: {
@@ -74,10 +71,23 @@ export const MateriaForge = () => {
         } catch (err) { console.error(err); }
     };
 
+    const handleFileUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                headers: { 'x-filename': file.name },
+                body: file
+            });
+            const result = await response.json();
+            if (result.url) setFormData({ ...formData, image: result.url });
+        } catch (err) { console.error(err); }
+    };
+
     return (
         <section className="materia-forge-container">
             <div className="forge-main">
-                {/* 👑 SELECTOR DE CLASE SUPREMO */}
                 <div className="class-selector-header">
                     <label>CLASE DE ENTIDAD</label>
                     <select value={selectedClass} onChange={e => { setSelectedClass(e.target.value); setFormData({...formData, type: e.target.value}); }}>
@@ -88,30 +98,30 @@ export const MateriaForge = () => {
                     </select>
                     <button className="new-btn" onClick={resetForm}>+ NUEVA ENTIDAD</button>
                 </div>
-
                 <h2 className="forge-title">{isEditing ? `Editando: ${formData.slug}` : `Nueva Entidad: ${selectedClass}`}</h2>
-                
                 <form onSubmit={handleSave} className="forge-form">
                     <div className="form-row">
                         <input type="text" placeholder="Título" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
                         {!isEditing && <input type="text" placeholder="Slug" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} />}
                     </div>
-
-                    <input type="text" placeholder="URL Imagen" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} />
-
-                    <textarea placeholder="Resumen / Subtítulo (Vista Colapsada)" value={formData.summary} onChange={e => setFormData({...formData, summary: e.target.value})} />
-
-                    {/* El cuerpo ahora es universal para cualquier Entidad */}
-                    {selectedClass.startsWith('ENTITY_') && (
+                    <div className="form-row" style={{ alignItems: 'center' }}>
+                        <input type="text" style={{ flex: 1 }} placeholder="URL Imagen" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} />
+                        <label className="file-upload-btn" style={{ marginLeft: '10px', cursor: 'pointer', background: '#000', color: '#fff', padding: '10px 15px' }}>
+                            📁 CARGAR LOCAL
+                            <input type="file" onChange={handleFileUpload} style={{display: 'none'}} />
+                        </label>
+                    </div>
+                    <textarea placeholder="Resumen / Subtítulo" value={formData.summary} onChange={e => setFormData({...formData, summary: e.target.value})} />
+                    
+                    {/* El cuerpo ahora es universal para cualquier Entidad o Card */}
+                    {(selectedClass.startsWith('ENTITY_') || selectedClass === 'DATA_CARD') && (
                         <textarea placeholder="Cuerpo Completo (Vista Expandida / Markdown / HTML)" value={formData.body} onChange={e => setFormData({...formData, body: e.target.value})} className="body-editor" />
                     )}
-
                     <div className="forge-actions">
                         <button type="submit" className="forge-btn">{isEditing ? 'ACTUALIZAR' : 'CRISTALIZAR'}</button>
                     </div>
                 </form>
             </div>
-
             <aside className="forge-inventory">
                 <h3 className="inventory-header">CATÁLOGO DE MATERIA</h3>
                 {Object.keys(groupedInventory).map(type => (
