@@ -34,6 +34,9 @@ const MarkdownBody = ({ definition, params }) => {
     );
 };
 
+import { MateriaReader } from './components/MateriaReader.jsx';
+import { IdentityProfile } from './components/IdentityProfile.jsx';
+
 export const COMPONENT_REGISTRY = {
     'hero_portal_home': Hero,
     'grid_entries_newsfeed': Grid,
@@ -45,5 +48,7 @@ export const COMPONENT_REGISTRY = {
     'materia_forge': MateriaForge,
     'materia_detail': MateriaDetail,
     'banner_info': BannerInfo,
-    'banner_action': BannerAction
+    'banner_action': BannerAction,
+    'materia_reader': MateriaReader,
+    'identity_profile': IdentityProfile
 };

@@ -27,6 +27,14 @@ export const ROUTE_MAP = {
         id: 'materia_detail',
         components: ['materia_detail']
     },
+    '/biblioteca/:slug': {
+        id: 'materia_reader',
+        components: ['materia_reader']
+    },
+    '/perfil': {
+        id: 'user_profile',
+        components: ['identity_profile']
+    },
     '/quienes-somos': {
         id: 'quienes_somos',
         components: [

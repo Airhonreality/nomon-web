@@ -122,8 +122,21 @@
                         "es": "Un libro. Una misión. Un nuevo norte.\nEn NOMON no buscamos donaciones pasivas; buscamos socios en la creación de un nuevo estándar ético para Colombia."
                     },
                     "image": "/assets/materia/portada-guardian-sextante.png",
-                    "body": "Un libro. Una misión. Un nuevo norte.\nEn NOMON no buscamos donaciones pasivas; buscamos socios en la creación de un nuevo estándar ético para Colombia. Por eso, nuestro principal motor de autofinanciación es esta obra: \"El Guardián del Sextante\".\nCada ejemplar que adquieres en la FILBo 2026 o a través de nuestro portal, deja de ser un objeto de estantería para convertirse en combustible directo para nuestros proyectos de impacto social. Al comprar este libro, estás financiando la logística de nuestros Nodos de Acción, la investigación técnica en ética aplicada y el desarrollo del programa \"Ciudadano Solar\".\n¿De qué trata la travesía?\nLa historia de F-E Orión es el espejo de nuestra propia capacidad de transformación. Es una invitación a dejar de ser \"pequeñas barquitas\" confinadas por miedos heredados y convertirnos en el velero portentoso que nuestra comunidad necesita. Es la prueba de que la adversidad no es el final, sino el detonante de nuestra verdadera resiliencia."
-                }
+                    "composition": [
+                        {
+                            "type": "LIBRARY_RESOURCE",
+                            "id": 1777515166938,
+                            "content": "",
+                            "url": "/assets/materia/El guardian del sextante imp.pdf",
+                            "resType": "PDF",
+                            "desc": "",
+                            "curator": "Airhon Javier García",
+                            "rationale": ""
+                        }
+                    ],
+                    "pdf_url": ""
+                },
+                "relations": []
             }
         }
     ],

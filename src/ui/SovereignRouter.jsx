@@ -21,14 +21,17 @@ export const SovereignRouter = () => {
     }, []);
 
     useEffect(() => {
-        let matchedRoute = ROUTE_MAP[path];
+        // Separamos la ruta de los parámetros de búsqueda (?...)
+        const [cleanPath, search] = path.split('?');
+        let matchedRoute = ROUTE_MAP[cleanPath];
         let matchedParams = {};
 
         if (!matchedRoute) {
             for (const r in ROUTE_MAP) {
                 if (r.includes(':')) {
+                    // Regex mejorado para manejar slugs y separar parámetros
                     const regex = new RegExp(`^${r.replace(/:[^\s/]+/g, '([\\w-]+)')}$`);
-                    const match = path.match(regex);
+                    const match = cleanPath.match(regex);
                     if (match) {
                         matchedRoute = ROUTE_MAP[r];
                         matchedParams.slug = match[1];

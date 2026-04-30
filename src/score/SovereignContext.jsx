@@ -31,6 +31,12 @@ export const SovereignProvider = ({ children }) => {
                 return item;
             });
             appState.update({ inventory: newInventory });
+        } else if (action === 'identity_update_extended') {
+            const newIdentity = { 
+                ...state.identity, 
+                profile_extended: payload 
+            };
+            appState.update({ identity: newIdentity }, true);
         } else {
             appState.update({ [action]: payload });
         }
