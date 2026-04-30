@@ -23,6 +23,7 @@ export const MateriaDetail = ({ params }) => {
 
     const content = materia.data?.content || {};
     const title = content.title?.es || content.title || materia.name;
+    const summary = content.summary?.es || content.summary || "";
     const body = content.body || "";
     const image = content.image || materia.metadata?.image;
 
@@ -40,12 +41,16 @@ export const MateriaDetail = ({ params }) => {
                     <h1 className="detail-title">{title}</h1>
                 </header>
 
-                {/* 🏗️ PROYECTOR DE COMPOSICIÓN LINEAL (Prioridad) */}
-                {content.composition?.length > 0 ? (
-                    <MateriaComposer composition={content.composition} />
-                ) : (
-                    <div className="detail-body" dangerouslySetInnerHTML={{ __html: body }} />
-                )}
+                {/* 🏗️ PROYECTOR DE MATERIA (Flujo Agnóstico) */}
+                <div className="materia-content-flow">
+                    {summary && <div className="detail-summary">{summary}</div>}
+                    
+                    {body && <div className="detail-body" dangerouslySetInnerHTML={{ __html: body }} />}
+                    
+                    {content.composition?.length > 0 && (
+                        <MateriaComposer composition={content.composition} />
+                    )}
+                </div>
 
                 {/* 📖 BIBLIOTECA CURADA (RECURSOS) */}
                 {materia.data?.content?.library?.length > 0 && (

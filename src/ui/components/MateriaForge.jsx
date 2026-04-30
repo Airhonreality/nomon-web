@@ -12,7 +12,7 @@ export const MateriaForge = () => {
     const [selectedClass, setSelectedClass] = useState('DATA_CARD');
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
-        title: '', summary: '', slug: '', image: '', type: 'DATA_CARD', relations: [], composition: []
+        title: '', summary: '', slug: '', image: '', body: '', type: 'DATA_CARD', relations: [], composition: [], pdf_url: ''
     });
 
     // Tipos de bloques disponibles
@@ -68,7 +68,7 @@ export const MateriaForge = () => {
             .replace(/-+/g, '-') // Elimina guiones dobles
             .replace(/^-|-$/g, ''); // Elimina guiones al inicio/final
     };
-
+    
     // 🧬 Efecto de Auto-Slug
     useEffect(() => {
         if (!isEditing && formData.title) {
@@ -84,14 +84,16 @@ export const MateriaForge = () => {
         const body = item.data?.content?.body || item.metadata?.body_markdown || '';
         const relations = item.data?.relations || item.data?.content?.relations || [];
         const composition = item.data?.content?.composition || [];
-        setFormData({ title, summary, type, slug: item.slug || '', image, relations, composition, pdf_url: item.data?.content?.pdf_url || '' });
+        const pdf_url = item.data?.content?.pdf_url || '';
+
+        setFormData({ title, summary, type, slug: item.slug || '', image, body, relations, composition, pdf_url });
         setSelectedClass(type);
         setIsEditing(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const resetForm = () => {
-        setFormData({ title: '', summary: '', type: selectedClass, slug: '', image: '', relations: [], composition: [], pdf_url: '' });
+        setFormData({ title: '', summary: '', body: '', type: selectedClass, slug: '', image: '', relations: [], composition: [], pdf_url: '' });
         setIsEditing(false);
     };
 
@@ -99,17 +101,14 @@ export const MateriaForge = () => {
         if (!window.confirm("¿Estás seguro de que deseas disolver esta materia? Esta acción es irreversible en el Silo local.")) return;
         
         try {
-            const response = await bridge.execute({
+            await bridge.execute({
                 protocol: 'DELETE',
                 context_id: 'NOMON_ENTRIES',
                 data: { slug: formData.slug }
             });
-            console.log("🔥 [Forge] Materia disuelta:", response);
             resetForm();
-            window.location.reload(); // Recarga para sincronizar inventario
-        } catch (err) {
-            alert("Error al disolver materia: " + err.message);
-        }
+            window.location.reload(); 
+        } catch (err) { alert("Error al disolver: " + err.message); }
     };
 
     const handleSave = async (e) => {
@@ -126,6 +125,7 @@ export const MateriaForge = () => {
                     content: {
                         title: { es: formData.title },
                         summary: { es: formData.summary },
+                        body: formData.body,
                         image: formData.image,
                         composition: formData.composition,
                         pdf_url: formData.pdf_url
@@ -294,6 +294,10 @@ export const MateriaForge = () => {
                         </div>
                     </div>
 
+                    <label className="group-label">CUERPO / TEXTO PRINCIPAL (Legacy)</label>
+                    <textarea placeholder="Cuerpo de la materia..." value={formData.body} onChange={e => setFormData({...formData, body: e.target.value})} style={{ minHeight: '10rem' }} />
+
+                    <label className="group-label">RESUMEN / SUBTÍTULO (Card View)</label>
                     <textarea placeholder="Resumen / Subtítulo para la Card (Opcional)" value={formData.summary} onChange={e => setFormData({...formData, summary: e.target.value})} />
                     
                     <div className="forge-actions">

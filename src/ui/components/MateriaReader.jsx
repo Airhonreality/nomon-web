@@ -4,187 +4,205 @@ import { MateriaRelations } from './MateriaRelations.jsx';
 import { MateriaComposer } from './MateriaComposer.jsx';
 
 /**
- * 🛰️ MATERIA READER ACTOR
- * Un entorno de lectura premium con soporte de temas y marcas de agua.
+ * 🛰️ MATERIA READER ACTOR (Sovereign Edition)
+ * Un entorno de lectura premium que equilibra estabilidad y estética.
  */
 export const MateriaReader = ({ params }) => {
     const { state } = useSovereign();
-    const [theme, setTheme] = useState('dark'); // light | dark
+    const [theme, setTheme] = useState('dark');
     const slug = params?.slug;
 
-    // Detectar recurso específico desde la URL (ya sea por índice o por URL directa)
     const hashParts = window.location.hash.split('?');
     const query = new URLSearchParams(hashParts[1] || "");
     const resIdx = parseInt(query.get('res')) || 0;
     const directUrl = query.get('url');
 
-    // Buscamos la materia en el silo
     const materia = state.inventory?.find(m => m.slug === slug) || 
                    state.NOMON_ENTRIES?.find(m => m.slug === slug);
 
     const library = materia?.data?.content?.library || [];
     const resource = library[resIdx] || (library.length > 0 ? library[0] : null);
     
-    // Prioridad: URL directa > Recurso de biblioteca > Fallback
     const pdfUrl = directUrl || resource?.url || "";
-    const title = resource?.desc || materia?.data?.content?.title?.es || "Documento Digital";
+    const title = resource?.desc || materia?.data?.content?.title?.es || "DOCUMENTO DIGITAL";
     const userEmail = state.identity?.user?.handle?.label || "USUARIO_NOMON_ANONIMO";
 
     return (
         <div className={`materia-reader-viewport theme-${theme}`}>
             <header className="reader-toolbar">
-                <div className="reader-title">{title} {library.length > 1 && `(${resIdx + 1}/${library.length})`}</div>
+                <div className="reader-brand">NOMON // {title}</div>
                 <div className="reader-controls">
-                    <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="theme-toggle">
+                    <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="ctrl-btn">
                         {theme === 'dark' ? '☀️ MODO CLARO' : '🌙 MODO OSCURO'}
                     </button>
-                    <button onClick={() => window.location.hash = '/'} className="exit-btn">CERRAR</button>
+                    <button onClick={() => window.location.hash = '/'} className="ctrl-btn exit">CERRAR</button>
                 </div>
             </header>
 
             <main className="reader-canvas">
-                {/* 🛡️ CAPA DE MARCA DE AGUA */}
-                <div className="watermark-overlay">
-                    <div className="watermark-text">
-                        {Array(50).fill(`${userEmail} | NOMON PROTOCOL | `).join('')}
-                    </div>
+                {/* 🛡️ MARCA DE AGUA ESTRUCTURAL */}
+                <div className="reader-watermark">
+                    {Array(40).fill(`${userEmail} | SOVEREIGN PROTOCOL | `).join('')}
                 </div>
 
-                {/* 📖 PROYECTOR DE PDF */}
                 {pdfUrl ? (
-                    <div className="pdf-container" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', overflowY: 'auto' }}>
-                        <iframe 
-                            src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`} 
-                            className="pdf-viewer"
-                            title={title}
-                        />
+                    <div className="document-container">
+                        <div className="document-shadow-box animate-fade-up">
+                            <iframe 
+                                src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1`} 
+                                className={`pdf-proyector ${theme === 'dark' ? 'pdf-inverted' : ''}`}
+                                title={title}
+                            />
+                        </div>
                         
-                        {/* 🏗️ COMPOSICIÓN LINEAL EN LA BIBLIOTECA */}
-                        {materia?.data?.content?.composition && (
-                            <div className="reader-footer-composition" style={{ width: '90%', padding: '4rem 0' }}>
-                                <MateriaComposer composition={materia.data.content.composition} />
+                        {/* SECCIÓN DE CONTEXTO (Bajo el documento) */}
+                        {(materia?.data?.content?.composition || materia?.data?.relations) && (
+                            <div className="document-context">
+                                <div className="context-divider"></div>
+                                {materia?.data?.content?.composition && (
+                                    <MateriaComposer composition={materia.data.content.composition} />
+                                )}
+                                <MateriaRelations relations={materia?.data?.relations || []} />
                             </div>
                         )}
-
-                        {/* 🕸️ RESONANCIAS EN LA BIBLIOTECA */}
-                        <div className="reader-footer-relations" style={{ width: '90%', padding: '0 0 4rem 0' }}>
-                            <MateriaRelations relations={materia?.data?.relations || []} />
-                        </div>
                     </div>
                 ) : (
-                    <div className="reader-placeholder">
-                        <div className="placeholder-msg">
-                            <h2>Sin Archivo Digital</h2>
-                            <p>Esta materia aún no ha sido cristalizada en formato PDF.</p>
-                        </div>
-                    </div>
+                    <div className="reader-empty">CRISTALIZACIÓN NO ENCONTRADA</div>
                 )}
             </main>
 
             <style dangerouslySetInnerHTML={{ __html: `
                 .materia-reader-viewport {
                     position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100vw;
-                    height: 100vh;
+                    top: 0; left: 0; width: 100vw; height: 100vh;
+                    z-index: 99999;
                     display: flex;
                     flex-direction: column;
-                    z-index: 1000;
+                    background: ${theme === 'dark' ? '#080808' : '#f0f0f0'};
+                    color: ${theme === 'dark' ? '#fff' : '#000'};
                     font-family: 'Outfit', sans-serif;
-                    transition: all 0.4s ease;
+                    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
                 }
 
-                .theme-dark { background: #0a0a0a; color: #ffffff; }
-                .theme-light { background: #f5f5f5; color: #000000; }
-
                 .reader-toolbar {
-                    padding: 1rem 2rem;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    border-bottom: 1px solid rgba(128,128,128,0.2);
-                    backdrop-filter: blur(10px);
+                    padding: 1.2rem 2.5rem;
+                    background: rgba(0,0,0,0.85);
+                    backdrop-filter: blur(15px);
+                    color: #fff;
+                    z-index: 100;
+                    border-bottom: 0.05rem solid rgba(255,255,255,0.1);
                 }
 
-                .reader-title {
-                    font-weight: 500;
-                    letter-spacing: 0.05em;
-                    text-transform: uppercase;
-                    font-size: 0.9rem;
-                }
+                .reader-brand { font-size: 0.65rem; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; }
 
-                .reader-controls {
-                    display: flex;
-                    gap: 1rem;
-                }
-
-                .theme-toggle, .exit-btn {
+                .reader-controls { display: flex; gap: 0.8rem; }
+                .ctrl-btn {
                     background: none;
-                    border: 1px solid currentColor;
-                    color: inherit;
-                    padding: 0.5rem 1rem;
-                    font-size: 0.7rem;
-                    font-weight: 700;
+                    color: #fff;
+                    border: 0.05rem solid rgba(255,255,255,0.3);
+                    padding: 0.6rem 1.2rem;
+                    font-size: 0.6rem;
+                    font-weight: 900;
                     cursor: pointer;
-                    transition: all 0.2s;
+                    transition: all 0.3s ease;
+                    text-transform: uppercase;
                 }
 
-                .theme-toggle:hover, .exit-btn:hover {
-                    background: currentColor;
-                    color: ${theme === 'dark' ? '#000' : '#fff'};
-                    cursor: pointer;
-                }
+                .ctrl-btn:hover { background: #fff; color: #000; border-color: #fff; }
+                .ctrl-btn.exit { background: #fff; color: #000; border-color: #fff; }
 
                 .reader-canvas {
                     flex: 1;
+                    overflow-y: auto;
                     position: relative;
-                    overflow: hidden;
+                    padding: 4rem 0;
                     display: flex;
-                    justify-content: center;
+                    flex-direction: column;
                     align-items: center;
                 }
 
-                .pdf-viewer {
+                .document-container {
                     width: 90%;
-                    height: 95%;
-                    border: none;
-                    border-radius: 4px;
-                    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-                }
-
-                .watermark-overlay {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    pointer-events: none;
-                    z-index: 10;
-                    overflow: hidden;
-                    opacity: 0.05;
+                    max-width: 75rem;
                     display: flex;
+                    flex-direction: column;
                     align-items: center;
-                    justify-content: center;
+                    gap: 4rem;
+                }
+
+                .document-shadow-box {
+                    width: 100%;
+                    background: #fff;
+                    box-shadow: 0 4rem 8rem rgba(0,0,0,0.5);
+                    position: relative;
+                    z-index: 10;
+                }
+
+                .pdf-proyector {
+                    width: 100%;
+                    height: 90vh;
+                    border: none;
+                    display: block;
+                    transition: filter 0.6s ease;
+                }
+
+                .pdf-inverted {
+                    filter: invert(0.9) hue-rotate(180deg) contrast(1.1) brightness(1.1);
+                    background: #000;
+                }
+
+                .document-context {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3rem;
+                }
+
+                .context-divider {
+                    height: 0.1rem;
+                    width: 5rem;
+                    background: currentColor;
+                    opacity: 0.2;
+                }
+
+                .animate-fade-up {
+                    animation: fadeUp 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+                }
+
+                @keyframes fadeUp {
+                    from { opacity: 0; transform: translateY(2rem); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                .reader-watermark {
+                    position: fixed;
+                    top: 0; left: 0; width: 100%; height: 100%;
+                    pointer-events: none;
+                    opacity: 0.03;
+                    z-index: 5;
+                    font-size: 1.2rem;
+                    font-weight: 300;
+                    overflow: hidden;
                     transform: rotate(-30deg) scale(1.5);
+                    display: flex;
+                    flex-wrap: wrap;
                 }
 
-                .watermark-text {
-                    font-size: 1.5rem;
+                .reader-empty {
+                    padding: 10rem;
                     font-weight: 900;
-                    line-height: 2;
+                    letter-spacing: 0.5em;
+                    opacity: 0.3;
                     text-align: center;
-                    white-space: pre-wrap;
-                }
-
-                .reader-placeholder {
-                    text-align: center;
-                    opacity: 0.5;
                 }
 
                 @media (max-width: 768px) {
-                    .pdf-viewer { width: 100%; height: 100%; border-radius: 0; }
-                    .reader-title { display: none; }
+                    .document-container { width: 100%; }
+                    .pdf-proyector { height: 75vh; }
+                    .reader-brand { display: none; }
                 }
             `}} />
         </div>
