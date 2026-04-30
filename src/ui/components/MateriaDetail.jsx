@@ -23,8 +23,6 @@ export const MateriaDetail = ({ params }) => {
 
     const content = materia.data?.content || {};
     const title = content.title?.es || content.title || materia.name;
-    const summary = content.summary?.es || content.summary || "";
-    const body = content.body || "";
     const image = content.image || materia.metadata?.image;
 
     return (
@@ -41,41 +39,15 @@ export const MateriaDetail = ({ params }) => {
                     <h1 className="detail-title">{title}</h1>
                 </header>
 
-                {/* 🏗️ PROYECTOR DE MATERIA (Flujo Agnóstico) */}
+                {/* 🏗️ PROYECTOR DE MATERIA (Tejido Agnóstico Puro) */}
                 <div className="materia-content-flow">
-                    {summary && <div className="detail-summary">{summary}</div>}
-                    
-                    {body && <div className="detail-body" dangerouslySetInnerHTML={{ __html: body }} />}
-                    
                     {content.composition?.length > 0 && (
-                        <MateriaComposer composition={content.composition} />
+                        <MateriaComposer 
+                            composition={content.composition} 
+                            slug={slug} 
+                        />
                     )}
                 </div>
-
-                {/* 📖 BIBLIOTECA CURADA (RECURSOS) */}
-                {materia.data?.content?.library?.length > 0 && (
-                    <section className="detail-library">
-                        <h4 className="relations-label">BIBLIOTECA Y RECURSOS CURADOS</h4>
-                        <div className="library-grid">
-                            {materia.data.content.library.map((res, i) => (
-                                <div key={i} className="library-card">
-                                    <div className="lib-badge">{res.type}</div>
-                                    <h5>{res.desc || 'Recurso sin título'}</h5>
-                                    <div className="lib-curation">
-                                        <p><b>Por qué:</b> {res.rationale}</p>
-                                        <span><b>Curador:</b> {res.curator}</span>
-                                    </div>
-                                    <button 
-                                        className="read-btn" 
-                                        onClick={() => window.location.hash = `/biblioteca/${materia.slug}?res=${i}`}
-                                    >
-                                        ACCEDER AL RECURSO
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
 
                 {/* 🕸️ PROYECTOR DE RESONANCIAS */}
                 <MateriaRelations relations={materia.data?.relations} />

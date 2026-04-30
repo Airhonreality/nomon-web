@@ -22,8 +22,8 @@ export const DataCard = ({ definition }) => {
 
     const label = typeMap[type] || 'Materia';
 
-    const title = content.title?.es || content.title || 'Sin Título';
-    const summary = content.summary?.es || content.summary || content.subtitle?.es || '';
+    const title = (typeof content.title === 'object' ? content.title?.es : content.title) || 'Sin Título';
+    const summary = (typeof content.summary === 'object' ? content.summary?.es : content.summary) || '';
     const image = content.image || meta.image;
 
     const handleNavigate = () => {

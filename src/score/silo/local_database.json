@@ -121,16 +121,21 @@
                     "summary": {
                         "es": "Un libro. Una misión. Un nuevo norte.\nEn NOMON no buscamos donaciones pasivas; buscamos socios en la creación de un nuevo estándar ético para Colombia."
                     },
-                    "image": "/assets/materia/portada-guardian-sextante.png",
+                    "image": "/assets/materia/portada-guardian-del-sextante-nomon.png",
                     "composition": [
                         {
+                            "type": "MARKDOWN",
+                            "id": 1777555870091,
+                            "content": "Un libro. Una misión. Un nuevo norte.\nEn NOMON no buscamos donaciones pasivas; buscamos socios en la creación de un nuevo estándar ético para Colombia."
+                        },
+                        {
                             "type": "LIBRARY_RESOURCE",
-                            "id": 1777515166938,
+                            "id": 1777554761511,
                             "content": "",
-                            "url": "/assets/materia/El guardian del sextante imp.pdf",
+                            "url": "/assets/materia/el-guardian-del-sextante-red-nomon.pdf",
                             "resType": "PDF",
                             "desc": "",
-                            "curator": "Airhon Javier García",
+                            "curator": "",
                             "rationale": ""
                         }
                     ],

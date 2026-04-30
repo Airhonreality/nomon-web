@@ -5,7 +5,7 @@ import { MateriaRelations } from './MateriaRelations.jsx';
  * 🎨 MATERIA COMPOSER ACTOR
  * Interpreta y proyecta la secuencia lineal de bloques de una entidad.
  */
-export const MateriaComposer = ({ composition }) => {
+export const MateriaComposer = ({ composition, slug }) => {
     const [expandedBlocks, setExpandedBlocks] = React.useState({});
 
     const toggleBlock = (id) => {
@@ -14,17 +14,22 @@ export const MateriaComposer = ({ composition }) => {
 
     if (!composition || composition.length === 0) return null;
 
+    const safeStr = (val) => {
+        if (typeof val === 'object' && val !== null) return val.es || val.en || '';
+        return val || '';
+    };
+
     return (
         <div className="materia-composition-lane">
             {composition.map((block, i) => {
                 switch (block.type) {
                     case 'TITLE':
-                        return <h2 key={block.id || i} className="comp-title">{block.content}</h2>;
+                        return <h2 key={block.id || i} className="comp-title">{safeStr(block.content)}</h2>;
                     
                     case 'MARKDOWN':
                         return (
                             <div key={block.id || i} className="comp-markdown" 
-                                 dangerouslySetInnerHTML={{ __html: block.content }} />
+                                 dangerouslySetInnerHTML={{ __html: safeStr(block.content) }} />
                         );
 
                     case 'IMAGE':
@@ -41,27 +46,32 @@ export const MateriaComposer = ({ composition }) => {
 
                     case 'LIBRARY_RESOURCE':
                         const isExpanded = expandedBlocks[block.id || i];
+                        const hasMetadata = block.rationale || block.curator;
                         return (
                             <div key={block.id || i} className="comp-library-resource">
                                 <div className="lib-badge">{block.resType}</div>
-                                <h3 className="lib-title">{block.desc || 'Recurso de Biblioteca'}</h3>
+                                <h3 className="lib-title">{safeStr(block.desc) || 'Recurso de Biblioteca'}</h3>
                                 
-                                {/* ⚖️ ELEMENTO CANÓNICO DE COLAPSO (Disclosure) */}
-                                <div className="materia-disclosure" onClick={() => toggleBlock(block.id || i)}>
-                                    <div className={`disclosure-line ${isExpanded ? 'active' : ''}`}></div>
-                                    <span className="disclosure-label">{isExpanded ? 'OCULTAR METADATOS' : 'VER CURADURÍA Y POR QUÉ NOMON'}</span>
-                                </div>
+                                {hasMetadata && (
+                                    <div className="materia-disclosure" onClick={() => toggleBlock(block.id || i)}>
+                                        <div className={`disclosure-line ${isExpanded ? 'active' : ''}`}></div>
+                                        <span className="disclosure-label">{isExpanded ? 'MENOS' : 'INFO'}</span>
+                                    </div>
+                                )}
 
-                                {isExpanded && (
+                                {isExpanded && hasMetadata && (
                                     <div className="lib-curation animate-fade-in">
-                                        <p><b>Por qué NOMON:</b> {block.rationale}</p>
-                                        <span><b>Curado por:</b> {block.curator}</span>
+                                        {block.rationale && <p><b>Por qué NOMON:</b> {safeStr(block.rationale)}</p>}
+                                        {block.curator && <span><b>Curado por:</b> {safeStr(block.curator)}</span>}
                                     </div>
                                 )}
 
                                 <button 
                                     className="lib-read-btn" 
-                                    onClick={() => window.location.hash = `/biblioteca/direct?url=${encodeURIComponent(block.url)}`}
+                                    onClick={() => {
+                                        const safeUrl = encodeURIComponent(block.url || "");
+                                        window.location.hash = `/biblioteca/${slug}?url=${safeUrl}`;
+                                    }}
                                 >
                                     ACCEDER AL CONOCIMIENTO DIGITAL →
                                 </button>

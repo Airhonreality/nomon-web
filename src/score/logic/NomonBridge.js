@@ -77,12 +77,17 @@ class NomonBridgeClass {
 
         if (uqo.protocol === 'DELETE') {
             try {
+                const targetContext = uqo.context_id || uqo.payload?.context_id || uqo.data?.context_id || 'NOMON_ENTRIES';
+                const targetSlug = uqo.payload?.slug || uqo.data?.slug;
+
+                if (!targetSlug) throw new Error("Falta el SLUG de la materia para la disolución.");
+
                 const response = await fetch('/api/delete', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        context_id: uqo.context_id || 'NOMON_ENTRIES',
-                        slug: uqo.data.slug
+                        context_id: targetContext,
+                        slug: targetSlug
                     })
                 });
                 return await response.json();

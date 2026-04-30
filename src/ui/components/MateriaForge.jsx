@@ -1,9 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { useSovereign } from '../../score/SovereignContext.jsx';
 import { useIndraResonance } from '../../score/hooks/useIndraResonance.js';
+import { MateriaEditor } from './MateriaEditor.jsx';
+import { MateriaLinker } from './MateriaLinker.jsx';
 
 /**
- * 🛠️ MATERIA CONSTRUCTOR (Admin Actor)
+ * 🖋️ COMPONENTE AUXILIAR: Barra de Inserción
+ * (Definido fuera para evitar pérdida de estado en renders)
+ */
+const InsertBar = ({ index, addBlock, blockTypes }) => {
+    const [open, setOpen] = useState(false);
+    return (
+        <div className="insert-bar" style={{ position: 'relative', height: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0.5rem 0' }}>
+            <div style={{ position: 'absolute', width: '100%', height: '1px', background: 'rgba(0,0,0,0.05)' }}></div>
+            <button 
+                type="button" 
+                onClick={() => setOpen(!open)} 
+                style={{ 
+                    position: 'relative', zIndex: 10, background: '#000', color: '#fff', 
+                    border: 'none', borderRadius: '50%', width: '1.8rem', height: '1.8rem', 
+                    cursor: 'pointer', fontWeight: 'bold', fontSize: '1.2rem',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}
+            >
+                {open ? '×' : '+'}
+            </button>
+            {open && (
+                <div style={{ 
+                    position: 'absolute', top: '2.8rem', zIndex: 100, background: '#fff', 
+                    border: '1px solid #000', padding: '0.8rem', display: 'grid', 
+                    gridTemplateColumns: '1fr 1fr', gap: '0.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+                    minWidth: '250px'
+                }}>
+                    {Object.keys(blockTypes).map(t => (
+                        <button 
+                            key={t} 
+                            type="button" 
+                            onClick={() => { addBlock(t, index); setOpen(false); }} 
+                            style={{ 
+                                fontSize: '0.65rem', padding: '0.6rem', textAlign: 'left', 
+                                background: '#f9f9f9', border: 'none', cursor: 'pointer', 
+                                fontWeight: 'bold', textTransform: 'uppercase' 
+                            }}
+                        >
+                            + {blockTypes[t]}
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+/**
+ * 🛠️ MATERIA CONSTRUCTOR (V3 - Agnostic & Robust)
  */
 export const MateriaForge = () => {
     const { bridge } = useSovereign();
@@ -12,10 +62,9 @@ export const MateriaForge = () => {
     const [selectedClass, setSelectedClass] = useState('DATA_CARD');
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
-        title: '', summary: '', slug: '', image: '', body: '', type: 'DATA_CARD', relations: [], composition: [], pdf_url: ''
+        title: '', summary: '', slug: '', image: '', relations: [], composition: [], pdf_url: ''
     });
 
-    // Tipos de bloques disponibles
     const BLOCK_TYPES = {
         'TITLE': 'Título Destacado',
         'MARKDOWN': 'Bloque de Texto / MD',
@@ -24,97 +73,120 @@ export const MateriaForge = () => {
         'LIBRARY_RESOURCE': 'Recurso Bibliográfico'
     };
 
-    const addBlock = (type) => {
+    const addBlock = (type, index = null) => {
         const newBlock = { type, id: Date.now(), content: '' };
         if (type === 'IMAGE') newBlock.images = [''];
         if (type === 'LIBRARY_RESOURCE') {
-            newBlock.url = '';
-            newBlock.resType = 'PDF';
-            newBlock.desc = '';
-            newBlock.curator = '';
-            newBlock.rationale = '';
+            newBlock.url = ''; newBlock.resType = 'PDF'; newBlock.desc = ''; newBlock.curator = ''; newBlock.rationale = '';
         }
-        setFormData(prev => ({ ...prev, composition: [...prev.composition, newBlock] }));
+        
+        setFormData(prev => {
+            const newComp = [...(prev.composition || [])];
+            if (index === null) newComp.push(newBlock);
+            else newComp.splice(index, 0, newBlock);
+            return { ...prev, composition: newComp };
+        });
+    };
+
+    const moveBlock = (index, direction) => {
+        const newComp = [...formData.composition];
+        const target = index + direction;
+        if (target < 0 || target >= newComp.length) return;
+        const [item] = newComp.splice(index, 1);
+        newComp.splice(target, 0, item);
+        setFormData({ ...formData, composition: newComp });
     };
 
     const updateBlock = (id, data) => {
         setFormData(prev => ({
             ...prev,
-            composition: prev.composition.map(b => b.id === id ? { ...b, ...data } : b)
+            composition: (prev.composition || []).map(b => b.id === id ? { ...b, ...data } : b)
         }));
     };
 
     const removeBlock = (id) => {
         setFormData(prev => ({
             ...prev,
-            composition: prev.composition.filter(b => b.id !== id)
+            composition: (prev.composition || []).filter(b => b.id !== id)
         }));
     };
 
-    const inventory = entries || [];
-    const groupedInventory = inventory.reduce((acc, item) => {
-        const type = item.meta?.component_type || item.metadata?.type || 'OTRO';
-        if (!acc[type]) acc[type] = [];
-        acc[type].push(item);
-        return acc;
-    }, {});
-
     const generateSlug = (text) => {
-        return text
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "") // Elimina tildes
-            .replace(/[^a-z0-9]/g, '-') // Reemplaza no-alfanumérico por guiones
-            .replace(/-+/g, '-') // Elimina guiones dobles
-            .replace(/^-|-$/g, ''); // Elimina guiones al inicio/final
+        return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
     };
-    
-    // 🧬 Efecto de Auto-Slug
-    useEffect(() => {
-        if (!isEditing && formData.title) {
-            setFormData(prev => ({ ...prev, slug: generateSlug(formData.title) }));
-        }
-    }, [formData.title, isEditing]);
 
     const handleSelectForEdit = (item) => {
-        const title = item.data?.content?.title?.es || item.metadata?.title || item.name || '';
-        const summary = item.data?.content?.summary?.es || item.metadata?.summary || item.description || '';
-        const image = item.data?.content?.image || item.metadata?.image || '';
-        const type = item.meta?.component_type || item.metadata?.type || 'DATA_CARD';
-        const body = item.data?.content?.body || item.metadata?.body_markdown || '';
-        const relations = item.data?.relations || item.data?.content?.relations || [];
-        const composition = item.data?.content?.composition || [];
-        const pdf_url = item.data?.content?.pdf_url || '';
+        if (!item) return;
+        const d = item.data || {};
+        const c = d.content || {};
+        let comp = [...(c.composition || [])];
 
-        setFormData({ title, summary, type, slug: item.slug || '', image, body, relations, composition, pdf_url });
-        setSelectedClass(type);
+        // 🧬 BÚSQUEDA EXHAUSTIVA DE IMAGEN (Honestidad de Datos)
+        const foundImage = c.image || c.img || d.image || d.img || item.image || item.thumbnail || '';
+
+        // 🧬 TRANSMUTACIÓN: Cuerpo Legado
+        if (c.body && c.body.trim().length > 0) {
+            comp = [{ type: 'MARKDOWN', id: 'legacy-body-' + Date.now(), content: c.body }, ...comp];
+        }
+
+        // 🧬 TRANSMUTACIÓN: Biblioteca Legada
+        if (c.library && Array.isArray(c.library) && c.library.length > 0) {
+            const legacyLibraryBlocks = c.library.map((res, idx) => ({
+                type: 'LIBRARY_RESOURCE',
+                id: `legacy-lib-${idx}-${Date.now()}`,
+                url: res.url || '',
+                desc: res.desc || '',
+                curator: res.curator || '',
+                rationale: res.rationale || '',
+                resType: res.type || 'PDF'
+            }));
+            if (!comp.some(b => b.type === 'LIBRARY_RESOURCE')) {
+                comp = [...comp, ...legacyLibraryBlocks];
+            }
+        }
+
+        setFormData({
+            title: c.title?.es || c.title || item.name || '',
+            summary: c.summary?.es || c.summary || d.summary || '',
+            slug: item.slug || '',
+            image: foundImage,
+            relations: d.relations || [],
+            composition: comp,
+            pdf_url: c.pdf_url || ''
+        });
+        setSelectedClass(item.meta?.component_type || 'DATA_CARD');
         setIsEditing(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const resetForm = () => {
-        setFormData({ title: '', summary: '', body: '', type: selectedClass, slug: '', image: '', relations: [], composition: [], pdf_url: '' });
+        setFormData({ title: '', summary: '', slug: '', image: '', relations: [], composition: [], pdf_url: '' });
         setIsEditing(false);
     };
 
     const handleDelete = async () => {
-        if (!window.confirm("¿Estás seguro de que deseas disolver esta materia? Esta acción es irreversible en el Silo local.")) return;
+        if (!window.confirm("¿Estás seguro de que deseas disolver esta materia permanentemente?")) return;
         
+        const uqo = {
+            protocol: 'DELETE',
+            identity: { id: 'indra-core' },
+            payload: { context_id: 'NOMON_ENTRIES', slug: formData.slug }
+        };
+
         try {
-            await bridge.execute({
-                protocol: 'DELETE',
-                context_id: 'NOMON_ENTRIES',
-                data: { slug: formData.slug }
-            });
+            await bridge.execute(uqo);
+            console.log("🧨 Materia disuelta con éxito.");
             resetForm();
-            window.location.reload(); 
-        } catch (err) { alert("Error al disolver: " + err.message); }
+            window.location.reload();
+        } catch (err) {
+            console.error("❌ Fallo en la disolución:", err);
+        }
     };
 
     const handleSave = async (e) => {
         e.preventDefault();
         const cleanSlug = generateSlug(formData.slug || formData.title);
-
+        
         const uqo = {
             protocol: 'CREATE',
             context_id: 'NOMON_ENTRIES',
@@ -125,7 +197,6 @@ export const MateriaForge = () => {
                     content: {
                         title: { es: formData.title },
                         summary: { es: formData.summary },
-                        body: formData.body,
                         image: formData.image,
                         composition: formData.composition,
                         pdf_url: formData.pdf_url
@@ -134,194 +205,178 @@ export const MateriaForge = () => {
                 }
             }
         };
-
         try {
             await bridge.execute(uqo);
-            alert("Materia cristalizada.");
+            alert("Materia Cristalizada.");
             if (!isEditing) resetForm();
+            window.location.reload();
         } catch (err) { console.error(err); }
     };
 
-    const uploadFile = async (file) => {
-        if (!file) return null;
-        try {
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                headers: { 'x-filename': file.name },
-                body: file
-            });
-            const result = await response.json();
-            return result.url;
-        } catch (err) {
-            console.error("Error subiendo materia:", err);
-            return null;
-        }
-    };
-
-    const handleFileUpload = async (e) => {
-        const url = await uploadFile(e.target.files[0]);
-        if (url) setFormData({ ...formData, image: url });
-    };
+    const inventory = entries || [];
+    const groupedInventory = inventory.reduce((acc, item) => {
+        const t = item.meta?.component_type || 'OTRO';
+        if (!acc[t]) acc[t] = []; acc[t].push(item); return acc;
+    }, {});
 
     return (
         <section className="materia-forge-container">
             <div className="forge-main">
-                <div className="class-selector-header">
-                    <label>CLASE DE ENTIDAD</label>
-                    <select value={selectedClass} onChange={e => { setSelectedClass(e.target.value); setFormData({...formData, type: e.target.value}); }}>
-                        <option value="ENTITY_NEWS">Entidad: Noticia</option>
+                <div className="class-selector-header" style={{ marginBottom: '2rem' }}>
+                    <label>ARQUETIPO DE ENTIDAD</label>
+                    <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)}>
                         <option value="ENTITY_PROJECT">Entidad: Proyecto</option>
+                        <option value="ENTITY_NEWS">Entidad: Noticia</option>
                         <option value="ENTITY_ALLY">Entidad: Aliado</option>
                         <option value="LIBRARY_RESOURCE">Recurso de Biblioteca</option>
-                        <option value="BANNER_INFO">Estructura: Banner Informativo</option>
-                        <option value="BANNER_ACTION">Estructura: Banner de Acción (Landing)</option>
+                        <option value="BANNER_INFO">Estructura: Informativa</option>
+                        <option value="BANNER_ACTION">Estructura: Acción</option>
                     </select>
-                    <button className="new-btn" onClick={resetForm}>+ NUEVA ENTIDAD</button>
+                    <button type="button" className="new-btn" onClick={resetForm}>+ NUEVA ENTIDAD</button>
                 </div>
-                <h2 className="forge-title">{isEditing ? `Editando: ${formData.slug}` : `Nueva Entidad: ${selectedClass}`}</h2>
-                <form onSubmit={handleSave} className="forge-form">
-                    <div className="form-row">
-                        <input type="text" placeholder="Título" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
-                        {!isEditing && <input type="text" placeholder="Slug" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} />}
-                    </div>
-                    <div className="form-row" style={{ alignItems: 'center' }}>
-                        <input type="text" style={{ flex: 1 }} placeholder="URL Imagen" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} />
-                        <label className="file-upload-btn" style={{ marginLeft: '10px', cursor: 'pointer', background: '#000', color: '#fff', padding: '10px 15px' }}>
-                            📁 CARGAR LOCAL
-                            <input type="file" onChange={handleFileUpload} style={{display: 'none'}} />
-                        </label>
-                    </div>
 
-                    {/* 🏗️ CARRIL VERTICAL DE COMPOSICIÓN */}
-                    <div className="composition-lane">
-                        <div className="add-block-controls" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(10rem, 1fr))', gap: '0.5rem', background: '#000', padding: '0.5rem', marginBottom: '2rem' }}>
-                            {Object.keys(BLOCK_TYPES).map(type => (
-                                <button key={type} type="button" onClick={() => addBlock(type)} className="forge-btn" style={{ fontSize: '0.6rem', padding: '0.8rem' }}>+ {BLOCK_TYPES[type]}</button>
-                            ))}
+                <form onSubmit={handleSave} className="forge-form">
+                    <div className="identity-section" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem' }}>
+                        <div className="identity-field">
+                            <label className="group-label">TÍTULO DE LA ENTIDAD</label>
+                            <input 
+                                type="text" 
+                                placeholder="Nombre de la materia..." 
+                                value={typeof formData.title === 'object' ? formData.title?.es : formData.title} 
+                                onChange={e => setFormData({...formData, title: e.target.value})} 
+                                required 
+                                style={{ fontSize: '1.8rem', fontWeight: 900, width: '100%', border: 'none', borderBottom: '2px solid #eee', padding: '0.5rem 0' }} 
+                            />
                         </div>
 
-                        <label className="group-label">SECUENCIA DE COMPOSICIÓN</label>
+                        <div className="identity-field">
+                            <label className="group-label">SLUG / URL AMIGABLE</label>
+                            <input type="text" placeholder="slug-de-la-materia" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} style={{ opacity: 0.5, width: '100%' }} />
+                        </div>
+
+                        <div className="identity-field">
+                            <MateriaLinker 
+                                value={formData.image} 
+                                label="IMAGEN PRINCIPAL (MANIFEST)"
+                                onChange={(val) => setFormData({...formData, image: val})} 
+                            />
+                            {formData.image && (
+                                <div style={{ marginTop: '1rem', border: '1px solid #eee', padding: '1rem', background: '#fafafa', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                                    <div style={{ width: '6rem', height: '6rem', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                                        <img src={formData.image} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                             onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML = '<span style="font-size:0.5rem; opacity:0.5; text-align:center">ARCHIVO NO ENCONTRADO EN /ASSETS/</span>'; }} />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                                        <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>PREVISUALIZACIÓN DE PIEL (GRID CARD)</span>
+                                        <span style={{ fontSize: '0.55rem', opacity: 0.5, maxWidth: '20rem' }}>
+                                            ⚠️ SOBERANÍA MANUAL: Asegúrate de que el archivo físico esté en <code>/public/assets/materia/</code> con el nombre exacto que ves arriba.
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="identity-field">
+                            <label className="group-label">RESUMEN EJECUTIVO (SKIN)</label>
+                            <textarea 
+                                placeholder="Breve descripción para la tarjeta del grid..." 
+                                value={typeof formData.summary === 'object' ? formData.summary?.es : formData.summary} 
+                                onChange={e => setFormData({...formData, summary: e.target.value})} 
+                                style={{ minHeight: '6rem', padding: '1rem', width: '100%', border: '1px solid #eee', fontSize: '1rem', lineHeight: '1.6' }} 
+                            />
+                        </div>
+                    </div>
+
+                    <div className="composition-lane" style={{ margin: '3rem 0', borderTop: '0.1rem solid #eee', paddingTop: '2rem' }}>
+                        <label className="group-label" style={{ letterSpacing: '0.3em', marginBottom: '2rem', display: 'block' }}>TEJIDO DE COMPOSICIÓN</label>
                         
-                        <div className="blocks-vertical-list" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
-                            {formData.composition.map((block, i) => (
-                                <div key={block.id} className="composition-block" style={{ background: '#f9f9f9', padding: '1.5rem', border: '0.05rem solid rgba(0,0,0,0.1)', position: 'relative' }}>
-                                    <span className="block-badge" style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5 }}>#{i+1} {BLOCK_TYPES[block.type]}</span>
-                                    <button type="button" onClick={() => removeBlock(block.id)} style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', background: 'none', border: 'none', color: 'red', cursor: 'pointer', fontSize: '0.6rem', fontWeight: 900 }}>ELIMINAR</button>
+                        <InsertBar index={0} addBlock={addBlock} blockTypes={BLOCK_TYPES} />
+                        
+                        {(formData.composition || []).map((block, i) => (
+                            <React.Fragment key={block.id}>
+                                <div className="composition-block" style={{ background: '#fff', padding: '2rem', border: '1px solid #eee', position: 'relative', marginBottom: '0.5rem', boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
+                                    <div style={{ position: 'absolute', top: '0.8rem', right: '0.8rem', display: 'flex', gap: '0.5rem' }}>
+                                        <button type="button" onClick={() => moveBlock(i, -1)} disabled={i === 0}>▲</button>
+                                        <button type="button" onClick={() => moveBlock(i, 1)} disabled={i === formData.composition.length - 1}>▼</button>
+                                        <button type="button" onClick={() => removeBlock(block.id)} style={{ color: 'red', border: 'none', background: 'none', cursor: 'pointer', fontWeight: 900 }}>ELIMINAR</button>
+                                    </div>
+                                    <span style={{ fontSize: '0.6rem', opacity: 0.3, fontWeight: 900, textTransform: 'uppercase' }}>Bloque #{i+1} // {BLOCK_TYPES[block.type]}</span>
                                     
-                                    <div className="block-editor" style={{ marginTop: '1rem' }}>
-                                        {block.type === 'TITLE' && <input type="text" placeholder="Texto del Título" value={block.content} onChange={e => updateBlock(block.id, { content: e.target.value })} />}
-                                        {block.type === 'MARKDOWN' && <textarea placeholder="Contenido Markdown / HTML" value={block.content} onChange={e => updateBlock(block.id, { content: e.target.value })} style={{ minHeight: '15rem' }} />}
+                                    <div style={{ marginTop: '1.5rem' }}>
+                                        {block.type === 'TITLE' && <input type="text" value={block.content} onChange={e => updateBlock(block.id, { content: e.target.value })} placeholder="Texto del título" style={{ fontSize: '1.2rem', border: 'none', borderBottom: '1px solid #eee', width: '100%' }} />}
+                                        {block.type === 'MARKDOWN' && <MateriaEditor value={block.content} onChange={(val) => updateBlock(block.id, { content: val })} placeholder="Escribe aquí..." />}
                                         {block.type === 'IMAGE' && (
-                                            <div style={{ display: 'grid', gap: '0.5rem' }}>
-                                                {block.images.map((img, imgIdx) => (
-                                                    <div key={imgIdx} style={{ display: 'flex', gap: '5px' }}>
-                                                        <input type="text" placeholder={`URL Imagen ${imgIdx + 1}`} value={img} onChange={e => {
-                                                            const newImgs = [...block.images];
-                                                            newImgs[imgIdx] = e.target.value;
-                                                            updateBlock(block.id, { images: newImgs });
-                                                        }} style={{ flex: 1 }} />
-                                                        <label className="file-upload-btn" style={{ cursor: 'pointer', background: '#000', color: '#fff', padding: '5px 10px', fontSize: '0.6rem' }}>
-                                                            📁
-                                                            <input type="file" onChange={async (e) => {
-                                                                const file = e.target.files[0];
-                                                                if (!file) return;
-                                                                const url = await uploadFile(file);
-                                                                if (url) {
-                                                                    const newImgs = [...block.images];
-                                                                    newImgs[imgIdx] = url;
-                                                                    updateBlock(block.id, { images: newImgs });
-                                                                }
-                                                            }} style={{display: 'none'}} />
-                                                        </label>
-                                                    </div>
+                                            <div style={{ display: 'grid', gap: '1rem' }}>
+                                                {(block.images || []).map((img, imgIdx) => (
+                                                    <MateriaLinker 
+                                                        key={imgIdx}
+                                                        value={img}
+                                                        label={`IMAGEN #${imgIdx + 1}`}
+                                                        onChange={(val) => {
+                                                            const ni = [...block.images]; ni[imgIdx] = val;
+                                                            updateBlock(block.id, { images: ni });
+                                                        }}
+                                                    />
                                                 ))}
-                                                <button type="button" onClick={() => updateBlock(block.id, { images: [...block.images, ''] })} className="new-btn" style={{ fontSize: '0.6rem' }}>+ AÑADIR OTRA IMAGEN A LA GALERÍA</button>
+                                                <button type="button" onClick={() => updateBlock(block.id, { images: [...(block.images || []), ''] })} className="new-btn" style={{ fontSize: '0.6rem' }}>+ AÑADIR IMAGEN A GALERÍA</button>
+                                            </div>
+                                        )}
+                                        {block.type === 'LIBRARY_RESOURCE' && (
+                                            <div style={{ display: 'grid', gap: '1rem' }}>
+                                                <MateriaLinker 
+                                                    value={block.url || ''} 
+                                                    label="ARCHIVO DEL RECURSO"
+                                                    onChange={(val) => updateBlock(block.id, { url: val })} 
+                                                />
+                                                <div style={{ display: 'grid', gap: '0.8rem', padding: '1rem', background: '#fcfcfc', border: '1px solid #eee' }}>
+                                                    <input type="text" placeholder="Descripción del recurso" value={block.desc || ''} onChange={e => updateBlock(block.id, { desc: e.target.value })} />
+                                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                        <input type="text" placeholder="Curador" value={block.curator || ''} onChange={e => updateBlock(block.id, { curator: e.target.value })} />
+                                                        <input type="text" placeholder="Justificación NOMON" value={block.rationale || ''} onChange={e => updateBlock(block.id, { rationale: e.target.value })} />
+                                                    </div>
+                                                </div>
                                             </div>
                                         )}
                                         {block.type === 'RESONANCE' && (
-                                            <select value={block.content} onChange={e => updateBlock(block.id, { content: e.target.value })}>
-                                                <option value="">Seleccionar materia a incrustar...</option>
+                                            <select value={block.content} onChange={e => updateBlock(block.id, { content: e.target.value })} style={{ width: '100%', padding: '0.8rem' }}>
+                                                <option value="">Enlazar con otra materia...</option>
                                                 {inventory.map(m => <option key={m.slug} value={m.slug}>{m.data?.content?.title?.es || m.slug}</option>)}
                                             </select>
                                         )}
-                                        {block.type === 'LIBRARY_RESOURCE' && (
-                                            <div style={{ display: 'grid', gap: '0.5rem' }}>
-                                                <div 
-                                                    className="dropzone"
-                                                    onDragOver={e => { e.preventDefault(); e.currentTarget.style.background = '#eee'; }}
-                                                    onDragLeave={e => { e.preventDefault(); e.currentTarget.style.background = 'none'; }}
-                                                    onDrop={async (e) => {
-                                                        e.preventDefault();
-                                                        e.currentTarget.style.background = 'none';
-                                                        const file = e.dataTransfer.files[0];
-                                                        if (file) {
-                                                            const url = await uploadFile(file);
-                                                            if (url) updateBlock(block.id, { url });
-                                                        }
-                                                    }}
-                                                    style={{ border: '0.1rem dashed #ccc', padding: '1.5rem', textAlign: 'center', transition: 'all 0.3s' }}
-                                                >
-                                                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                                        <input type="text" placeholder="URL Archivo / Link" value={block.url} onChange={e => updateBlock(block.id, { url: e.target.value })} style={{ flex: 2 }} />
-                                                        <label className="file-upload-btn" style={{ cursor: 'pointer', background: '#000', color: '#fff', padding: '10px 15px', fontSize: '0.7rem' }}>
-                                                            📁 SUBIR PDF
-                                                            <input type="file" onChange={async (e) => {
-                                                                const file = e.target.files[0];
-                                                                if (file) {
-                                                                    const url = await uploadFile(file);
-                                                                    if (url) updateBlock(block.id, { url });
-                                                                }
-                                                            }} style={{display: 'none'}} />
-                                                        </label>
-                                                        <select value={block.resType} onChange={e => updateBlock(block.id, { resType: e.target.value })} style={{ flex: 1 }}>
-                                                            <option value="PDF">Documento PDF</option>
-                                                            <option value="WEB">Link Externo</option>
-                                                            <option value="VIDEO">Video / Multimedia</option>
-                                                        </select>
-                                                    </div>
-                                                    <small style={{ display: 'block', marginTop: '1rem', color: '#888' }}>O arrastra tu PDF aquí</small>
-                                                </div>
-                                                <input type="text" placeholder="Descripción corta del recurso" value={block.desc} onChange={e => updateBlock(block.id, { desc: e.target.value })} />
-                                                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                                    <input type="text" placeholder="Curador" value={block.curator} onChange={e => updateBlock(block.id, { curator: e.target.value })} />
-                                                    <input type="text" placeholder="Justificación (Por qué NOMON?)" value={block.rationale} onChange={e => updateBlock(block.id, { rationale: e.target.value })} />
-                                                </div>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                                <InsertBar index={i + 1} addBlock={addBlock} blockTypes={BLOCK_TYPES} />
+                            </React.Fragment>
+                        ))}
                     </div>
 
-                    <label className="group-label">CUERPO / TEXTO PRINCIPAL (Legacy)</label>
-                    <textarea placeholder="Cuerpo de la materia..." value={formData.body} onChange={e => setFormData({...formData, body: e.target.value})} style={{ minHeight: '10rem' }} />
-
-                    <label className="group-label">RESUMEN / SUBTÍTULO (Card View)</label>
-                    <textarea placeholder="Resumen / Subtítulo para la Card (Opcional)" value={formData.summary} onChange={e => setFormData({...formData, summary: e.target.value})} />
-                    
-                    <div className="forge-actions">
-                        <button type="submit" className="forge-btn">
-                            {isEditing ? 'ACTUALIZAR' : 'CRISTALIZAR'}
+                    <div className="forge-actions" style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                        <button type="submit" className="forge-btn" style={{ padding: '1.2rem 3rem', background: '#000', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>
+                            {isEditing ? 'ACTUALIZAR MATERIA' : 'CRISTALIZAR MATERIA'}
                         </button>
                         {isEditing && (
-                            <button type="button" onClick={handleDelete} className="forge-btn-delete">
-                                DISOLVER
-                            </button>
+                            <>
+                                <button type="button" onClick={handleDelete} style={{ background: '#ff4444', color: '#fff', border: 'none', padding: '1.2rem 2rem', fontWeight: 900, cursor: 'pointer' }}>
+                                    ELIMINAR MATERIA
+                                </button>
+                                <button type="button" onClick={resetForm} className="forge-btn-cancel" style={{ background: '#fff', border: '1px solid #eee', padding: '1.2rem 2rem', cursor: 'pointer' }}>
+                                    DESCARTAR
+                                </button>
+                            </>
                         )}
-                        <button type="button" onClick={resetForm} className="forge-btn-cancel">CANCELAR</button>
                     </div>
                 </form>
             </div>
-            <aside className="forge-inventory">
-                <h3 className="inventory-header">CATÁLOGO DE MATERIA</h3>
-                {Object.keys(groupedInventory).map(type => (
-                    <div key={type} className="inventory-group">
-                        <span className="group-label">{type}</span>
-                        {groupedInventory[type].map((item, idx) => (
-                            <div key={idx} className="inventory-item" onClick={() => handleSelectForEdit(item)}>
-                                <strong>{item.data?.content?.title?.es || item.name}</strong>
-                                <code>{item.slug}</code>
+
+            <aside className="forge-inventory" style={{ width: '30rem', borderLeft: '1px solid #eee', paddingLeft: '2rem' }}>
+                <h3 className="inventory-header" style={{ fontSize: '0.7rem', opacity: 0.5, letterSpacing: '0.3em', marginBottom: '2rem' }}>SILO DE ENTIDADES</h3>
+                {Object.keys(groupedInventory).map(t => (
+                    <div key={t} className="inventory-group" style={{ marginBottom: '2rem' }}>
+                        <span className="group-label" style={{ fontSize: '0.55rem', opacity: 0.4, borderBottom: '1px solid #eee', display: 'block', paddingBottom: '0.3rem', marginBottom: '0.5rem' }}>{t}</span>
+                        {groupedInventory[t].map(m => (
+                            <div key={m.slug} className="inventory-item" onClick={() => handleSelectForEdit(m)} style={{ cursor: 'pointer', padding: '0.8rem', borderBottom: '1px solid #f9f9f9', fontSize: '0.8rem', background: '#fff', transition: 'all 0.2s' }}>
+                                <strong>{m.data?.content?.title?.es || m.slug}</strong>
+                                <code style={{ display: 'block', fontSize: '0.6rem', opacity: 0.5 }}>{m.slug}</code>
                             </div>
                         ))}
                     </div>

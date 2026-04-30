@@ -9,7 +9,8 @@ import { MateriaComposer } from './MateriaComposer.jsx';
  */
 export const MateriaReader = ({ params }) => {
     const { state } = useSovereign();
-    const [theme, setTheme] = useState('dark');
+    const getSystemTheme = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const [theme, setTheme] = useState(getSystemTheme());
     const slug = params?.slug;
 
     const hashParts = window.location.hash.split('?');
