@@ -70,15 +70,22 @@ class GitHubStrategy extends PersistenceStrategy {
     }
 
     async fetchFullDb() {
-        const url = `https://raw.githubusercontent.com/${this.owner}/${this.repo}/${this.branch}/${this.dbPath}?t=${Date.now()}`;
+        const apiUrl = `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${this.dbPath}`;
         try {
-            const res = await fetch(url);
+            const res = await fetch(apiUrl, {
+                headers: { 
+                    'Authorization': `token ${this.token}`,
+                    'Accept': 'application/vnd.github.v3.raw',
+                    'Cache-Control': 'no-cache'
+                }
+            });
             if (res.ok) return await res.json();
         } catch (err) {
-            console.warn("⚠️ Fallo al leer Raw GitHub, intentando fallback local:", err.message);
+            console.warn("⚠️ Fallo al leer GitHub API, intentando fallback local:", err.message);
         }
         return localDatabaseFallback;
     }
+
 
     async read(context_id) {
         const db = await this.fetchFullDb();
