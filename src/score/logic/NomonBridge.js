@@ -1,4 +1,5 @@
-import { localDatabaseFallback } from './local_database_fallback.js';
+import localDatabaseFallback from '../silo/local_database.json';
+
 
 export const Config = {
     SOVEREIGN_ACTOR: 'indra-core',
