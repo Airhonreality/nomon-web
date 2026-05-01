@@ -143,8 +143,19 @@
                 },
                 "relations": []
             }
+        },
+        {
+            "slug": "digital-sextante",
+            "meta": {
+                "component_type": "ENTITY_WHITELIST"
+            },
+            "data": {
+                "whitelist": [],
+                "activations": []
+            }
         }
     ],
+
     "NOMON_ALLY": [
         {
             "id": "ally_1",
