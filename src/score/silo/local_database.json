@@ -3,7 +3,7 @@
         {
             "slug": "quienes-somos",
             "meta": {
-                "component_type": "BANNER_ACTION"
+                "component_type": "ENTITY_ROUTER"
             },
             "metadata": {
                 "author": "",
