@@ -107,10 +107,16 @@ export const MateriaReader = ({ params }) => {
                 }
 
                 if (strategy === 'REFERENCE_WHITELIST' && accessControl.whitelist_slug) {
-                    const fullDb = state.inventory || [];
+                    const fullDb = state.inventory || state.NOMON_ENTRIES || [];
                     const whitelistEntity = fullDb.find(m => m.slug === accessControl.whitelist_slug);
+                    
+                    if (!whitelistEntity) {
+                        console.log("⏳ [Reader] Esperando a que cargue la Whitelist...");
+                        return; // Esperamos al siguiente ciclo de render
+                    }
+
                     const hashes = whitelistEntity?.data?.whitelist || [];
-                    const emailHash = await calcSha256(state.identity.user.payload.email);
+                    const emailHash = state.identity.user.payload.email_hash || await calcSha256(state.identity.user.payload.email);
                     
                     if (hashes.includes(emailHash)) {
                         setIsWhitelisted(true);
@@ -127,7 +133,7 @@ export const MateriaReader = ({ params }) => {
         };
 
         checkAccess();
-    }, [state.identity?.isLoggedIn, strategy, accessControl.whitelist_slug, isRestricted]);
+    }, [state.identity?.isLoggedIn, state.identity?.user?.payload?.email, state.inventory, state.NOMON_ENTRIES, strategy, accessControl.whitelist_slug, isRestricted]);
 
     const handleLogout = () => {
         appState.logout();

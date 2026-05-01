@@ -10,13 +10,27 @@ import { BookOpen, ArrowRight, Info, Minus, Lock } from 'lucide-react';
  */
 export const MateriaRelations = ({ relations }) => {
     const { state } = useSovereign();
-    const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES');
-    const [expandedBlocks, setExpandedBlocks] = React.useState({});
+    const [userHash, setUserHash] = React.useState(state.identity?.user?.payload?.email_hash || '');
 
-    const toggleBlock = (id) => {
-        setExpandedBlocks(prev => ({ ...prev, [id]: !prev[id] }));
+    // Helper de SHA-256 nativo
+    const calcSha256 = async (message) => {
+        const msgBuffer = new TextEncoder().encode(message.toLowerCase().trim());
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     };
-    
+
+    // Sincronizar el hash del usuario si no está en el payload
+    React.useEffect(() => {
+        const syncHash = async () => {
+            if (state.identity?.isLoggedIn && state.identity?.user?.payload?.email && !userHash) {
+                const hash = await calcSha256(state.identity.user.payload.email);
+                setUserHash(hash);
+            }
+        };
+        syncHash();
+    }, [state.identity?.isLoggedIn, state.identity?.user?.payload?.email]);
+
     if (!relations || relations.length === 0) return null;
 
     // Resolvemos los datos de las resonancias buscando en el inventario remoto
@@ -40,9 +54,9 @@ export const MateriaRelations = ({ relations }) => {
                         if (!state.identity?.isLoggedIn) return false;
                         if (access.strategy === 'REGISTERED_ONLY') return true;
                         if (access.strategy === 'REFERENCE_WHITELIST') {
-                            const userHash = state.identity?.user?.payload?.email_hash || '';
-                            const whitelistNode = entries?.find(w => w.slug === access.whitelist_slug);
-                            return whitelistNode?.data?.whitelist?.includes(userHash);
+                            const currentHash = state.identity?.user?.payload?.email_hash || userHash;
+                            const whitelistNode = (entries || []).find(w => w.slug === access.whitelist_slug);
+                            return whitelistNode?.data?.whitelist?.includes(currentHash);
                         }
                         return false;
                     };
