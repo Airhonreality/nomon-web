@@ -1,6 +1,44 @@
 {
     "NOMON_ENTRIES": [
         {
+            "slug": "libro-digital-guardian-del-sextante",
+            "meta": {
+                "component_type": "LIBRARY_RESOURCE"
+            },
+            "metadata": {
+                "author": "",
+                "editorial": "",
+                "year": "",
+                "id_universal": "",
+                "license": "CC BY-NC",
+                "language": "es",
+                "tags": "",
+                "curator": "",
+                "rationale": ""
+            },
+            "data": {
+                "content": {
+                    "title": {
+                        "es": "Libro digital Guardián del sextante"
+                    },
+                    "summary": {
+                        "es": ""
+                    },
+                    "image": "",
+                    "composition": [],
+                    "pdf_url": ""
+                },
+                "relations": [],
+                "access_control": {
+                    "strategy": "PUBLIC",
+                    "whitelist_slug": "",
+                    "restricted_title": "",
+                    "restricted_message": "",
+                    "denied_message": ""
+                }
+            }
+        },
+        {
             "slug": "el-guardian-del-sextante-la-historia-que-financia-el-manana-pdf-657",
             "meta": {
                 "component_type": "LIBRARY_RESOURCE"
