@@ -44,30 +44,6 @@
             }
         },
         {
-            "slug": "el-guardian-del-sextante-la-historia-que-financia-el-manana-pdf-657",
-            "meta": {
-                "component_type": "LIBRARY_RESOURCE"
-            },
-            "metadata": {
-                "curator": "NOMON Forge Auto-Migrator",
-                "rationale": "Recurso extraído automáticamente de la entidad: EL GUARDIÁN DEL SEXTANTE: LA HISTORIA QUE FINANCIA EL MAÑANA"
-            },
-            "data": {
-                "content": {
-                    "title": {
-                        "es": "Recurso: EL GUARDIÁN DEL SEXTANTE: LA HISTORIA QUE FINANCIA EL MAÑANA"
-                    },
-                    "summary": {
-                        "es": "Documentación vinculada a EL GUARDIÁN DEL SEXTANTE: LA HISTORIA QUE FINANCIA EL MAÑANA"
-                    },
-                    "pdf_url": "/assets/materia/el-guardian-del-sextante-red-nomon.pdf"
-                },
-                "access_control": {
-                    "strategy": "PUBLIC"
-                }
-            }
-        },
-        {
             "slug": "nuestra-filosofia",
             "meta": {
                 "component_type": "BANNER_INFO"
