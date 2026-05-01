@@ -1,6 +1,38 @@
 {
     "NOMON_ENTRIES": [
         {
+            "slug": "nav-bar",
+            "meta": {
+                "component_type": "ENTITY_NAVBAR"
+            },
+            "metadata": {
+                "author": "",
+                "editorial": "",
+                "year": "",
+                "id_universal": "",
+                "license": "CC BY-NC",
+                "language": "es",
+                "tags": "",
+                "curator": "",
+                "rationale": ""
+            },
+            "data": {
+                "content": {
+                    "title": {
+                        "es": "nav bar"
+                    },
+                    "summary": {
+                        "es": ""
+                    },
+                    "image": "",
+                    "composition": [],
+                    "pdf_url": ""
+                },
+                "nav_links": [],
+                "relations": []
+            }
+        },
+        {
             "slug": "quienes-somos",
             "meta": {
                 "component_type": "ENTITY_ROUTER"
