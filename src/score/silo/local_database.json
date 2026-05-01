@@ -7,8 +7,12 @@
             },
             "data": {
                 "content": {
-                    "title": { "es": "Nuestra Filosofía" },
-                    "summary": { "es": "Pragmatismo Ético: entendemos la integridad no como un dogma moral, sino como una herramienta de ingeniería indispensable para la supervivencia y la expansión..." },
+                    "title": {
+                        "es": "Nuestra Filosofía"
+                    },
+                    "summary": {
+                        "es": "Pragmatismo Ético: entendemos la integridad no como un dogma moral, sino como una herramienta de ingeniería indispensable para la supervivencia y la expansión..."
+                    },
                     "image": "",
                     "body": ""
                 }
@@ -21,8 +25,12 @@
             },
             "data": {
                 "content": {
-                    "title": { "es": "SOMOS NOMON" },
-                    "summary": { "es": "NOMON es una organización de impacto..." },
+                    "title": {
+                        "es": "SOMOS NOMON"
+                    },
+                    "summary": {
+                        "es": "NOMON es una organización de impacto..."
+                    },
                     "image": "",
                     "body": ""
                 }
@@ -35,10 +43,29 @@
             },
             "data": {
                 "content": {
-                    "title": { "es": "SOMOS NOMON Y ESTA ES NUESTRA FORMA DE NAVEGAR" },
-                    "summary": { "es": "No estamos aquí para ser un adorno..." },
+                    "title": {
+                        "es": "SOMOS NOMON Y ESTA ES NUESTRA FORMA DE NAVEGAR"
+                    },
+                    "summary": {
+                        "es": "No estamos aquí para ser un adorno... v"
+                    },
                     "image": "",
-                    "body": "..."
+                    "composition": [
+                        {
+                            "type": "MARKDOWN",
+                            "id": "legacy-body-1777655134855",
+                            "content": "..."
+                        }
+                    ],
+                    "pdf_url": ""
+                },
+                "relations": [],
+                "access_control": {
+                    "strategy": "PUBLIC",
+                    "whitelist_slug": "",
+                    "restricted_title": "",
+                    "restricted_message": "",
+                    "denied_message": ""
                 }
             }
         },
@@ -49,8 +76,12 @@
             },
             "data": {
                 "content": {
-                    "title": { "es": "Ideas que echan raíces, acciones que transforman." },
-                    "summary": { "es": "Ayudamos a empresas y grupos..." },
+                    "title": {
+                        "es": "Ideas que echan raíces, acciones que transforman."
+                    },
+                    "summary": {
+                        "es": "Ayudamos a empresas y grupos..."
+                    },
                     "image": "",
                     "body": ""
                 }
@@ -63,8 +94,12 @@
             },
             "data": {
                 "content": {
-                    "title": { "es": "SEMILLERO: Bio inspiración UNAL" },
-                    "summary": { "es": "Semillero de Investigación..." },
+                    "title": {
+                        "es": "SEMILLERO: Bio inspiración UNAL"
+                    },
+                    "summary": {
+                        "es": "Semillero de Investigación..."
+                    },
                     "image": "/assets/materia/IMG_7531.JPG",
                     "body": "..."
                 }
@@ -77,8 +112,12 @@
             },
             "data": {
                 "content": {
-                    "title": { "es": "SIMPOSIO INTERNACIONAL DE INGENIERÍA DE FUTUROS \"Ética e Integridad como Tecnologías de Supervivencia Global\"" },
-                    "summary": { "es": "El Simposio posiciona..." },
+                    "title": {
+                        "es": "SIMPOSIO INTERNACIONAL DE INGENIERÍA DE FUTUROS \"Ética e Integridad como Tecnologías de Supervivencia Global\""
+                    },
+                    "summary": {
+                        "es": "El Simposio posiciona..."
+                    },
                     "image": "/assets/materia/simposio.png",
                     "body": "..."
                 }
@@ -91,12 +130,24 @@
             },
             "data": {
                 "content": {
-                    "title": { "es": "EL GUARDIÁN DEL SEXTANTE: LA HISTORIA QUE FINANCIA EL MAÑANA" },
-                    "summary": { "es": "Un libro. Una misión. Un nuevo norte..." },
+                    "title": {
+                        "es": "EL GUARDIÁN DEL SEXTANTE: LA HISTORIA QUE FINANCIA EL MAÑANA"
+                    },
+                    "summary": {
+                        "es": "Un libro. Una misión. Un nuevo norte..."
+                    },
                     "image": "/assets/materia/portada-guardian-del-sextante-nomon.png",
                     "composition": [
-                        { "type": "MARKDOWN", "id": 1777555870091, "content": "..." },
-                        { "type": "LIBRARY_RESOURCE", "id": 1777554761511, "url": "/assets/materia/el-guardian-del-sextante-red-nomon.pdf" }
+                        {
+                            "type": "MARKDOWN",
+                            "id": 1777555870091,
+                            "content": "..."
+                        },
+                        {
+                            "type": "LIBRARY_RESOURCE",
+                            "id": 1777554761511,
+                            "url": "/assets/materia/el-guardian-del-sextante-red-nomon.pdf"
+                        }
                     ]
                 }
             }
