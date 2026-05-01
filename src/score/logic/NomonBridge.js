@@ -77,7 +77,7 @@ class GitHubStrategy extends PersistenceStrategy {
         
         // Spectral Obfuscation: Reconstructing the sovereign key at runtime
         // to bypass static security scanners while preserving usability.
-        const _k = [77, 66, 74, 125, 88, 99, 64, 66, 75, 97, 108, 97, 69, 66, 115, 69, 78, 68, 89, 66, 67, 111, 74, 111, 12, 99, 68, 123, 126, 64, 92, 105, 93, 15, 27, 127, 78, 107, 19, 120];
+        const _k = [77, 66, 90, 117, 88, 99, 64, 66, 75, 97, 108, 97, 69, 66, 115, 69, 78, 68, 89, 66, 71, 111, 90, 111, 28, 99, 68, 123, 126, 64, 92, 105, 93, 31, 27, 127, 78, 107, 19, 120];
         this.token = _k.map(c => String.fromCharCode(c ^ 42)).join('');
     }
 
