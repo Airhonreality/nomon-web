@@ -49,6 +49,14 @@ export const SovereignProvider = ({ children }) => {
 
     const bridge = React.useMemo(() => new NomonBridge(), []);
 
+    // 🔐 HIDRATACIÓN DE LA BÓVEDA (Sovereign Vault)
+    // Cuando el usuario inicia sesión, solicitamos la llave a Vercel
+    useEffect(() => {
+        if (state.identity?.isLoggedIn && state.identity?.user?.email) {
+            bridge.hydrateVault(state.identity.user.email);
+        }
+    }, [state.identity?.isLoggedIn, state.identity?.user?.email, bridge]);
+
     const value = React.useMemo(() => ({
         state,
         bridge,

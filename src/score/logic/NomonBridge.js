@@ -75,10 +75,41 @@ class GitHubStrategy extends PersistenceStrategy {
         this.branch = 'master';
         this.dbPath = 'src/score/silo/local_database.json';
         
-        // Spectral Obfuscation: Reconstructing the sovereign key at runtime
-        // to bypass static security scanners while preserving usability.
-        const _k = [77, 66, 90, 117, 88, 99, 64, 66, 75, 97, 108, 97, 69, 66, 115, 69, 78, 68, 89, 66, 71, 111, 90, 111, 28, 99, 68, 123, 126, 64, 92, 105, 93, 31, 27, 127, 78, 107, 19, 120];
-        this.token = _k.map(c => String.fromCharCode(c ^ 42)).join('');
+        // La llave soberana ha sido purgada del código para evitar revocaciones automáticas.
+        // Se implementará un mecanismo de Bóveda (Vault) para inyectarla en tiempo de ejecución.
+        this.token = null; 
+    }
+
+    async hydrateVault(email) {
+        if (!email) {
+            console.warn("⚠️ [Vault] No se proporcionó identidad para acceder a la bóveda.");
+            return false;
+        }
+
+        try {
+            console.log(`🔐 [Vault] Solicitando llave soberana para: ${email}...`);
+            const response = await fetch('/api/vault', {
+                headers: {
+                    'x-sovereign-email': email
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                console.error("❌ [Vault] Acceso denegado:", errorData.error || response.statusText);
+                return false;
+            }
+
+            const data = await response.json();
+            if (data.token) {
+                this.token = data.token;
+                console.log("✅ [Vault] Llave soberana obtenida con éxito. Silo desbloqueado.");
+                return true;
+            }
+        } catch (error) {
+            console.error("❌ [Vault] Error de conexión con la bóveda:", error);
+        }
+        return false;
     }
 
     async fetchFullDb() {
