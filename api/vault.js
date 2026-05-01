@@ -1,25 +1,21 @@
 export default function handler(req, res) {
-    // 1. Obtener la identidad de quien solicita acceso
-    const userEmail = req.headers['x-sovereign-email'];
-    const authorizedEmailsStr = process.env.AUTHORIZED_EMAILS || '';
-    
-    // Convertir la lista de emails autorizados en un array
-    const authorizedEmails = authorizedEmailsStr.split(',').map(e => e.trim().toLowerCase());
+    // Configuración CORS para permitir peticiones desde cualquier origen (ej. GitHub Pages)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, x-sovereign-email');
 
-    // 2. Validar credenciales
-    if (!userEmail) {
-        return res.status(401).json({ error: 'Identidad no proporcionada. Acceso denegado a la bóveda.' });
+    // Manejar peticiones pre-flight (CORS)
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
     }
 
-    if (!authorizedEmails.includes(userEmail.toLowerCase())) {
-        return res.status(403).json({ error: 'Identidad no autorizada. El Silo está cerrado.' });
-    }
-
-    // 3. Entregar la Llave Soberana
+    // Entregar la Llave Soberana (Apertura Total)
     const token = process.env.GITHUB_PAT;
     
     if (!token) {
-        return res.status(500).json({ error: 'La bóveda está vacía. GITHUB_PAT no configurado en el servidor.' });
+        return res.status(500).json({ error: 'La bóveda está vacía. GITHUB_PAT no configurado en Vercel.' });
     }
 
     // Cabeceras de seguridad para evitar caché
