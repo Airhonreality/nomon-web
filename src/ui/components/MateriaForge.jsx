@@ -165,7 +165,8 @@ export const MateriaForge = () => {
             nav_links: d.nav_links || [],
             metadata: { author: m.author || '', editorial: m.editorial || '', year: m.year || '', id_universal: m.id_universal || '', license: m.license || 'CC BY-NC', language: m.language || 'es', tags: m.tags || '', curator: m.curator || '', rationale: m.rationale || '' },
             access_control: d.access_control || { strategy: 'PUBLIC', whitelist_slug: '', restricted_title: '', restricted_message: '', denied_message: '' },
-            whitelist_emails: d.emails || [] 
+            whitelist_emails: d.emails && d.emails.length > 0 ? d.emails : (d.activations ? d.activations.map(a => a.buyer).filter(Boolean) : []),
+            activations: d.activations || []
         });
         setSelectedClass(item.meta?.component_type || 'ENTITY_PROJECT');
         setIsEditing(true);
@@ -198,7 +199,8 @@ export const MateriaForge = () => {
                     relations: formData.relations,
                     access_control: (selectedClass !== 'ENTITY_WHITELIST' && selectedClass !== 'ENTITY_NAVBAR') ? formData.access_control : undefined,
                     whitelist: selectedClass === 'ENTITY_WHITELIST' ? hashes : undefined,
-                    emails: selectedClass === 'ENTITY_WHITELIST' ? formData.whitelist_emails : undefined 
+                    emails: selectedClass === 'ENTITY_WHITELIST' ? formData.whitelist_emails : undefined,
+                    activations: selectedClass === 'ENTITY_WHITELIST' ? formData.activations : undefined
                 }
             }
         };
@@ -241,7 +243,7 @@ export const MateriaForge = () => {
                     ))}
                 </div>
                 <div style={{ padding: '1rem' }}>
-                    <button onClick={() => { setIsEditing(false); setFormData({ title: '', summary: '', slug: '', image: '', relations: [], composition: [], pdf_url: '', nav_config: { show_in_nav: false, priority: 0, nav_label: '' }, metadata: { author: '', editorial: '', year: '', id_universal: '', license: 'CC BY-NC', language: 'es', tags: '', curator: '', rationale: '' }, access_control: { strategy: 'PUBLIC', whitelist_slug: '', restricted_title: '', restricted_message: '', denied_message: '' }, whitelist_emails: [] }); }} style={{ width: '100%', padding: '0.8rem', background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', fontWeight: 900, cursor: 'pointer' }}>+ NUEVA MATERIA</button>
+                    <button onClick={() => { setIsEditing(false); setFormData({ title: '', summary: '', slug: '', image: '', relations: [], composition: [], pdf_url: '', nav_config: { show_in_nav: false, priority: 0, nav_label: '' }, metadata: { author: '', editorial: '', year: '', id_universal: '', license: 'CC BY-NC', language: 'es', tags: '', curator: '', rationale: '' }, access_control: { strategy: 'PUBLIC', whitelist_slug: '', restricted_title: '', restricted_message: '', denied_message: '' }, whitelist_emails: [], activations: [] }); }} style={{ width: '100%', padding: '0.8rem', background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', fontWeight: 900, cursor: 'pointer' }}>+ NUEVA MATERIA</button>
                 </div>
             </aside>
 
