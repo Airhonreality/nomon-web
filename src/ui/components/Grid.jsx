@@ -29,6 +29,7 @@ export const Grid = ({ definition }) => {
                     const type = item.meta?.component_type || '';
                     const isPortalClass = type === 'ENTITY_PROJECT' || type === 'ENTITY_NEWS';
                     const title = item.data?.content?.title?.es || item.data?.content?.title || item.metadata?.title || item.name;
+                    console.log(`[Grid:Filter] Item: ${item.slug}, Type: ${type}, PortalClass: ${isPortalClass}, Title: ${title}`);
                     return isPortalClass && title;
                 })
                 .map(item => ({
@@ -41,6 +42,7 @@ export const Grid = ({ definition }) => {
                     }}
                 }));
 
+            console.log(`[Grid:Projected] Items filtrados:`, itemsToProject);
             setProjectedItems(itemsToProject);
 
             // Sincronizamos con el inventario global para persistencia
