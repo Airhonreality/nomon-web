@@ -160,10 +160,14 @@ export const MateriaReader = ({ params }) => {
                         <div className="document-container">
                             <div className="document-shadow-box animate-fade-up">
                                 <iframe 
-                                    src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1`} 
+                                    src={window.innerWidth < 768 
+                                        ? `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl.startsWith('http') ? pdfUrl : window.location.origin + pdfUrl)}&embedded=true`
+                                        : `${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1`
+                                    } 
                                     className={`pdf-proyector ${theme === 'dark' ? 'pdf-inverted' : ''}`}
                                     title={title}
                                 />
+
                             </div>
                             
                             {/* SECCIÓN DE CONTEXTO */}

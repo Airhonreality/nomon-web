@@ -22,8 +22,47 @@ export const MateriaDetail = ({ params }) => {
     }
 
     const content = materia.data?.content || {};
+    const access = materia.data?.access_control || { strategy: 'PUBLIC' };
+    const { state } = useSovereign();
+
     const title = content.title?.es || content.title || materia.name;
     const image = content.image || materia.metadata?.image;
+
+    // 🛡️ VALIDACIÓN DE SOBERANÍA (ACCESO PROFUNDO)
+    const isAuthorized = () => {
+        if (access.strategy === 'PUBLIC') return true;
+        if (!state.identity?.isLoggedIn) return false;
+        if (access.strategy === 'REGISTERED_ONLY') return true;
+        if (access.strategy === 'REFERENCE_WHITELIST') {
+            const userEmail = state.identity?.user?.payload?.email || '';
+            const userHash = state.identity?.user?.payload?.email_hash || ''; // Asumimos que el hash está disponible
+            // En este prototipo, comparamos directamente o buscamos en la whitelist remota
+            // Para simplicidad en este paso, si es whitelist, delegamos la validación real al reader
+            // pero bloqueamos la vista de detalle si no hay sesión.
+            return !!state.identity?.isLoggedIn;
+        }
+        return false;
+    };
+
+    if (!isAuthorized()) {
+        return (
+            <section style={{ padding: '5rem 2rem', textAlign: 'center', minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>🔐</span>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '0.1em' }}>{access.restricted_title || 'CONTENIDO RESERVADO'}</h2>
+                <div style={{ maxWidth: '30rem', opacity: 0.7, fontSize: '0.9rem', lineHeight: 1.6, margin: '1.5rem 0' }}>
+                    {access.restricted_message || 'Esta materia contiene recursos de alta sensibilidad o profundidad técnica. Para proyectarlos, es necesario validar tu identidad soberana.'}
+                </div>
+                {!state.identity?.isLoggedIn ? (
+                    <div id="google-signin-btn-detail"></div>
+                ) : (
+                    <div style={{ color: '#d32f2f', fontWeight: 'bold', fontSize: '0.8rem' }}>
+                        {access.denied_message || 'Tu identidad no cuenta con los permisos necesarios para este nodo.'}
+                    </div>
+                )}
+            </section>
+        );
+    }
+
 
     return (
         <article className="materia-detail">

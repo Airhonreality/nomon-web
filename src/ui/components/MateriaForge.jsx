@@ -256,38 +256,106 @@ export const MateriaForge = () => {
         } catch (err) { console.error(err); }
     };
 
+    const [activeTab, setActiveTab] = useState('ALL');
     const inventory = entries || [];
     const whitelists = inventory.filter(item => item.meta?.component_type === 'ENTITY_WHITELIST');
 
-    const groupedInventory = inventory.reduce((acc, item) => {
-        const t = item.meta?.component_type || 'OTRO';
-        if (!acc[t]) acc[t] = []; acc[t].push(item); return acc;
-    }, {});
+    const filteredInventory = inventory.filter(item => {
+        if (activeTab === 'ALL') return true;
+        return (item.meta?.component_type || 'DATA_CARD') === activeTab;
+    });
+
+    const TABS = [
+        { id: 'ALL', label: 'Todo' },
+        { id: 'ENTITY_PROJECT', label: 'Proyectos' },
+        { id: 'ENTITY_NEWS', label: 'Noticias' },
+        { id: 'LIBRARY_RESOURCE', label: 'Biblioteca' },
+        { id: 'ENTITY_WHITELIST', label: 'Whitelists' },
+        { id: 'BANNER_INFO', label: 'Banners' }
+    ];
 
     return (
-        <section className="materia-forge-container" style={{ padding: '2rem', maxWidth: '75rem', margin: '0 auto' }}>
-            <div className="forge-main">
-                <div className="class-selector-header" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                        <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5, display: 'block' }}>ARQUETIPO DE ENTIDAD</label>
-                        <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)} style={{ padding: '0.8rem', border: '1px solid #ddd', minWidth: '15rem', fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase' }}>
-                            <option value="ENTITY_PROJECT">Entidad: Proyecto</option>
-                            <option value="ENTITY_NEWS">Entidad: Noticia</option>
-                            <option value="ENTITY_ALLY">Entidad: Aliado</option>
-                            <option value="LIBRARY_RESOURCE">Recurso de Biblioteca</option>
-                            <option value="ENTITY_WHITELIST">Entidad: Lista Blanca</option>
-                            <option value="BANNER_INFO">Estructura: Informativa</option>
-                            <option value="BANNER_ACTION">Estructura: Acción</option>
+        <section className="materia-forge-v5" style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#fff' }}>
+            {/* 🛰️ SIDEBAR: INVENTARIO COMPACTO (20%) */}
+            <aside className="forge-sidebar" style={{ width: '20%', borderRight: '1px solid #eee', display: 'flex', flexDirection: 'column', background: '#fcfcfc' }}>
+                <div style={{ padding: '1.5rem', borderBottom: '1px solid #eee' }}>
+                    <h2 style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '0.2em', margin: '0 0 1rem 0', opacity: 0.5 }}>SILO DE MATERIA</h2>
+                    
+                    <div className="sovereign-filter-container">
+                        <label style={{ fontSize: '0.5rem', fontWeight: 900, opacity: 0.4, display: 'block', marginBottom: '0.3rem' }}>FILTRAR POR CLASE</label>
+                        <select 
+                            value={activeTab} 
+                            onChange={e => setActiveTab(e.target.value)}
+                            style={{ 
+                                width: '100%', padding: '0.6rem', border: '1px solid #000', 
+                                background: '#fff', fontSize: '0.65rem', fontWeight: 900, 
+                                textTransform: 'uppercase', cursor: 'pointer', outline: 'none'
+                            }}
+                        >
+                            {TABS.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
                         </select>
                     </div>
-                    <button type="button" className="new-btn" onClick={resetForm} style={{ background: '#000', color: '#fff', border: 'none', padding: '0.8rem 1.5rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
+                </div>
+
+
+                <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+                    {filteredInventory.map((item, idx) => (
+                        <div 
+                            key={item.slug || idx} 
+                            onClick={() => handleEdit(item)}
+                            style={{ 
+                                padding: '0.8rem', borderBottom: '1px solid #f0f0f0', cursor: 'pointer',
+                                background: formData.slug === item.slug ? '#fff' : 'transparent',
+                                borderLeft: formData.slug === item.slug ? '4px solid #000' : '4px solid transparent'
+                            }}
+                        >
+                            <span style={{ fontSize: '0.5rem', fontWeight: 900, opacity: 0.4, textTransform: 'uppercase' }}>{item.meta?.component_type || 'DATA_CARD'}</span>
+                            <h4 style={{ fontSize: '0.75rem', fontWeight: 800, margin: '0.2rem 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {item.data?.content?.title?.es || item.name || item.slug}
+                            </h4>
+                            <code style={{ fontSize: '0.55rem', opacity: 0.3 }}>{item.slug}</code>
+                        </div>
+                    ))}
+                </div>
+                
+                <div style={{ padding: '1.5rem', borderTop: '1px solid #eee' }}>
+                    <button onClick={resetForm} style={{ width: '100%', background: '#000', color: '#fff', border: 'none', padding: '0.8rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
                         + NUEVA ENTIDAD
                     </button>
                 </div>
+            </aside>
 
-                <form onSubmit={handleSave} className="forge-form" style={{ background: '#fff', padding: '2.5rem', border: '1px solid #eee' }}>
-                    <div className="identity-section" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem' }}>
-                        <div className="identity-field">
+            {/* 🖋️ MAIN AREA: EDITOR DINÁMICO (80%) */}
+            <main className="forge-main-editor" style={{ width: '80%', overflowY: 'auto', padding: '3rem' }}>
+                <form onSubmit={handleSave} style={{ maxWidth: '60rem', margin: '0 auto' }}>
+                    <header style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div style={{ flex: 1 }}>
+                            <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>ARQUETIPO</label>
+                            <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)} style={{ display: 'block', padding: '0.5rem 0', border: 'none', borderBottom: '1px solid #000', fontSize: '1rem', fontWeight: 900, textTransform: 'uppercase', background: 'transparent' }}>
+                                <option value="ENTITY_PROJECT">Proyecto</option>
+                                <option value="ENTITY_NEWS">Noticia</option>
+                                <option value="ENTITY_ALLY">Aliado</option>
+                                <option value="LIBRARY_RESOURCE">Biblioteca</option>
+                                <option value="ENTITY_WHITELIST">Whitelist</option>
+                                <option value="BANNER_INFO">Informativo</option>
+                                <option value="BANNER_ACTION">Acción</option>
+                            </select>
+                        </div>
+                        <div style={{ display: 'flex', gap: '1rem' }}>
+                            {isEditing && (
+                                <button type="button" onClick={handleDelete} style={{ background: 'transparent', border: '1px solid #d32f2f', color: '#d32f2f', padding: '0.8rem 1.5rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
+                                    ELIMINAR
+                                </button>
+                            )}
+                            <button type="submit" style={{ background: '#000', color: '#fff', border: 'none', padding: '0.8rem 2.5rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
+                                {isEditing ? 'CRISTALIZAR CAMBIOS' : 'CRISTALIZAR MATERIA'}
+                            </button>
+                        </div>
+                    </header>
+
+                    <div className="editor-body">
+                        {/* TÍTULO GIGANTE */}
+                        <div style={{ marginBottom: '3rem' }}>
                             <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>TÍTULO DE LA ENTIDAD</label>
                             <input 
                                 type="text" 
@@ -295,192 +363,105 @@ export const MateriaForge = () => {
                                 value={typeof formData.title === 'object' ? formData.title?.es : formData.title} 
                                 onChange={e => setFormData({...formData, title: e.target.value})} 
                                 required 
-                                style={{ fontSize: '1.8rem', fontWeight: 900, width: '100%', border: 'none', borderBottom: '2px solid #eee', padding: '0.5rem 0' }} 
+                                style={{ fontSize: '2.5rem', fontWeight: 900, width: '100%', border: 'none', borderBottom: '2px solid #f0f0f0', padding: '1rem 0' }} 
                             />
                         </div>
 
-                        <div className="identity-field">
-                            <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>SLUG / URL AMIGABLE</label>
-                            <input type="text" placeholder="slug-de-la-materia" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} style={{ width: '100%', padding: '0.6rem', border: '1px solid #eee', marginTop: '0.3rem' }} />
+                        {/* 🛡️ REGLAS DE SOBERANÍA (AHORA ARRIBA) */}
+                        {selectedClass !== 'ENTITY_WHITELIST' && (
+                            <div style={{ background: '#f8fafc', padding: '1.5rem', border: '1px solid #e2e8f0', marginBottom: '3rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
+                                    <h4 style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '0.15em', margin: 0 }}>🛡️ SOBERANÍA DE ACCESO</h4>
+                                    <select 
+                                        value={formData.access_control?.strategy || 'PUBLIC'} 
+                                        onChange={e => setFormData({
+                                            ...formData, 
+                                            access_control: { ...formData.access_control, strategy: e.target.value }
+                                        })}
+                                        style={{ padding: '0.4rem', border: '1px solid #ddd', fontSize: '0.65rem', fontWeight: 900 }}
+                                    >
+                                        <option value="PUBLIC">🔓 PÚBLICO</option>
+                                        <option value="REGISTERED_ONLY">👥 REGISTRADOS</option>
+                                        <option value="REFERENCE_WHITELIST">🔑 WHITELIST</option>
+                                    </select>
+
+                                    {formData.access_control?.strategy === 'REFERENCE_WHITELIST' && (
+                                        <select 
+                                            value={formData.access_control?.whitelist_slug || ''} 
+                                            onChange={e => setFormData({
+                                                ...formData, 
+                                                access_control: { ...formData.access_control, whitelist_slug: e.target.value }
+                                            })}
+                                            style={{ padding: '0.4rem', border: '1px solid #ddd', fontSize: '0.65rem' }}
+                                        >
+                                            <option value="">Selecciona...</option>
+                                            {whitelists.map(item => (
+                                                <option key={item.slug} value={item.slug}>{item.data?.content?.title?.es || item.slug}</option>
+                                            ))}
+                                        </select>
+                                    )}
+                                </div>
+                                {formData.access_control?.strategy !== 'PUBLIC' && (
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                        <input type="text" placeholder="Título bloqueo..." value={formData.access_control?.restricted_title || ''} onChange={e => setFormData({...formData, access_control: {...formData.access_control, restricted_title: e.target.value}})} style={{ fontSize: '0.7rem', padding: '0.5rem', border: '1px solid #eee' }} />
+                                        <input type="text" placeholder="Mensaje bloqueo..." value={formData.access_control?.restricted_message || ''} onChange={e => setFormData({...formData, access_control: {...formData.access_control, restricted_message: e.target.value}})} style={{ fontSize: '0.7rem', padding: '0.5rem', border: '1px solid #eee' }} />
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                            <div>
+                                <label style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.5 }}>SLUG</label>
+                                <input type="text" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} style={{ width: '100%', padding: '0.6rem', border: '1px solid #eee', fontSize: '0.8rem' }} />
+                            </div>
+                            {selectedClass === 'ENTITY_WHITELIST' ? (
+                                <div>
+                                    <label style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.5 }}>EMAILS (WHITELIST)</label>
+                                    <input type="text" value={formData.whitelist_emails} onChange={e => setFormData({...formData, whitelist_emails: e.target.value})} style={{ width: '100%', padding: '0.6rem', border: '1px solid #eee', fontSize: '0.8rem' }} />
+                                </div>
+                            ) : (
+                                <div>
+                                    <label style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.5 }}>PDF URL</label>
+                                    <input type="text" value={formData.pdf_url} onChange={e => setFormData({...formData, pdf_url: e.target.value})} style={{ width: '100%', padding: '0.6rem', border: '1px solid #eee', fontSize: '0.8rem' }} />
+                                </div>
+                            )}
                         </div>
 
-                        {selectedClass === 'ENTITY_WHITELIST' ? (
-                            <div className="identity-field" style={{ marginTop: '1.5rem' }}>
-                                <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>EMAILS DE LA WHITELIST (Uno por línea o separados por coma)</label>
-                                <textarea 
-                                    placeholder="juan@gmail.com, maria@yahoo.com"
-                                    value={formData.whitelist_emails}
-                                    onChange={e => setFormData({ ...formData, whitelist_emails: e.target.value })}
-                                    style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', height: '10rem', marginTop: '0.5rem', fontFamily: 'monospace' }}
-                                />
-                            </div>
-                        ) : (
+                        {selectedClass !== 'ENTITY_WHITELIST' && (
                             <>
-                                <div className="identity-field">
-                                    <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>URL DIRECTA PDF (Opcional)</label>
-                                    <input type="text" placeholder="https://..." value={formData.pdf_url} onChange={e => setFormData({...formData, pdf_url: e.target.value})} style={{ width: '100%', padding: '0.6rem', border: '1px solid #eee' }} />
-                                </div>
-
-                                <div className="identity-field">
-                                    <MateriaLinker 
-                                        value={formData.image} 
-                                        label="IMAGEN PRINCIPAL (MANIFEST)"
-                                        onChange={(val) => setFormData({...formData, image: val})} 
-                                    />
-                                </div>
-
-                                {/* 🛡️ REGLAS DE SOBERANÍA Y ACCESO DESACOPLADAS */}
-                                <div className="access-rules-box" style={{ background: '#fafafa', padding: '1.5rem', border: '1px solid #e0e0e0', marginTop: '2rem' }}>
-                                    <h4 style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '0.15em', margin: 0, opacity: 0.8 }}>🛡️ REGLAS DE SOBERANÍA Y ACCESO</h4>
-                                    
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '1.5rem' }}>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                                            <label style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.6 }}>ESTRATEGIA DE ACCESO</label>
-                                            <select 
-                                                value={formData.access_control?.strategy || 'PUBLIC'} 
-                                                onChange={e => setFormData({
-                                                    ...formData, 
-                                                    access_control: { ...formData.access_control, strategy: e.target.value }
-                                                })}
-                                                style={{ padding: '0.6rem', border: '1px solid #ddd', fontSize: '0.75rem', background: '#fff' }}
-                                            >
-                                                <option value="PUBLIC">🔓 Público (Por Defecto)</option>
-                                                <option value="REGISTERED_ONLY">👥 Todos los usuarios registrados</option>
-                                                <option value="REFERENCE_WHITELIST">🔑 Vincular a Whitelist por Slug</option>
-                                            </select>
-                                        </div>
-
-                                        {formData.access_control?.strategy === 'REFERENCE_WHITELIST' && (
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                                                <label style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.6 }}>SELECCIONAR WHITELIST</label>
-                                                <select 
-                                                    value={formData.access_control?.whitelist_slug || ''} 
-                                                    onChange={e => setFormData({
-                                                        ...formData, 
-                                                        access_control: { ...formData.access_control, whitelist_slug: e.target.value }
-                                                    })}
-                                                    style={{ padding: '0.6rem', border: '1px solid #ddd', fontSize: '0.75rem', background: '#fff' }}
-                                                >
-                                                    <option value="">Selecciona una lista...</option>
-                                                    {whitelists.map(item => (
-                                                        <option key={item.slug} value={item.slug}>{item.data?.content?.title?.es || item.name || item.slug}</option>
-                                                    ))}
-                                                </select>
+                                <MateriaLinker value={formData.image} label="IMAGEN PRINCIPAL" onChange={val => setFormData({...formData, image: val})} />
+                                
+                                <div style={{ marginTop: '3rem' }}>
+                                    <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5, display: 'block', marginBottom: '1rem' }}>COMPOSICIÓN</label>
+                                    <InsertBar onInsert={addBlock} blockTypes={BLOCK_TYPES} index={0} />
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
+                                        {formData.composition.map((b, idx) => (
+                                            <div key={b.id} style={{ border: '1px solid #f0f0f0', padding: '1rem', background: '#fff' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', opacity: 0.4 }}>
+                                                    <span style={{ fontSize: '0.5rem', fontWeight: 900 }}>{BLOCK_TYPES[b.type]}</span>
+                                                    <div style={{ display: 'flex', gap: '0.4rem' }}>
+                                                        <button type="button" onClick={() => moveBlock(idx, -1)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem' }}>↑</button>
+                                                        <button type="button" onClick={() => moveBlock(idx, 1)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem' }}>↓</button>
+                                                        <button type="button" onClick={() => deleteBlock(b.id)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem', color: '#d32f2f' }}>[×]</button>
+                                                    </div>
+                                                </div>
+                                                {b.type === 'MARKDOWN' ? (
+                                                    <MateriaEditor value={b.content || ''} onChange={val => updateBlock(b.id, 'content', val)} />
+                                                ) : (
+                                                    <input type="text" value={b.url || b.content || ''} onChange={e => updateBlock(b.id, b.type === 'LIBRARY_RESOURCE' ? 'url' : 'content', e.target.value)} placeholder="..." style={{ width: '100%', padding: '0.5rem', border: '1px solid #eee' }} />
+                                                )}
+                                                <InsertBar onInsert={addBlock} blockTypes={BLOCK_TYPES} index={idx + 1} />
                                             </div>
-                                        )}
+                                        ))}
                                     </div>
-
-                                    {formData.access_control?.strategy !== 'PUBLIC' && (
-                                        <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '1px solid #eee', paddingTop: '1.5rem' }}>
-                                            <div>
-                                                <label style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.6 }}>TÍTULO DE RESTRICCIÓN</label>
-                                                <input 
-                                                    type="text" 
-                                                    placeholder="MATERIA DE ACCESO RESTRINGIDO" 
-                                                    value={formData.access_control?.restricted_title || ''} 
-                                                    onChange={e => setFormData({
-                                                        ...formData, 
-                                                        access_control: { ...formData.access_control, restricted_title: e.target.value }
-                                                    })}
-                                                    style={{ width: '100%', padding: '0.6rem', border: '1px solid #ddd', background: '#fff', fontSize: '0.75rem' }} 
-                                                />
-                                            </div>
-
-                                            <div>
-                                                <label style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.6 }}>MENSAJE DE ACCESO RESTRINGIDO (Markdown)</label>
-                                                <textarea 
-                                                    placeholder="Este recurso es premium. Para continuar con su proyección, debes iniciar sesión..." 
-                                                    value={formData.access_control?.restricted_message || ''} 
-                                                    onChange={e => setFormData({
-                                                        ...formData, 
-                                                        access_control: { ...formData.access_control, restricted_message: e.target.value }
-                                                    })}
-                                                    style={{ width: '100%', padding: '0.6rem', border: '1px solid #ddd', background: '#fff', height: '4rem', fontSize: '0.75rem' }} 
-                                                />
-                                            </div>
-
-                                            <div>
-                                                <label style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.6 }}>MENSAJE DE ACCESO DENEGADO (Markdown)</label>
-                                                <textarea 
-                                                    placeholder="El correo no se encuentra autorizado en la whitelist..." 
-                                                    value={formData.access_control?.denied_message || ''} 
-                                                    onChange={e => setFormData({
-                                                        ...formData, 
-                                                        access_control: { ...formData.access_control, denied_message: e.target.value }
-                                                    })}
-                                                    style={{ width: '100%', padding: '0.6rem', border: '1px solid #ddd', background: '#fff', height: '4rem', fontSize: '0.75rem' }} 
-                                                />
-                                            </div>
-                                        </div>
-                                    )}
                                 </div>
                             </>
                         )}
                     </div>
-
-                    {selectedClass !== 'ENTITY_WHITELIST' && (
-                        <div className="composer-section" style={{ borderTop: '2px solid #f0f0f0', paddingTop: '3rem', marginTop: '3rem' }}>
-                            <h3 style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.2em', marginBottom: '2rem' }}>🎨 COMPOSICIÓN DE CONTENIDO</h3>
-                            <InsertBar onInsert={addBlock} blockTypes={BLOCK_TYPES} index={0} />
-
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1.5rem' }}>
-                                {formData.composition.map((b, idx) => (
-                                    <div key={b.id} style={{ border: '1px solid #eee', background: '#fafafa', padding: '1.5rem', position: 'relative' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                            <span style={{ fontSize: '0.55rem', fontWeight: 900, color: '#000', letterSpacing: '0.15em' }}>{BLOCK_TYPES[b.type]}</span>
-                                            <div style={{ display: 'flex', gap: '0.4rem' }}>
-                                                <button type="button" onClick={() => moveBlock(idx, -1)} style={{ background: '#fff', border: '1px solid #ddd', padding: '0.3rem 0.6rem', fontSize: '0.6rem', cursor: 'pointer' }}>↑</button>
-                                                <button type="button" onClick={() => moveBlock(idx, 1)} style={{ background: '#fff', border: '1px solid #ddd', padding: '0.3rem 0.6rem', fontSize: '0.6rem', cursor: 'pointer' }}>↓</button>
-                                                <button type="button" onClick={() => deleteBlock(b.id)} style={{ background: '#fff', border: '1px solid #d32f2f', color: '#d32f2f', padding: '0.3rem 0.6rem', fontSize: '0.6rem', cursor: 'pointer' }}>ELIMINAR</button>
-                                            </div>
-                                        </div>
-
-                                        {b.type === 'TITLE' && (
-                                            <input type="text" value={b.content || ''} onChange={e => updateBlock(b.id, 'content', e.target.value)} placeholder="Escribe el título aquí..." style={{ width: '100%', padding: '0.6rem', border: '1px solid #ddd' }} />
-                                        )}
-
-                                        {b.type === 'MARKDOWN' && (
-                                            <MateriaEditor value={b.content || ''} onChange={val => updateBlock(b.id, 'content', val)} />
-                                        )}
-
-                                        <InsertBar onInsert={addBlock} blockTypes={BLOCK_TYPES} index={idx + 1} />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    <div style={{ marginTop: '4rem', display: 'flex', gap: '1.5rem', borderTop: '2px solid #f0f0f0', paddingTop: '2.5rem' }}>
-                        <button type="submit" style={{ background: '#000', color: '#fff', border: 'none', padding: '1.2rem 3.5rem', fontSize: '0.75rem', fontWeight: 900, cursor: 'pointer' }}>
-                            {isEditing ? '💎 CRISTALIZAR CAMBIOS' : '✨ CRISTALIZAR MATERIA'}
-                        </button>
-                        {isEditing && (
-                            <button type="button" onClick={handleDelete} style={{ background: '#fff', border: '1px solid #d32f2f', color: '#d32f2f', padding: '1.2rem 3.5rem', fontSize: '0.75rem', fontWeight: 900, cursor: 'pointer' }}>
-                                🔥 ELIMINAR MATERIA
-                            </button>
-                        )}
-                    </div>
                 </form>
-
-                {/* VISOR DE INVENTARIO SOBERANO */}
-                <div style={{ marginTop: '5rem', borderTop: '2px solid #eee', paddingTop: '4rem' }}>
-                    <h3 style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.2em', marginBottom: '2rem' }}>📂 INVENTARIO SOBERANO (SILO)</h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(22rem, 1fr))', gap: '2rem' }}>
-                        {inventory.map((item, idx) => (
-                            <div key={item.slug || idx} style={{ background: '#fff', border: '1px solid #eee', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                <div>
-                                    <span style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.15em', opacity: 0.5, textTransform: 'uppercase' }}>{item.meta?.component_type || 'DATA_CARD'}</span>
-                                    <h4 style={{ fontSize: '1.2rem', fontWeight: 900, margin: '0.5rem 0' }}>{item.data?.content?.title?.es || item.name || item.slug}</h4>
-                                    <p style={{ fontSize: '0.7rem', opacity: 0.5, margin: 0 }}>{item.slug}</p>
-                                </div>
-                                <button type="button" onClick={() => handleEdit(item)} style={{ background: '#000', color: '#fff', border: 'none', padding: '0.6rem 1.2rem', fontSize: '0.65rem', fontWeight: 900, marginTop: '1.5rem', cursor: 'pointer', alignSelf: 'flex-start' }}>
-                                    EDITAR MATERIA
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
+            </main>
         </section>
     );
 };
+
