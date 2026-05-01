@@ -1,41 +1,6 @@
 {
     "NOMON_ENTRIES": [
         {
-            "slug": "hola",
-            "meta": {
-                "component_type": "ENTITY_PROJECT"
-            },
-            "data": {
-                "content": {
-                    "title": {
-                        "es": "hola"
-                    },
-                    "summary": {
-                        "es": {
-                            "es": ""
-                        }
-                    },
-                    "image": "",
-                    "composition": [
-                        {
-                            "type": "TITLE",
-                            "id": 1777644859661,
-                            "content": "qwdqwdqw"
-                        }
-                    ],
-                    "pdf_url": ""
-                },
-                "relations": [],
-                "access_control": {
-                    "strategy": "PUBLIC",
-                    "whitelist_slug": "",
-                    "restricted_title": "",
-                    "restricted_message": "",
-                    "denied_message": ""
-                }
-            }
-        },
-        {
             "slug": "nuestra-filosofia",
             "meta": {
                 "component_type": "BANNER_INFO"
