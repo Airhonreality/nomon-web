@@ -10,7 +10,13 @@ import { BookOpen, ArrowRight, Info, Minus, Lock } from 'lucide-react';
  */
 export const MateriaRelations = ({ relations }) => {
     const { state } = useSovereign();
+    const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES');
     const [userHash, setUserHash] = React.useState(state.identity?.user?.payload?.email_hash || '');
+    const [expandedBlocks, setExpandedBlocks] = React.useState({});
+
+    const toggleBlock = (id) => {
+        setExpandedBlocks(prev => ({ ...prev, [id]: !prev[id] }));
+    };
 
     // Helper de SHA-256 nativo
     const calcSha256 = async (message) => {
