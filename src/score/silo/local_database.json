@@ -180,7 +180,18 @@
         {
             "slug": "simposio-etica-e-integridad",
             "meta": {
-                "component_type": "DATA_CARD"
+                "component_type": "ENTITY_PROJECT"
+            },
+            "metadata": {
+                "author": "",
+                "editorial": "",
+                "year": "",
+                "id_universal": "",
+                "license": "CC BY-NC",
+                "language": "es",
+                "tags": "",
+                "curator": "",
+                "rationale": ""
             },
             "data": {
                 "content": {
@@ -191,7 +202,17 @@
                         "es": "El Simposio posiciona..."
                     },
                     "image": "/assets/materia/simposio.png",
-                    "body": "..."
+                    "composition": [],
+                    "pdf_url": ""
+                },
+                "nav_links": [],
+                "relations": [],
+                "access_control": {
+                    "strategy": "PUBLIC",
+                    "whitelist_slug": "",
+                    "restricted_title": "",
+                    "restricted_message": "",
+                    "denied_message": ""
                 }
             }
         },
