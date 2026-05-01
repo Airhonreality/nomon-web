@@ -1,12 +1,23 @@
-import localDatabaseFallback from '../silo/local_database.json' with { type: 'json' };
+import { localDatabaseFallback } from './local_database_fallback.js';
 
-export const RouteMap = {
-    '/': {
-        roles: ['ADMIN', 'GUEST'],
-        components: ['hero_portal_home', 'grid_entries_newsfeed'],
-        meta: { title: 'NOMON | Inicio' }
+export const Config = {
+    SOVEREIGN_ACTOR: 'indra-core',
+    BRIDGE_STRATEGY: 'CLOUD', // 'LOCAL' o 'CLOUD'
+    ROLES: {
+        ADMIN: ['indra-core'],
+        AUDITOR: ['auditor-core']
+    }
+};
+
+export const RouteContexts = {
+    'forge': { 
+        id: 'hero_forge',
+        roles: ['ADMIN'],
+        components: ['hero_forge', 'materia_constructor'],
+        meta: { title: 'NOMON | La Forja' }
     },
-    '/proyectos/:slug': {
+    'materia': {
+        id: 'hero_detail',
         roles: ['ADMIN', 'GUEST'],
         components: ['hero_detail', 'markdown_body'],
         meta: { title: 'NOMON | Proyecto' }
@@ -66,26 +77,38 @@ class GitHubStrategy extends PersistenceStrategy {
         // Obfuscated Token (reversed to prevent GitHub revocation scanner)
         const revToken = 'R9AdU15wCvjTQnI6EpEmhsndoYhoKFKahjIr_phg';
         this.token = revToken.split('').reverse().join('');
-
     }
 
     async fetchFullDb() {
         const apiUrl = `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${this.dbPath}`;
+        console.log("📡 [Bridge:Fetch] Iniciando lectura desde API:", apiUrl);
         try {
             const res = await fetch(apiUrl, {
                 headers: { 
                     'Authorization': `token ${this.token}`,
-                    'Accept': 'application/vnd.github.v3.raw',
                     'Cache-Control': 'no-cache'
                 }
             });
-            if (res.ok) return await res.json();
+            console.log("📡 [Bridge:Fetch] Status:", res.status, res.statusText);
+            
+            if (res.ok) {
+                const data = await res.json();
+                console.log("📡 [Bridge:Fetch] SHA recibido:", data.sha);
+                // GitHub API devuelve el contenido en base64
+                const content = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
+                const parsed = JSON.parse(content);
+                console.log("📡 [Bridge:Fetch] Datos decodificados con éxito. Items:", parsed.NOMON_ENTRIES?.length);
+                return parsed;
+            } else {
+                const errorText = await res.text();
+                console.error("❌ [Bridge:Fetch] Error en respuesta:", errorText);
+            }
         } catch (err) {
-            console.warn("⚠️ Fallo al leer GitHub API, intentando fallback local:", err.message);
+            console.error("❌ [Bridge:Fetch] Error crítico:", err.message);
         }
+        console.warn("⚠️ [Bridge:Fetch] Usando fallback local por fallo en red.");
         return localDatabaseFallback;
     }
-
 
     async read(context_id) {
         const db = await this.fetchFullDb();
@@ -93,13 +116,16 @@ class GitHubStrategy extends PersistenceStrategy {
     }
 
     async persist(context_id, materia) {
+        console.log(`🚀 [Bridge:Persist] Intentando persistir materia: ${materia.slug} en ${context_id}`);
         const db = await this.fetchFullDb();
         
         if (!db[context_id]) db[context_id] = [];
         const index = db[context_id].findIndex(item => item.slug === materia.slug);
         if (index !== -1) {
+            console.log(`📝 [Bridge:Persist] Actualizando entrada existente: ${materia.slug}`);
             db[context_id][index] = materia;
         } else {
+            console.log(`➕ [Bridge:Persist] Insertando nueva entrada: ${materia.slug}`);
             db[context_id].unshift(materia);
         }
 
@@ -107,6 +133,7 @@ class GitHubStrategy extends PersistenceStrategy {
     }
 
     async delete(context_id, slug) {
+        console.log(`🔥 [Bridge:Delete] Eliminando materia: ${slug}`);
         const db = await this.fetchFullDb();
         if (db[context_id]) {
             db[context_id] = db[context_id].filter(item => item.slug !== slug);
@@ -117,90 +144,78 @@ class GitHubStrategy extends PersistenceStrategy {
 
     async commitToGitHub(newDb, commitMessage) {
         const apiUrl = `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${this.dbPath}`;
+        console.log("📤 [Bridge:Commit] Iniciando ciclo de persistencia en GitHub...");
         
-        const res = await fetch(apiUrl, {
-            headers: { 'Authorization': `token ${this.token}` }
-        });
-        
-        if (!res.ok) throw new Error("No se pudo conectar con el repositorio. Verifica credenciales.");
-        const fileData = await res.json();
-        const sha = fileData.sha;
+        try {
+            const res = await fetch(apiUrl, {
+                headers: { 'Authorization': `token ${this.token}` }
+            });
+            
+            if (!res.ok) {
+                const errJson = await res.json();
+                console.error("❌ [Bridge:Commit] No se pudo obtener SHA:", errJson);
+                throw new Error(`Error de conexión (SHA): ${errJson.message}`);
+            }
 
-        const updateRes = await fetch(apiUrl, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${this.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
+            const fileData = await res.json();
+            const sha = fileData.sha;
+            console.log("📤 [Bridge:Commit] SHA obtenido para sobrescritura:", sha);
+
+            const body = {
                 message: commitMessage,
                 content: btoa(unescape(encodeURIComponent(JSON.stringify(newDb, null, 4)))),
                 sha: sha,
                 branch: this.branch
-            })
-        });
+            };
 
-        if (!updateRes.ok) {
-            const errorData = await updateRes.json();
-            throw new Error(`Error de sincronización con GitHub: ${errorData.message}`);
+            const updateRes = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${this.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (!updateRes.ok) {
+                const errorData = await updateRes.json();
+                console.error("❌ [Bridge:Commit] Error en PUT:", errorData);
+                throw new Error(`Error de sincronización (PUT): ${errorData.message}`);
+            }
+
+            console.log("✅ [Bridge:Commit] Sincronización exitosa.");
+            return { status: 'OK', msg: 'Cambios cristalizados en GitHub.' };
+        } catch (err) {
+            console.error("❌ [Bridge:Commit] Error fatal:", err.message);
+            throw err;
         }
-
-        return { status: 'OK', msg: 'Cambios cristalizados en GitHub.' };
     }
 }
 
 // -------------------------------------------------------------------------
-// 🔌 CORE BRIDGE: UNIVERSAL PRODUCTION ROUTING
+// 🌉 NOMON BRIDGE ACTOR
 // -------------------------------------------------------------------------
-class NomonBridgeClass {
+export class NomonBridge {
     constructor() {
-        console.log("📡 [NomonBridge] Activando Estrategia CLOUD por defecto.");
-        this.strategy = new GitHubStrategy();
+        this.strategy = Config.BRIDGE_STRATEGY === 'CLOUD' ? new GitHubStrategy() : null;
     }
 
     async execute(uqo) {
-        const id = uqo.schema_id || uqo.context_id || uqo.data?.schema_id;
-        console.log(`🔌 [Bridge] Ejecutando: ${uqo.protocol} para ID: ${id}`);
-
-        if (uqo.protocol === 'CREATE') {
-            return await this.strategy.persist(uqo.context_id || 'NOMON_ENTRIES', uqo.data);
+        const { protocol, context_id, data, payload } = uqo;
+        
+        if (protocol === 'ATOM_READ') {
+            const items = await this.strategy.read(context_id);
+            return { items, metadata: { context_id, count: items.length } };
         }
 
-        if (uqo.protocol === 'DELETE') {
-            const contextId = uqo.context_id || uqo.payload?.context_id || uqo.data?.context_id || 'NOMON_ENTRIES';
-            const slug = uqo.payload?.slug || uqo.data?.slug;
-            if (!slug) throw new Error("Falta el SLUG de la materia para la disolución.");
-            return await this.strategy.delete(contextId, slug);
+        if (protocol === 'CREATE' || protocol === 'UPDATE') {
+            return await this.strategy.persist(context_id, data);
         }
 
-        if (uqo.protocol === 'TABULAR_STREAM' || uqo.protocol === 'ATOM_READ' || uqo.protocol === 'INDUSTRIAL_SYNC') {
-            const collection = await this.strategy.read(id);
-            if (collection && collection.length > 0) {
-                return { items: collection, metadata: { status: 'OK', id: id } };
-            }
-
-            console.log(`🔍 [Bridge] ID no encontrado como contexto. Buscando como slug...`);
-            const fullDb = await this.strategy.fetchFullDb();
-            
-            let foundItem = null;
-            for (const context in fullDb) {
-                const found = fullDb[context].find(item => item.slug === id);
-                if (found) { foundItem = found; break; }
-            }
-
-            console.log(`💎 [Bridge] Datos encontrados para [${id}]:`, foundItem ? '1 objeto' : 'NADA');
-            return {
-                items: foundItem || [],
-                metadata: { status: 'OK', id: id }
-            };
+        if (protocol === 'DELETE') {
+            return await this.strategy.delete(payload.context_id, payload.slug);
         }
 
-        return { items: [], metadata: { status: 'OK' } };
-    }
-
-    getSession() {
-        return { profile: { email: "admin@nomon.dev", name: "Arquitecto", role: "ADMIN" } };
+        throw new Error(`Protocolo desconocido: ${protocol}`);
     }
 }
-
-export const NomonBridge = new NomonBridgeClass();
