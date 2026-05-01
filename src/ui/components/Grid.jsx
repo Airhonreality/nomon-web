@@ -19,47 +19,36 @@ export const Grid = ({ definition }) => {
 
     // 🧬 UNIFICACIÓN DE RESONANCIA
     useEffect(() => {
-        const processMateria = (materia) => {
-            if (materia && Array.isArray(materia)) {
-                // Mapeo agnóstico y FILTRADO por tipo universal
-                const itemsToProject = materia
-                    .filter(item => {
-                        const type = (item.meta?.component_type || item.metadata?.type || '').toUpperCase();
-                        const title = item.data?.content?.title?.es || item.data?.content?.title || item.metadata?.title || item.name;
-                        
-                        // Solo proyectar si tiene tipo válido Y título (para evitar fantasmas)
-                        const isValidType = type.startsWith('ENTITY_') || type === 'DATA_CARD';
-                        return isValidType && title;
-                    })
+        if (remoteData && Array.isArray(remoteData)) {
+            // Mapeo agnóstico y FILTRADO por tipo universal
+            const itemsToProject = remoteData
+                .filter(item => {
+                    const type = (item.meta?.component_type || item.metadata?.type || '').toUpperCase();
+                    const title = item.data?.content?.title?.es || item.data?.content?.title || item.metadata?.title || item.name;
+                    const isValidType = type.startsWith('ENTITY_') || type === 'DATA_CARD';
+                    return isValidType && title;
+                })
+                .map(item => ({
+                    ...item,
+                    meta: { ...item.meta, component_id: item.slug || item.id },
+                    data: item.data || { content: { 
+                        title: { es: item.metadata?.title || item.name },
+                        summary: { es: item.metadata?.summary || item.description },
+                        image: item.metadata?.image || item.image
+                    }}
+                }));
 
-                    .map(item => ({
-                        ...item,
-                        meta: { ...item.meta, component_id: item.slug || item.id },
-                        data: item.data || { content: { 
-                            title: { es: item.metadata?.title || item.name },
-                            summary: { es: item.metadata?.summary || item.description },
-                            image: item.metadata?.image || item.image
-                        }}
-                    }));
-
+            // Solo despachar si hay cambios reales para evitar re-renders infinitos
+            const currentItems = definition?.data?.content?.items || [];
+            if (JSON.stringify(currentItems) !== JSON.stringify(itemsToProject)) {
                 dispatch('inventory_update_component', { 
                     id: componentId, 
                     data: { content: { items: itemsToProject } } 
                 });
             }
-        };
-        // ... (resto de la lógica de sincronía)
-
-        if (remoteData) {
-            processMateria(remoteData);
-        } else {
-            // Bypass si el hook no entrega nada pero el bridge sí tiene datos
-            console.log(`📡 [Grid:Sync] Intentando sincronía directa...`);
-            bridge.execute({ protocol: 'ATOM_READ', context_id: resonanceId })
-                .then(res => processMateria(res.items))
-                .catch(err => console.error("❌ [Grid:Error]", err));
         }
-    }, [remoteData, resonanceId]);
+    }, [remoteData, componentId]);
+
 
     const items = definition?.data?.content?.items || [];
 
