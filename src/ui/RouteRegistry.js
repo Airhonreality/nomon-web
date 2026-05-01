@@ -48,12 +48,15 @@ export const ROUTE_MAP = {
     },
     '/comercialFilbo': {
         id: 'comercial_filbo',
-        components: ['comercial_portal']
+        components: ['comercial_portal'],
+        restricted: true
     },
     '/comercialAuditoria': {
         id: 'comercial_auditoria',
-        components: ['comercial_auditoria']
+        components: ['comercial_auditoria'],
+        restricted: true
     }
+
 
 
 };

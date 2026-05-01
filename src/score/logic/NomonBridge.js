@@ -81,36 +81,31 @@ class GitHubStrategy extends PersistenceStrategy {
     }
 
     async fetchFullDb() {
-        const apiUrl = `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${this.dbPath}?t=${Date.now()}`;
-        console.log("📡 [Bridge:Fetch] Iniciando lectura desde API:", apiUrl);
-
+        const rawUrl = `https://raw.githubusercontent.com/${this.owner}/${this.repo}/${this.branch}/${this.dbPath}?t=${Date.now()}`;
+        const apiUrl = `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${this.dbPath}`;
+        
+        console.log("📡 [Bridge:Fetch] Leyendo desde Raw GitHub (Optimized)...");
         try {
-            const res = await fetch(apiUrl, {
-                headers: { 
-                    'Authorization': `token ${this.token}`
-                }
-            });
+            // Intentamos Raw primero (sin límites de API)
+            const res = await fetch(rawUrl);
+            if (res.ok) return await res.json();
 
-            console.log("📡 [Bridge:Fetch] Status:", res.status, res.statusText);
-            
-            if (res.ok) {
-                const data = await res.json();
-                console.log("📡 [Bridge:Fetch] SHA recibido:", data.sha);
-                // GitHub API devuelve el contenido en base64
+            // Si falla Raw, intentamos API (solo si es necesario)
+            console.log("📡 [Bridge:Fetch] Raw falló, intentando API...");
+            const apiRes = await fetch(apiUrl, {
+                headers: { 'Authorization': `token ${this.token}` }
+            });
+            if (apiRes.ok) {
+                const data = await apiRes.json();
                 const content = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
-                const parsed = JSON.parse(content);
-                console.log("📡 [Bridge:Fetch] Datos decodificados con éxito. Items:", parsed.NOMON_ENTRIES?.length);
-                return parsed;
-            } else {
-                const errorText = await res.text();
-                console.error("❌ [Bridge:Fetch] Error en respuesta:", errorText);
+                return JSON.parse(content);
             }
         } catch (err) {
             console.error("❌ [Bridge:Fetch] Error crítico:", err.message);
         }
-        console.warn("⚠️ [Bridge:Fetch] Usando fallback local por fallo en red.");
         return localDatabaseFallback;
     }
+
 
     async read(context_id) {
         const db = await this.fetchFullDb();

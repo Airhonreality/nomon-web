@@ -51,6 +51,29 @@ export const SovereignRouter = () => {
 
     if (!routeConfig) return <div className="error-404">Ruta No Encontrada</div>;
 
+    // 🔒 ESCUDO DE ACCESO SOBERANO
+    if (routeConfig.restricted && !state.identity?.isLoggedIn) {
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '80vh', textAlign: 'center', padding: '2rem' }}>
+                <span style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>🔐</span>
+                <h2 style={{ fontSize: '1.2rem', fontWeight: 900, letterSpacing: '0.1em', marginBottom: '1rem' }}>ACCESO RESTRINGIDO</h2>
+                <p style={{ fontSize: '0.8rem', opacity: 0.6, maxWidth: '25rem', lineHeight: 1.5, marginBottom: '2rem' }}>
+                    Esta sección del satélite requiere una identidad validada. Por favor, inicia sesión con tu cuenta autorizada de Google para continuar.
+                </p>
+                <div id="google-signin-btn-router"></div>
+                <script dangerouslySetInnerHTML={{ __html: `
+                    if (window.google) {
+                        window.google.accounts.id.renderButton(
+                            document.getElementById("google-signin-btn-router"),
+                            { theme: "outline", size: "large", text: "continue_with" }
+                        );
+                    }
+                `}} />
+            </div>
+        );
+    }
+
+
     return (
         <main id="app-root-inner">
             {routeConfig.components.map((actorDef, idx) => {

@@ -25,8 +25,13 @@ export const Grid = ({ definition }) => {
                 const itemsToProject = materia
                     .filter(item => {
                         const type = (item.meta?.component_type || item.metadata?.type || '').toUpperCase();
-                        return type.startsWith('ENTITY_') || type === 'DATA_CARD' || !type;
+                        const title = item.data?.content?.title?.es || item.data?.content?.title || item.metadata?.title || item.name;
+                        
+                        // Solo proyectar si tiene tipo válido Y título (para evitar fantasmas)
+                        const isValidType = type.startsWith('ENTITY_') || type === 'DATA_CARD';
+                        return isValidType && title;
                     })
+
                     .map(item => ({
                         ...item,
                         meta: { ...item.meta, component_id: item.slug || item.id },
