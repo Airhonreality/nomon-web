@@ -244,30 +244,20 @@ export const ComercialFilbo = () => {
                     </div>
 
 
-                    {/* Campo de auditoría de Nequi en el panel de contabilidad del asesor */}
                     <div style={{ gridColumn: '1 / -1', borderTop: '1px solid #f0f0f0', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                         <label style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.5, letterSpacing: '0.1em' }}>
-                            NOMBRE EN EL COMPROBANTE & FOTO DEL RECIBO (Para pagos con Nequi)
+                            REGISTRAR COMPROBANTE DE PAGO (CÁMARA / GALERÍA)
                         </label>
-                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: '1 1 15rem' }}>
+                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flex: '1' }}>
                                 <input 
-                                    type="text" 
-                                    style={{ padding: '0.8rem', border: '1px solid #ddd', fontSize: '0.8rem', background: '#fafafa', width: '100%', boxSizing: 'border-box' }}
-                                    placeholder="Nombre que aparece en el comprobante de pago..."
-                                    value={receiptName}
-                                    onChange={e => setReceiptName(e.target.value)}
+                                    type="file" 
+                                    accept="image/*" 
+                                    capture="environment"
+                                    onChange={handleFileChange}
+                                    style={{ fontSize: '0.65rem' }} 
                                 />
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                    <input 
-                                        type="file" 
-                                        accept="image/*" 
-                                        capture="environment"
-                                        onChange={handleFileChange}
-                                        style={{ fontSize: '0.65rem' }} 
-                                    />
-                                    {receiptImage && <span style={{ fontSize: '0.6rem', color: '#15803d', fontWeight: 'bold' }}>📸 ¡Imagen Cargada!</span>}
-                                </div>
+                                {receiptImage && <span style={{ fontSize: '0.6rem', color: '#15803d', fontWeight: 'bold' }}>📸 ¡Imagen Cargada!</span>}
                             </div>
                             <button 
                                 type="button"
@@ -278,6 +268,7 @@ export const ComercialFilbo = () => {
                             </button>
                         </div>
                     </div>
+
                 </div>
 
                 <div className="comercial-tabs">

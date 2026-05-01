@@ -81,8 +81,9 @@ class GitHubStrategy extends PersistenceStrategy {
     }
 
     async fetchFullDb() {
-        const apiUrl = `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${this.dbPath}`;
+        const apiUrl = `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${this.dbPath}?t=${Date.now()}`;
         console.log("📡 [Bridge:Fetch] Iniciando lectura desde API:", apiUrl);
+
         try {
             const res = await fetch(apiUrl, {
                 headers: { 
