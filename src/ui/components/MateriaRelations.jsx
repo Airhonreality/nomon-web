@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSovereign } from '../../score/SovereignContext.jsx';
+import { useIndraResonance } from '../../score/hooks/useIndraResonance.js';
 import { BookOpen, ArrowRight } from 'lucide-react';
 
 
@@ -8,106 +9,113 @@ import { BookOpen, ArrowRight } from 'lucide-react';
  * Proyecta la red de conocimiento vinculada a una entidad.
  */
 export const MateriaRelations = ({ relations }) => {
-    const { state } = useSovereign();
+    const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES');
+    const [expandedBlocks, setExpandedBlocks] = React.useState({});
+
+    const toggleBlock = (id) => {
+        setExpandedBlocks(prev => ({ ...prev, [id]: !prev[id] }));
+    };
     
     if (!relations || relations.length === 0) return null;
 
-    // Resolvemos los datos de las resonancias
+    // Resolvemos los datos de las resonancias buscando en el inventario remoto
     const linkedMatter = relations.map(slug => {
-        return state.inventory?.find(m => m.slug === slug) || 
-               state.NOMON_ENTRIES?.find(m => m.slug === slug);
+        return entries?.find(m => m.slug === slug);
     }).filter(m => !!m);
 
     if (linkedMatter.length === 0) return null;
 
     return (
         <section className="materia-relations">
-            <h4 className="relations-label">RESONANCIAS VINCULADAS</h4>
+            {linkedMatter.length > 1 && <h4 className="relations-label">RESONANCIAS VINCULADAS</h4>}
             <div className="relations-grid">
                 {linkedMatter.map((m, i) => {
                     const isLibrary = m.meta?.component_type === 'LIBRARY_RESOURCE';
-                    return (
-                        <div key={i} className={`mini-resonance-card ${isLibrary ? 'res-library' : ''}`} 
-                             onClick={() => window.location.hash = isLibrary ? `/biblioteca/${m.slug}` : `/materia/${m.slug}`}>
-                            <div className="mini-card-info">
-                                <span className="mini-type" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                    {isLibrary ? <BookOpen size={10} strokeWidth={2} /> : null}
-                                    {isLibrary ? 'BIBLIOTECA' : m.meta?.component_type}
-                                </span>
-                                <span className="mini-title">{m.data?.content?.title?.es || m.slug}</span>
-                                {isLibrary && (
-                                    <span className="mini-action" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                        LEER AHORA <ArrowRight size={12} strokeWidth={2} />
-                                    </span>
-                                )}
-                            </div>
+                    
+                    if (isLibrary) {
+                        const content = m.data?.content || {};
+                        const meta = m.metadata || {};
+                        const isExpanded = expandedBlocks[m.slug || i];
 
+                        return (
+                            <div key={i} className="comp-library-resource premium-resonance" style={{ position: 'relative' }}>
+                                <div className="lib-badge" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                    <BookOpen size={12} /> BIBLIOTECA
+                                </div>
+                                
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '2rem' }}>
+                                    <h3 className="lib-title">{content.title?.es || m.slug}</h3>
+                                    <button 
+                                        type="button"
+                                        onClick={() => toggleBlock(m.slug || i)}
+                                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: isExpanded ? '#000' : '#ccc', padding: '0.5rem', transition: 'all 0.3s ease' }}
+                                    >
+                                        {isExpanded ? <Minus size={18} strokeWidth={2.5} /> : <Info size={18} strokeWidth={2.5} />}
+                                    </button>
+                                </div>
+                                
+                                {isExpanded && (
+                                    <div className="lib-curation animate-fade-in" style={{ fontSize: '0.85rem', lineHeight: '1.6', color: '#555', borderTop: '1px solid #eee', paddingTop: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                        {meta.author && <p style={{ margin: 0 }}><b>Autor:</b> {meta.author}</p>}
+                                        {meta.year && <p style={{ margin: 0 }}><b>Año:</b> {meta.year}</p>}
+                                        {meta.editorial && <p style={{ margin: 0 }}><b>Origen:</b> {meta.editorial}</p>}
+                                        {meta.license && <p style={{ margin: 0 }}><b>Licencia:</b> {meta.license}</p>}
+                                        {meta.rationale && <p style={{ gridColumn: 'span 2', marginTop: '0.5rem', fontStyle: 'italic', borderLeft: '2px solid #eee', paddingLeft: '1rem' }}>"{meta.rationale}"</p>}
+                                    </div>
+                                )}
+
+                                <button 
+                                    className="lib-read-btn" 
+                                    onClick={() => window.location.hash = `/biblioteca/${m.slug}?url=${encodeURIComponent(content.pdf_url || "")}`}
+                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}
+                                >
+                                    ACCEDER AL CONOCIMIENTO DIGITAL <ArrowRight size={16} strokeWidth={2} />
+                                </button>
+                            </div>
+                        );
+                    }
+
+                    return (
+                        <div key={i} className="mini-resonance-card" 
+                             onClick={() => window.location.hash = `/materia/${m.slug}`}>
+                            <div className="mini-card-info">
+                                <span className="mini-type">{m.meta?.component_type}</span>
+                                <span className="mini-title">{m.data?.content?.title?.es || m.slug}</span>
+                            </div>
                         </div>
                     );
                 })}
             </div>
 
             <style dangerouslySetInnerHTML={{ __html: `
-                .materia-relations {
-                    margin-top: 5rem;
-                    padding-top: 3rem;
-                    border-top: 1px solid rgba(0,0,0,0.05);
-                }
-                .relations-label {
-                    font-size: 0.65rem;
-                    font-weight: 900;
-                    letter-spacing: 0.3em;
-                    color: #bbb;
-                    margin-bottom: 2.5rem;
-                    text-transform: uppercase;
-                    text-align: center;
-                }
-                .relations-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-                    gap: 1.5rem;
-                }
-                .mini-resonance-card {
-                    padding: 2rem;
+                .materia-relations { margin-top: 5rem; padding-top: 3rem; }
+                .premium-resonance { grid-column: 1 / -1; margin-bottom: 2rem; }
+                
+                .comp-library-resource {
+                    padding: 3rem;
                     background: #fff;
-                    border: 0.05rem solid rgba(0,0,0,0.1);
-                    cursor: pointer;
-                    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-                    position: relative;
-                    overflow: hidden;
+                    border: 1px solid rgba(0,0,0,0.1);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1.5rem;
+                    border-left: 0.5rem solid #000;
                 }
-                .mini-resonance-card:hover {
-                    border-color: #000;
-                    transform: translateY(-0.5rem);
-                    box-shadow: 0 1rem 2rem rgba(0,0,0,0.08);
+                .lib-badge { font-size: 0.6rem; font-weight: 900; letter-spacing: 0.2em; color: #999; text-transform: uppercase; }
+                .lib-title { font-size: 1.8rem; font-weight: 500; margin: 0; }
+                .lib-curation { font-size: 0.9rem; line-height: 1.6; color: #555; border-top: 1px solid #eee; padding-top: 1.5rem; }
+                .lib-read-btn {
+                    margin-top: 1rem; padding: 1.2rem; background: #000; color: #fff; border: none;
+                    font-size: 0.75rem; font-weight: 900; letter-spacing: 0.1em; cursor: pointer;
+                    transition: all 0.3s ease;
                 }
-                .res-library {
-                    border-left: 0.25rem solid #000;
-                }
-                .mini-type {
-                    display: block;
-                    font-size: 0.55rem;
-                    font-weight: 900;
-                    letter-spacing: 0.15em;
-                    margin-bottom: 0.8rem;
-                    color: #999;
-                    text-transform: uppercase;
-                }
-                .mini-title {
-                    font-size: 1.1rem;
-                    font-weight: 500;
-                    line-height: 1.2;
-                    color: #222;
-                    display: block;
-                }
-                .mini-action {
-                    display: block;
-                    margin-top: 1.2rem;
-                    font-size: 0.65rem;
-                    font-weight: 900;
-                    letter-spacing: 0.05em;
-                    color: #000;
-                }
+                .lib-read-btn:hover { letter-spacing: 0.2em; background: #333; }
+
+                .relations-label { font-size: 0.65rem; font-weight: 900; letter-spacing: 0.3em; color: #bbb; margin-bottom: 2.5rem; text-transform: uppercase; text-align: center; }
+                .relations-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1.5rem; }
+                .mini-resonance-card { padding: 2rem; background: #fff; border: 1px solid rgba(0,0,0,0.1); cursor: pointer; transition: all 0.5s ease; }
+                .mini-resonance-card:hover { border-color: #000; transform: translateY(-0.3rem); }
+                .mini-type { display: block; font-size: 0.55rem; font-weight: 900; letter-spacing: 0.15em; margin-bottom: 0.8rem; color: #999; text-transform: uppercase; }
+                .mini-title { font-size: 1.1rem; font-weight: 500; color: #222; }
             `}} />
         </section>
     );

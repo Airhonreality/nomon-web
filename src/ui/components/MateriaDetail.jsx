@@ -84,6 +84,36 @@ export const MateriaDetail = ({ params }) => {
 
                 {/* 🏗️ PROYECTOR DE MATERIA (Tejido Agnóstico Puro) */}
                 <div className="materia-content-flow">
+                    {/* Visualización de Metadatos de Biblioteca si aplica */}
+                    {materia.meta?.component_type === 'LIBRARY_RESOURCE' && (
+                        <div className="library-thesaurus-grid">
+                            <div className="thesaurus-main">
+                                {materia.metadata?.author && <div className="thesaurus-item"><label>AUTOR/A</label><span>{materia.metadata.author}</span></div>}
+                                {materia.metadata?.editorial && <div className="thesaurus-item"><label>EDITORIAL</label><span>{materia.metadata.editorial}</span></div>}
+                                {materia.metadata?.year && <div className="thesaurus-item"><label>AÑO</label><span>{materia.metadata.year}</span></div>}
+                                {materia.metadata?.id_universal && <div className="thesaurus-item"><label>DOI / ISBN</label><span>{materia.metadata.id_universal}</span></div>}
+                                {materia.metadata?.license && <div className="thesaurus-item"><label>LICENCIA</label><span>{materia.metadata.license}</span></div>}
+                                {materia.metadata?.language && <div className="thesaurus-item"><label>IDIOMA</label><span>{materia.metadata.language}</span></div>}
+                            </div>
+                            
+                            {(materia.metadata?.curator || materia.metadata?.rationale) && (
+                                <div className="thesaurus-curation">
+                                    {materia.metadata.curator && <p><b>CURADO POR:</b> {materia.metadata.curator}</p>}
+                                    {materia.metadata.rationale && <p><b>RAZÓN NOMON:</b> {materia.metadata.rationale}</p>}
+                                </div>
+                            )}
+
+                            {content.pdf_url && (
+                                <button 
+                                    className="library-access-btn"
+                                    onClick={() => window.location.hash = `/biblioteca/${slug}?url=${encodeURIComponent(content.pdf_url)}`}
+                                >
+                                    ACCEDER AL CONOCIMIENTO DIGITAL
+                                </button>
+                            )}
+                        </div>
+                    )}
+
                     {content.composition?.length > 0 && (
                         <MateriaComposer 
                             composition={content.composition} 
@@ -98,6 +128,46 @@ export const MateriaDetail = ({ params }) => {
 
             <style dangerouslySetInnerHTML={{ __html: `
                 .detail-library { margin-top: 4rem; }
+                .library-thesaurus-grid { 
+                    margin: 2rem 0 4rem 0; 
+                    display: flex; 
+                    flex-direction: column; 
+                    gap: 2rem; 
+                    background: var(--bg-secondary);
+                    padding: 3rem;
+                    border: 1px solid var(--border-primary);
+                }
+                .thesaurus-main { 
+                    display: grid; 
+                    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+                    gap: 2rem; 
+                }
+                .thesaurus-item { display: flex; flexDirection: column; gap: 0.4rem; }
+                .thesaurus-item label { font-size: 0.55rem; font-weight: 900; opacity: 0.5; letter-spacing: 0.1em; }
+                .thesaurus-item span { font-size: 0.9rem; font-weight: 600; }
+                .thesaurus-curation { 
+                    padding-top: 2rem; 
+                    border-top: 1px solid var(--border-primary); 
+                    font-size: 0.9rem; 
+                    line-height: 1.6; 
+                    color: var(--text-primary);
+                }
+                .library-access-btn {
+                    margin-top: 1rem;
+                    padding: 1.5rem;
+                    background: var(--accent-color);
+                    color: var(--bg-primary);
+                    border: none;
+                    font-size: 0.75rem;
+                    font-weight: 900;
+                    letter-spacing: 0.1em;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+                .library-access-btn:hover {
+                    opacity: 0.8;
+                    letter-spacing: 0.2em;
+                }
                 .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
                 .library-card { 
                     padding: 2rem; 
