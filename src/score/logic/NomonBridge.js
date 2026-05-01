@@ -86,10 +86,10 @@ class GitHubStrategy extends PersistenceStrategy {
         try {
             const res = await fetch(apiUrl, {
                 headers: { 
-                    'Authorization': `token ${this.token}`,
-                    'Cache-Control': 'no-cache'
+                    'Authorization': `token ${this.token}`
                 }
             });
+
             console.log("📡 [Bridge:Fetch] Status:", res.status, res.statusText);
             
             if (res.ok) {
