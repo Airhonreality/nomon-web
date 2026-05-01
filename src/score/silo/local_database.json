@@ -210,6 +210,17 @@
             "meta": {
                 "component_type": "ENTITY_PROJECT"
             },
+            "metadata": {
+                "author": "",
+                "editorial": "",
+                "year": "",
+                "id_universal": "",
+                "license": "CC BY-NC",
+                "language": "es",
+                "tags": "",
+                "curator": "",
+                "rationale": ""
+            },
             "data": {
                 "content": {
                     "title": {
@@ -226,12 +237,22 @@
                             "content": "..."
                         },
                         {
+                            "type": "RESONANCE",
+                            "id": 1777658707477,
+                            "content": "libro-digital-guardian-del-sextante"
+                        },
+                        {
                             "type": "LIBRARY_RESOURCE",
                             "id": 1777554761511,
                             "url": "/assets/materia/el-guardian-del-sextante-red-nomon.pdf"
                         }
                     ],
                     "pdf_url": ""
+                },
+                "nav_config": {
+                    "show_in_nav": false,
+                    "priority": 0,
+                    "nav_label": ""
                 },
                 "relations": [],
                 "access_control": {
