@@ -163,7 +163,16 @@
                             "id": 1777554761511,
                             "url": "/assets/materia/el-guardian-del-sextante-red-nomon.pdf"
                         }
-                    ]
+                    ],
+                    "pdf_url": ""
+                },
+                "relations": [],
+                "access_control": {
+                    "strategy": "PUBLIC",
+                    "whitelist_slug": "",
+                    "restricted_title": "",
+                    "restricted_message": "",
+                    "denied_message": ""
                 }
             }
         },
