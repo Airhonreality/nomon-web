@@ -1,10 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSovereign } from '../../score/SovereignContext.jsx';
+import { appState } from '../../score/AppState.js';
 import { MateriaRelations } from './MateriaRelations.jsx';
 import { MateriaComposer } from './MateriaComposer.jsx';
 
+// Helper para decodificar JWT de Google de forma nativa
+function decodeJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        console.error("Fallo al decodificar el token de Google:", e);
+        return null;
+    }
+}
+
+// Helper para calcular el hash SHA-256 de forma nativa
+async function calcSha256(message) {
+    const msgBuffer = new TextEncoder().encode(message.toLowerCase().trim());
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 /**
- * 🛰️ MATERIA READER ACTOR (Sovereign Edition)
+ * 🛰️ MATERIA READER ACTOR (Sovereign & Restricted Edition)
  * Un entorno de lectura premium que equilibra estabilidad y estética.
  */
 export const MateriaReader = ({ params }) => {
@@ -18,6 +42,8 @@ export const MateriaReader = ({ params }) => {
     const resIdx = parseInt(query.get('res')) || 0;
     const directUrl = query.get('url');
 
+    const [isWhitelisted, setIsWhitelisted] = useState(null);
+
     const materia = state.inventory?.find(m => m.slug === slug) || 
                    state.NOMON_ENTRIES?.find(m => m.slug === slug);
 
@@ -26,16 +52,85 @@ export const MateriaReader = ({ params }) => {
     
     const pdfUrl = directUrl || resource?.url || "";
     const title = resource?.desc || materia?.data?.content?.title?.es || "DOCUMENTO DIGITAL";
-    const userEmail = state.identity?.user?.handle?.label || "USUARIO_NOMON_ANONIMO";
+    const userEmail = state.identity?.user?.payload?.email || "USUARIO_NOMON_ANONIMO";
+
+    // Requerimientos de whitelist por entidad
+    const whitelist = materia?.data?.whitelist || [];
+    const isRestricted = whitelist.length > 0;
+
+    // Efecto 1: Inicializar Google Sign-In
+    useEffect(() => {
+        if (!state.identity?.isLoggedIn && window.google && isRestricted) {
+            setTimeout(() => {
+                const btnContainer = document.getElementById("google-signin-btn");
+                if (btnContainer) {
+                    window.google.accounts.id.initialize({
+                        client_id: "957715051136-pcma3u1cpl9d4h0jsl81vjbcoe0rt62s.apps.googleusercontent.com",
+                        callback: (res) => {
+                            const payload = decodeJwt(res.credential);
+                            if (payload) {
+                                appState.setIdentity({
+                                    id: payload.sub,
+                                    email: payload.email,
+                                    name: payload.name,
+                                    picture: payload.picture,
+                                    alias: payload.given_name
+                                });
+                            }
+                        }
+                    });
+                    window.google.accounts.id.renderButton(
+                        btnContainer,
+                        { theme: "outline", size: "large", text: "continue_with" }
+                    );
+                }
+            }, 100);
+        }
+    }, [state.identity?.isLoggedIn, isRestricted]);
+
+    // Efecto 2: Evaluar si el usuario está en la Whitelist de esta entidad específica
+    useEffect(() => {
+        const checkAccess = async () => {
+            if (!isRestricted) {
+                setIsWhitelisted(true);
+                return;
+            }
+
+            if (state.identity?.isLoggedIn && state.identity?.user?.payload?.email) {
+                const emailHash = await calcSha256(state.identity.user.payload.email);
+                if (whitelist.includes(emailHash)) {
+                    setIsWhitelisted(true);
+                } else {
+                    setIsWhitelisted(false);
+                }
+            } else {
+                setIsWhitelisted(false);
+            }
+        };
+
+        checkAccess();
+    }, [state.identity?.isLoggedIn, whitelist, isRestricted]);
+
+    const handleLogout = () => {
+        appState.logout();
+    };
 
     return (
         <div className={`materia-reader-viewport theme-${theme}`}>
             <header className="reader-toolbar">
                 <div className="reader-brand">NOMON // {title}</div>
                 <div className="reader-controls">
+                    {state.identity?.isLoggedIn && (
+                        <span className="reader-profile" style={{ fontSize: '0.65rem', opacity: 0.8, alignSelf: 'center', marginRight: '1rem' }}>
+                            👤 {state.identity.user.payload.email}
+                        </span>
+                    )}
                     <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="ctrl-btn">
                         {theme === 'dark' ? '☀️ MODO CLARO' : '🌙 MODO OSCURO'}
                     </button>
+                    {state.identity?.isLoggedIn && (
+                        <button onClick={handleLogout} className="ctrl-btn exit">SALIR</button>
+                    )}
                     <button onClick={() => window.location.hash = '/'} className="ctrl-btn exit">CERRAR</button>
                 </div>
             </header>
@@ -46,29 +141,55 @@ export const MateriaReader = ({ params }) => {
                     {Array(40).fill(`${userEmail} | SOVEREIGN PROTOCOL | `).join('')}
                 </div>
 
-                {pdfUrl ? (
-                    <div className="document-container">
-                        <div className="document-shadow-box animate-fade-up">
-                            <iframe 
-                                src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1`} 
-                                className={`pdf-proyector ${theme === 'dark' ? 'pdf-inverted' : ''}`}
-                                title={title}
-                            />
+                {!isRestricted || isWhitelisted ? (
+                    pdfUrl ? (
+                        <div className="document-container">
+                            <div className="document-shadow-box animate-fade-up">
+                                <iframe 
+                                    src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1`} 
+                                    className={`pdf-proyector ${theme === 'dark' ? 'pdf-inverted' : ''}`}
+                                    title={title}
+                                />
+                            </div>
+                            
+                            {/* SECCIÓN DE CONTEXTO */}
+                            {(materia?.data?.content?.composition || materia?.data?.relations) && (
+                                <div className="document-context">
+                                    <div className="context-divider"></div>
+                                    {materia?.data?.content?.composition && (
+                                        <MateriaComposer composition={materia.data.content.composition} />
+                                    )}
+                                    <MateriaRelations relations={materia?.data?.relations || []} />
+                                </div>
+                            )}
                         </div>
-                        
-                        {/* SECCIÓN DE CONTEXTO (Bajo el documento) */}
-                        {(materia?.data?.content?.composition || materia?.data?.relations) && (
-                            <div className="document-context">
-                                <div className="context-divider"></div>
-                                {materia?.data?.content?.composition && (
-                                    <MateriaComposer composition={materia.data.content.composition} />
-                                )}
-                                <MateriaRelations relations={materia?.data?.relations || []} />
+                    ) : (
+                        <div className="reader-empty">CRISTALIZACIÓN NO ENCONTRADA</div>
+                    )
+                ) : (
+                    /* 🛡️ ESCUDO DE IDENTIDAD (ACCESO RESTRINGIDO) */
+                    <div className="reader-restricted-box animate-fade-up" style={{ textAlign: 'center', background: '#fff', color: '#000', padding: '4rem 2rem', border: '1px solid #ddd', maxWidth: '35rem', boxShadow: '0 4rem 8rem rgba(0,0,0,0.1)', marginTop: '5rem', zIndex: 10 }}>
+                        <div style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>🔏</div>
+                        <h2 style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '-0.02em', marginBottom: '0.8rem' }}>MATERIA DE ACCESO RESTRINGIDO</h2>
+                        <p style={{ fontSize: '0.9rem', opacity: 0.6, lineHeight: '1.6', marginBottom: '2.5rem' }}>
+                            Esta entidad pertenece a un estrato de conocimiento reservado. Para continuar con su proyección, debes iniciar sesión y estar autorizado por un asesor.
+                        </p>
+
+                        {!state.identity?.isLoggedIn ? (
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <div id="google-signin-btn"></div>
+                            </div>
+                        ) : (
+                            <div style={{ background: '#fff4f4', padding: '1.5rem', border: '1px solid #ffebeb', borderRadius: '4px' }}>
+                                <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#d32f2f', letterSpacing: '0.1em', display: 'block', marginBottom: '0.5rem' }}>
+                                    ❌ ACCESO NO AUTORIZADO
+                                </span>
+                                <p style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                                    El correo <strong>{state.identity.user.payload.email}</strong> no se encuentra en la whitelist de esta materia. Comunícate con un asesor comercial.
+                                </p>
                             </div>
                         )}
                     </div>
-                ) : (
-                    <div className="reader-empty">CRISTALIZACIÓN NO ENCONTRADA</div>
                 )}
             </main>
 
