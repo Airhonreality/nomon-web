@@ -168,8 +168,8 @@
                 },
                 "relations": [],
                 "access_control": {
-                    "strategy": "PUBLIC",
-                    "whitelist_slug": "",
+                    "strategy": "REFERENCE_WHITELIST",
+                    "whitelist_slug": "digital-sextante",
                     "restricted_title": "",
                     "restricted_message": "",
                     "denied_message": ""
