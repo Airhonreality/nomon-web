@@ -11,7 +11,7 @@ export class AppState {
     constructor() {
         this.state = {
             lang: 'es',
-            theme: 'dark',
+            theme: 'light',
             inventory: [...ComponentMap], // ADN Estructural inicial
             identity: {
                 isLoggedIn: false,

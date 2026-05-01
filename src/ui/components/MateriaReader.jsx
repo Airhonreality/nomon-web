@@ -35,8 +35,7 @@ async function calcSha256(message) {
  */
 export const MateriaReader = ({ params }) => {
     const { state } = useSovereign();
-    const getSystemTheme = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const [theme, setTheme] = useState(getSystemTheme());
+    const [theme, setTheme] = useState(state.theme || 'light');
     const slug = params?.slug;
 
     const hashParts = window.location.hash.split('?');
