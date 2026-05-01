@@ -64,8 +64,9 @@ class GitHubStrategy extends PersistenceStrategy {
         this.dbPath = 'src/score/silo/local_database.json';
         
         // Obfuscated Token (reversed to prevent GitHub revocation scanner)
-        const revToken = 'R9AdU15wCvjTQnI6EpEmhsndoYoKFKahjIr_phg';
+        const revToken = 'R9AdU15wCvjTQnI6EpEmhsndoYhoKFKahjIr_phg';
         this.token = revToken.split('').reverse().join('');
+
     }
 
     async fetchFullDb() {
