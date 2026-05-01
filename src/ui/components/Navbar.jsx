@@ -20,7 +20,8 @@ function decodeJwt(token) {
  * 🛰️ NAVBAR ACTOR (V2 - Mobile First)
  */
 export const Navbar = ({ definition }) => {
-    const { state } = useSovereign();
+    const { state, toggleTheme } = useSovereign();
+
     const links = definition?.data?.content?.links || [];
 
     const handleNavigate = (path) => {
@@ -72,7 +73,21 @@ export const Navbar = ({ definition }) => {
                 </ul>
 
 
-                <div className="nav-identity-box" style={{ display: 'flex', alignItems: 'center', borderLeft: '1px solid #eee', paddingLeft: '1rem', minHeight: '2.5rem' }}>
+                <div className="nav-identity-box" style={{ display: 'flex', alignItems: 'center', borderLeft: '1px solid #eee', paddingLeft: '1rem', minHeight: '2.5rem', gap: '1rem' }}>
+                    <button 
+                        onClick={() => toggleTheme()}
+                        style={{ 
+                            background: 'none', border: 'none', cursor: 'pointer', 
+                            fontSize: '1rem', padding: '0.2rem', display: 'flex', 
+                            alignItems: 'center', opacity: 0.6, transition: 'opacity 0.2s'
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.opacity = 1}
+                        onMouseLeave={e => e.currentTarget.style.opacity = 0.6}
+                        title={state.theme === 'dark' ? "Activar Modo Luz" : "Activar Modo Oscuro"}
+                    >
+                        {state.theme === 'dark' ? '☀️' : '🌙'}
+                    </button>
+
                     {state.identity?.isLoggedIn ? (
                         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.8rem' }}>
                             <span style={{ fontSize: '0.6rem', fontWeight: 900, color: '#666', wordBreak: 'break-all' }}>
@@ -89,6 +104,7 @@ export const Navbar = ({ definition }) => {
                         <div id="navbar-google-signin"></div>
                     )}
                 </div>
+
             </div>
         </nav>
     );

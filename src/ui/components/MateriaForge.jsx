@@ -279,6 +279,7 @@ export const MateriaForge = () => {
             {/* 🛰️ SIDEBAR: INVENTARIO COMPACTO (20%) */}
             <aside className="forge-sidebar" style={{ width: '20%', borderRight: '1px solid #eee', display: 'flex', flexDirection: 'column', background: '#fcfcfc' }}>
                 <div style={{ padding: '1.5rem', borderBottom: '1px solid #eee' }}>
+                    <h2 style={{ fontSize: '0.8rem', fontWeight: 900, letterSpacing: '0.1em', margin: '0 0 1.5rem 0' }}>LISTA DE ENTIDADES</h2>
                     <h2 style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '0.2em', margin: '0 0 1rem 0', opacity: 0.5 }}>SILO DE MATERIA</h2>
                     
                     <div className="sovereign-filter-container">
@@ -305,8 +306,8 @@ export const MateriaForge = () => {
                             onClick={() => handleEdit(item)}
                             style={{ 
                                 padding: '0.8rem', borderBottom: '1px solid #f0f0f0', cursor: 'pointer',
-                                background: formData.slug === item.slug ? '#fff' : 'transparent',
-                                borderLeft: formData.slug === item.slug ? '4px solid #000' : '4px solid transparent'
+                                background: formData.slug === item.slug ? 'var(--bg-primary)' : 'transparent',
+                                borderLeft: formData.slug === item.slug ? '4px solid var(--accent-color)' : '4px solid transparent'
                             }}
                         >
                             <span style={{ fontSize: '0.5rem', fontWeight: 900, opacity: 0.4, textTransform: 'uppercase' }}>{item.meta?.component_type || 'DATA_CARD'}</span>
@@ -319,7 +320,7 @@ export const MateriaForge = () => {
                 </div>
                 
                 <div style={{ padding: '1.5rem', borderTop: '1px solid #eee' }}>
-                    <button onClick={resetForm} style={{ width: '100%', background: '#000', color: '#fff', border: 'none', padding: '0.8rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
+                    <button onClick={resetForm} style={{ width: '100%', background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', padding: '0.8rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
                         + NUEVA ENTIDAD
                     </button>
                 </div>
@@ -328,10 +329,14 @@ export const MateriaForge = () => {
             {/* 🖋️ MAIN AREA: EDITOR DINÁMICO (80%) */}
             <main className="forge-main-editor" style={{ width: '80%', overflowY: 'auto', padding: '3rem' }}>
                 <form onSubmit={handleSave} style={{ maxWidth: '60rem', margin: '0 auto' }}>
+                    <header style={{ marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '1rem', fontWeight: 900, letterSpacing: '0.1em', margin: '0 0 1.5rem 0' }}>EDICIÓN DE ENTIDADES</h2>
+                    </header>
+
                     <header style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                         <div style={{ flex: 1 }}>
                             <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>ARQUETIPO</label>
-                            <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)} style={{ display: 'block', padding: '0.5rem 0', border: 'none', borderBottom: '1px solid #000', fontSize: '1rem', fontWeight: 900, textTransform: 'uppercase', background: 'transparent' }}>
+                            <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)} style={{ display: 'block', padding: '0.5rem 0', border: 'none', borderBottom: '1px solid var(--accent-color)', fontSize: '1rem', fontWeight: 900, textTransform: 'uppercase', background: 'transparent' }}>
                                 <option value="ENTITY_PROJECT">Proyecto</option>
                                 <option value="ENTITY_NEWS">Noticia</option>
                                 <option value="ENTITY_ALLY">Aliado</option>
@@ -347,7 +352,7 @@ export const MateriaForge = () => {
                                     ELIMINAR
                                 </button>
                             )}
-                            <button type="submit" style={{ background: '#000', color: '#fff', border: 'none', padding: '0.8rem 2.5rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
+                            <button type="submit" style={{ background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', padding: '0.8rem 2.5rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
                                 {isEditing ? 'CRISTALIZAR CAMBIOS' : 'CRISTALIZAR MATERIA'}
                             </button>
                         </div>
@@ -355,7 +360,7 @@ export const MateriaForge = () => {
 
                     <div className="editor-body">
                         {/* TÍTULO GIGANTE */}
-                        <div style={{ marginBottom: '3rem' }}>
+                        <div style={{ marginBottom: '2rem' }}>
                             <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>TÍTULO DE LA ENTIDAD</label>
                             <input 
                                 type="text" 
@@ -363,13 +368,25 @@ export const MateriaForge = () => {
                                 value={typeof formData.title === 'object' ? formData.title?.es : formData.title} 
                                 onChange={e => setFormData({...formData, title: e.target.value})} 
                                 required 
-                                style={{ fontSize: '2.5rem', fontWeight: 900, width: '100%', border: 'none', borderBottom: '2px solid #f0f0f0', padding: '1rem 0' }} 
+                                style={{ fontSize: '2.5rem', fontWeight: 900, width: '100%', border: 'none', borderBottom: '2px solid var(--border-primary)', padding: '1rem 0' }} 
                             />
                         </div>
 
+                        {/* RESUMEN / SUMMARY */}
+                        <div style={{ marginBottom: '3rem' }}>
+                            <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>RESUMEN EJECUTIVO</label>
+                            <textarea 
+                                placeholder="Escribe una breve descripción..." 
+                                value={typeof formData.summary === 'object' ? formData.summary?.es : formData.summary} 
+                                onChange={e => setFormData({...formData, summary: e.target.value})} 
+                                style={{ fontSize: '1rem', width: '100%', border: 'none', borderBottom: '1px solid var(--border-primary)', padding: '1rem 0', minHeight: '4rem', resize: 'none', fontFamily: 'inherit' }} 
+                            />
+                        </div>
+
+
                         {/* 🛡️ REGLAS DE SOBERANÍA (AHORA ARRIBA) */}
                         {selectedClass !== 'ENTITY_WHITELIST' && (
-                            <div style={{ background: '#f8fafc', padding: '1.5rem', border: '1px solid #e2e8f0', marginBottom: '3rem' }}>
+                            <div style={{ background: 'var(--bg-secondary)', padding: '1.5rem', border: '1px solid var(--border-primary)', marginBottom: '3rem' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
                                     <h4 style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '0.15em', margin: 0 }}>🛡️ SOBERANÍA DE ACCESO</h4>
                                     <select 
@@ -378,7 +395,7 @@ export const MateriaForge = () => {
                                             ...formData, 
                                             access_control: { ...formData.access_control, strategy: e.target.value }
                                         })}
-                                        style={{ padding: '0.4rem', border: '1px solid #ddd', fontSize: '0.65rem', fontWeight: 900 }}
+                                        style={{ padding: '0.4rem', border: '1px solid var(--border-primary)', fontSize: '0.65rem', fontWeight: 900, background: 'transparent' }}
                                     >
                                         <option value="PUBLIC">🔓 PÚBLICO</option>
                                         <option value="REGISTERED_ONLY">👥 REGISTRADOS</option>
@@ -392,7 +409,7 @@ export const MateriaForge = () => {
                                                 ...formData, 
                                                 access_control: { ...formData.access_control, whitelist_slug: e.target.value }
                                             })}
-                                            style={{ padding: '0.4rem', border: '1px solid #ddd', fontSize: '0.65rem' }}
+                                            style={{ padding: '0.4rem', border: '1px solid var(--border-primary)', fontSize: '0.65rem', background: 'transparent' }}
                                         >
                                             <option value="">Selecciona...</option>
                                             {whitelists.map(item => (
@@ -403,12 +420,13 @@ export const MateriaForge = () => {
                                 </div>
                                 {formData.access_control?.strategy !== 'PUBLIC' && (
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                        <input type="text" placeholder="Título bloqueo..." value={formData.access_control?.restricted_title || ''} onChange={e => setFormData({...formData, access_control: {...formData.access_control, restricted_title: e.target.value}})} style={{ fontSize: '0.7rem', padding: '0.5rem', border: '1px solid #eee' }} />
-                                        <input type="text" placeholder="Mensaje bloqueo..." value={formData.access_control?.restricted_message || ''} onChange={e => setFormData({...formData, access_control: {...formData.access_control, restricted_message: e.target.value}})} style={{ fontSize: '0.7rem', padding: '0.5rem', border: '1px solid #eee' }} />
+                                        <input type="text" placeholder="Título bloqueo..." value={formData.access_control?.restricted_title || ''} onChange={e => setFormData({...formData, access_control: {...formData.access_control, restricted_title: e.target.value}})} style={{ fontSize: '0.7rem', padding: '0.5rem', border: '1px solid var(--border-primary)' }} />
+                                        <input type="text" placeholder="Mensaje bloqueo..." value={formData.access_control?.restricted_message || ''} onChange={e => setFormData({...formData, access_control: {...formData.access_control, restricted_message: e.target.value}})} style={{ fontSize: '0.7rem', padding: '0.5rem', border: '1px solid var(--border-primary)' }} />
                                     </div>
                                 )}
                             </div>
                         )}
+
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
                             <div>
@@ -437,24 +455,25 @@ export const MateriaForge = () => {
                                     <InsertBar onInsert={addBlock} blockTypes={BLOCK_TYPES} index={0} />
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
                                         {formData.composition.map((b, idx) => (
-                                            <div key={b.id} style={{ border: '1px solid #f0f0f0', padding: '1rem', background: '#fff' }}>
+                                            <div key={b.id} style={{ border: '1px solid var(--border-primary)', padding: '1rem', background: 'var(--bg-primary)' }}>
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', opacity: 0.4 }}>
                                                     <span style={{ fontSize: '0.5rem', fontWeight: 900 }}>{BLOCK_TYPES[b.type]}</span>
                                                     <div style={{ display: 'flex', gap: '0.4rem' }}>
-                                                        <button type="button" onClick={() => moveBlock(idx, -1)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem' }}>↑</button>
-                                                        <button type="button" onClick={() => moveBlock(idx, 1)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem' }}>↓</button>
+                                                        <button type="button" onClick={() => moveBlock(idx, -1)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem', color: 'var(--text-primary)' }}>↑</button>
+                                                        <button type="button" onClick={() => moveBlock(idx, 1)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem', color: 'var(--text-primary)' }}>↓</button>
                                                         <button type="button" onClick={() => deleteBlock(b.id)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem', color: '#d32f2f' }}>[×]</button>
                                                     </div>
                                                 </div>
                                                 {b.type === 'MARKDOWN' ? (
                                                     <MateriaEditor value={b.content || ''} onChange={val => updateBlock(b.id, 'content', val)} />
                                                 ) : (
-                                                    <input type="text" value={b.url || b.content || ''} onChange={e => updateBlock(b.id, b.type === 'LIBRARY_RESOURCE' ? 'url' : 'content', e.target.value)} placeholder="..." style={{ width: '100%', padding: '0.5rem', border: '1px solid #eee' }} />
+                                                    <input type="text" value={b.url || b.content || ''} onChange={e => updateBlock(b.id, b.type === 'LIBRARY_RESOURCE' ? 'url' : 'content', e.target.value)} placeholder="..." style={{ width: '100%', padding: '0.5rem', border: '1px solid var(--border-primary)', background: 'transparent' }} />
                                                 )}
                                                 <InsertBar onInsert={addBlock} blockTypes={BLOCK_TYPES} index={idx + 1} />
                                             </div>
                                         ))}
                                     </div>
+
                                 </div>
                             </>
                         )}

@@ -1,18 +1,20 @@
 import React from 'react';
 import MDEditor from '@uiw/react-md-editor';
 import "@uiw/react-md-editor/markdown-editor.css";
+import { useSovereign } from '../../score/SovereignContext.jsx';
+
 
 /**
  * 🖋️ SOVEREIGN MATERIA EDITOR (Industrial Grade)
  * Sustituye la improvisación por un motor de edición profesional.
  */
 export const MateriaEditor = ({ value, onChange, placeholder }) => {
-    
-    // Configuración de previsualización para el modo oscuro
-    const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const { state } = useSovereign();
+    const currentTheme = state.theme || 'dark';
 
     return (
-        <div className="sovereign-editor-container" data-color-mode={isDarkMode ? 'dark' : 'light'}>
+        <div className="sovereign-editor-container" data-color-mode={currentTheme}>
+
             <MDEditor
                 value={value}
                 onChange={onChange}

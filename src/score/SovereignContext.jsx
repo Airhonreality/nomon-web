@@ -42,14 +42,23 @@ export const SovereignProvider = ({ children }) => {
         }
     };
 
+    const toggleTheme = () => {
+        const newTheme = state.theme === 'dark' ? 'light' : 'dark';
+        appState.update({ theme: newTheme }, true);
+    };
+
+    const bridge = React.useMemo(() => new NomonBridge(), []);
+
     const value = {
         state,
-        bridge: new NomonBridge(),
-        dispatch
+        bridge,
+        dispatch,
+        toggleTheme
     };
 
 
-    console.log(`🏛️ [Provider:Render] Bridge disponible: ${!!NomonBridge} | Items en inventario: ${state.inventory?.length}`);
+    console.log(`🏛️ [Provider:Render] Bridge disponible: ${!!bridge} | Items en inventario: ${state.inventory?.length}`);
+
 
     return (
         <SovereignContext.Provider value={value}>

@@ -31,7 +31,9 @@ export class AppState {
         const cachedState = AgnosticVault.load();
         if (cachedState.identity) this.state.identity = cachedState.identity;
         if (cachedState.lang) this.state.lang = cachedState.lang;
+        if (cachedState.theme) this.state.theme = cachedState.theme;
         console.log("🧠 AppState: Hidratación completada.");
+
     }
 
     get() {
