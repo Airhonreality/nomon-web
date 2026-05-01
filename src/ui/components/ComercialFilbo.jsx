@@ -31,6 +31,31 @@ export const ComercialFilbo = () => {
         return parseInt(localStorage.getItem('comercial_sales_digital') || '0');
     });
 
+    const getTodayKey = () => new Date().toISOString().split('T')[0];
+
+    useEffect(() => {
+        const today = getTodayKey();
+        const lastReset = localStorage.getItem('comercial_last_reset_date');
+
+        if (lastReset !== today) {
+            console.log(`🌅 Nuevo día detectado (${today}). Reiniciando contadores...`);
+            
+            // Opcional: Guardar histórico antes de borrar
+            const history = JSON.parse(localStorage.getItem('comercial_sales_history') || '[]');
+            history.push({
+                date: lastReset || 'N/A',
+                physical: physicalSales,
+                digital: digitalSales,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('comercial_sales_history', JSON.stringify(history.slice(-30))); // Guardar últimos 30 días
+
+            setPhysicalSales(0);
+            setDigitalSales(0);
+            localStorage.setItem('comercial_last_reset_date', today);
+        }
+    }, []);
+
     useEffect(() => {
         localStorage.setItem('comercial_sales_physical', physicalSales.toString());
     }, [physicalSales]);
@@ -38,6 +63,7 @@ export const ComercialFilbo = () => {
     useEffect(() => {
         localStorage.setItem('comercial_sales_digital', digitalSales.toString());
     }, [digitalSales]);
+
 
     const inventory = entries || [];
     const fixedWhitelistSlug = "digital-sextante";
@@ -207,6 +233,16 @@ export const ComercialFilbo = () => {
                             <button onClick={() => setDigitalSales(Math.max(0, digitalSales - 1))} style={{ background: '#fff', color: '#000', border: '1px solid #ddd', width: '2.5rem', height: '2.5rem', fontSize: '1.2rem', cursor: 'pointer', fontWeight: 'bold' }}>↓</button>
                         </div>
                     </div>
+
+                    <div style={{ gridColumn: '1 / -1', borderTop: '1px solid #f0f0f0', paddingTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.4, letterSpacing: '0.05em' }}>
+                            🗓️ JORNADA ACTIVA: {new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).toUpperCase()}
+                        </span>
+                        <span style={{ fontSize: '0.55rem', background: '#000', color: '#fff', padding: '0.3rem 0.6rem', borderRadius: '2px', fontWeight: 'bold' }}>
+                            ID SESIÓN: {getTodayKey()}
+                        </span>
+                    </div>
+
 
                     {/* Campo de auditoría de Nequi en el panel de contabilidad del asesor */}
                     <div style={{ gridColumn: '1 / -1', borderTop: '1px solid #f0f0f0', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>

@@ -44,9 +44,10 @@ export const SovereignProvider = ({ children }) => {
 
     const value = {
         state,
-        bridge: NomonBridge,
+        bridge: new NomonBridge(),
         dispatch
     };
+
 
     console.log(`🏛️ [Provider:Render] Bridge disponible: ${!!NomonBridge} | Items en inventario: ${state.inventory?.length}`);
 
