@@ -45,5 +45,15 @@ export const ROUTE_MAP = {
     '/admin/forge': {
         id: 'forge',
         components: ['hero_forge', 'materia_forge']
+    },
+    '/comercialFilbo': {
+        id: 'comercial_filbo',
+        components: ['comercial_portal']
+    },
+    '/comercialAuditoria': {
+        id: 'comercial_auditoria',
+        components: ['comercial_auditoria']
     }
+
+
 };

@@ -54,9 +54,9 @@ export const MateriaReader = ({ params }) => {
     const title = resource?.desc || materia?.data?.content?.title?.es || "DOCUMENTO DIGITAL";
     const userEmail = state.identity?.user?.payload?.email || "USUARIO_NOMON_ANONIMO";
 
-    const accessControl = materia?.data?.access_control || {};
-    const strategy = accessControl.strategy || 'PUBLIC';
-    const isRestricted = strategy !== 'PUBLIC';
+    // Requerimientos de whitelist por entidad
+    const whitelist = materia?.data?.whitelist || [];
+    const isRestricted = whitelist.length > 0;
 
     // Efecto 1: Inicializar Google Sign-In
     useEffect(() => {
@@ -97,33 +97,19 @@ export const MateriaReader = ({ params }) => {
             }
 
             if (state.identity?.isLoggedIn && state.identity?.user?.payload?.email) {
-                if (strategy === 'REGISTERED_ONLY') {
+                const emailHash = await calcSha256(state.identity.user.payload.email);
+                if (whitelist.includes(emailHash)) {
                     setIsWhitelisted(true);
-                    return;
+                } else {
+                    setIsWhitelisted(false);
                 }
-
-                if (strategy === 'REFERENCE_WHITELIST' && accessControl.whitelist_slug) {
-                    const fullDb = state.inventory || [];
-                    const whitelistEntity = fullDb.find(m => m.slug === accessControl.whitelist_slug);
-                    const hashes = whitelistEntity?.data?.whitelist || [];
-                    const emailHash = await calcSha256(state.identity.user.payload.email);
-                    
-                    if (hashes.includes(emailHash)) {
-                        setIsWhitelisted(true);
-                    } else {
-                        setIsWhitelisted(false);
-                    }
-                    return;
-                }
-
-                setIsWhitelisted(false);
             } else {
                 setIsWhitelisted(false);
             }
         };
 
         checkAccess();
-    }, [state.identity?.isLoggedIn, strategy, accessControl.whitelist_slug, isRestricted]);
+    }, [state.identity?.isLoggedIn, whitelist, isRestricted]);
 
     const handleLogout = () => {
         appState.logout();
@@ -185,10 +171,10 @@ export const MateriaReader = ({ params }) => {
                     <div className="reader-restricted-box animate-fade-up" style={{ textAlign: 'center', background: '#fff', color: '#000', padding: '4rem 2rem', border: '1px solid #ddd', maxWidth: '35rem', boxShadow: '0 4rem 8rem rgba(0,0,0,0.1)', marginTop: '5rem', zIndex: 10 }}>
                         <div style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>🔏</div>
                         <h2 style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '-0.02em', marginBottom: '0.8rem' }}>
-                            {materia?.data?.content?.restricted_title || "MATERIA DE ACCESO RESTRINGIDO"}
+                            {materia?.data?.restricted_heading || "MATERIA DE ACCESO RESTRINGIDO"}
                         </h2>
                         <p style={{ fontSize: '0.9rem', opacity: 0.6, lineHeight: '1.6', marginBottom: '2.5rem' }}>
-                            {materia?.data?.content?.restricted_message || "Esta entidad pertenece a un estrato de conocimiento reservado. Para continuar con su proyección, debes iniciar sesión."}
+                            {materia?.data?.restricted_text || "Esta entidad pertenece a un estrato de conocimiento reservado. Para continuar con su proyección, debes iniciar sesión."}
                         </p>
 
                         {!state.identity?.isLoggedIn ? (
@@ -198,10 +184,14 @@ export const MateriaReader = ({ params }) => {
                         ) : (
                             <div style={{ background: '#fff4f4', padding: '1.5rem', border: '1px solid #ffebeb', borderRadius: '4px' }}>
                                 <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#d32f2f', letterSpacing: '0.1em', display: 'block', marginBottom: '0.5rem' }}>
-                                    ❌ ACCESO NO AUTORIZADO
+                                    ❌ {materia?.data?.denied_heading || "ACCESO NO AUTORIZADO"}
                                 </span>
                                 <p style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-                                    {materia?.data?.content?.denied_message || `El correo ${state.identity.user.payload.email} no se encuentra en la whitelist de esta materia.`}
+                                    {materia?.data?.denied_text || (
+                                        <>
+                                            El correo <strong>{state.identity.user.payload.email}</strong> no se encuentra en la whitelist de esta materia.
+                                        </>
+                                    )}
                                 </p>
                             </div>
                         )}
