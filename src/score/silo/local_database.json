@@ -1,6 +1,33 @@
 {
     "NOMON_ENTRIES": [
         {
+            "slug": "fantasma-2",
+            "meta": {
+                "component_type": "ENTITY_PROJECT"
+            },
+            "data": {
+                "content": {
+                    "title": {
+                        "es": "fantasma 2"
+                    },
+                    "summary": {
+                        "es": ""
+                    },
+                    "image": "",
+                    "composition": [],
+                    "pdf_url": ""
+                },
+                "relations": [],
+                "access_control": {
+                    "strategy": "PUBLIC",
+                    "whitelist_slug": "",
+                    "restricted_title": "",
+                    "restricted_message": "",
+                    "denied_message": ""
+                }
+            }
+        },
+        {
             "slug": "nuestra-filosofia",
             "meta": {
                 "component_type": "BANNER_INFO"
