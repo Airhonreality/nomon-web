@@ -1,8 +1,12 @@
 import React from 'react';
 import { MateriaRelations } from './MateriaRelations.jsx';
+import MDEditor from '@uiw/react-md-editor';
+import { BookOpen, ArrowRight, Info, Minus, Plus } from 'lucide-react';
+
+
 
 /**
- * 🎨 MATERIA COMPOSER ACTOR
+ * MATERIA COMPOSER ACTOR
  * Interpreta y proyecta la secuencia lineal de bloques de una entidad.
  */
 export const MateriaComposer = ({ composition, slug }) => {
@@ -28,8 +32,9 @@ export const MateriaComposer = ({ composition, slug }) => {
                     
                     case 'MARKDOWN':
                         return (
-                            <div key={block.id || i} className="comp-markdown" 
-                                 dangerouslySetInnerHTML={{ __html: safeStr(block.content) }} />
+                            <div key={block.id || i} className="comp-markdown">
+                                <MDEditor.Markdown source={safeStr(block.content)} style={{ background: 'transparent', color: 'inherit' }} />
+                            </div>
                         );
 
                     case 'IMAGE':
@@ -49,13 +54,18 @@ export const MateriaComposer = ({ composition, slug }) => {
                         const hasMetadata = block.rationale || block.curator;
                         return (
                             <div key={block.id || i} className="comp-library-resource">
-                                <div className="lib-badge">{block.resType}</div>
+                                <div className="lib-badge" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                    <BookOpen size={12} /> {block.resType}
+                                </div>
                                 <h3 className="lib-title">{safeStr(block.desc) || 'Recurso de Biblioteca'}</h3>
                                 
                                 {hasMetadata && (
                                     <div className="materia-disclosure" onClick={() => toggleBlock(block.id || i)}>
                                         <div className={`disclosure-line ${isExpanded ? 'active' : ''}`}></div>
-                                        <span className="disclosure-label">{isExpanded ? 'MENOS' : 'INFO'}</span>
+                                        <span className="disclosure-label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                            {isExpanded ? <Minus size={12} /> : <Info size={12} />}
+                                            {isExpanded ? 'MENOS' : 'INFO'}
+                                        </span>
                                     </div>
                                 )}
 
@@ -72,9 +82,11 @@ export const MateriaComposer = ({ composition, slug }) => {
                                         const safeUrl = encodeURIComponent(block.url || "");
                                         window.location.hash = `/biblioteca/${slug}?url=${safeUrl}`;
                                     }}
+                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}
                                 >
-                                    ACCEDER AL CONOCIMIENTO DIGITAL →
+                                    ACCEDER AL CONOCIMIENTO DIGITAL <ArrowRight size={16} strokeWidth={2} />
                                 </button>
+
                             </div>
                         );
 
@@ -194,11 +206,31 @@ export const MateriaComposer = ({ composition, slug }) => {
                 }
 
                 .comp-markdown {
-                    font-size: 1.2rem;
-                    line-height: 1.7;
-                    color: #333;
-                    max-width: 90%;
+                    font-size: 1.1rem;
+                    line-height: 1.8;
+                    color: var(--text-primary);
+                    max-width: 800px;
                     margin: 0 auto;
+                }
+
+                .comp-markdown .wmde-markdown {
+                    background: transparent !important;
+                    color: inherit !important;
+                    font-family: inherit !important;
+                }
+
+                .comp-markdown .wmde-markdown p {
+                    margin-bottom: 1.5rem;
+                }
+
+                .comp-markdown .wmde-markdown ul, 
+                .comp-markdown .wmde-markdown ol {
+                    padding-left: 2rem;
+                    margin-bottom: 1.5rem;
+                }
+
+                .comp-markdown .wmde-markdown li {
+                    margin-bottom: 0.5rem;
                 }
 
                 .comp-gallery {

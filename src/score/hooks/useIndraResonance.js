@@ -8,7 +8,7 @@ export const useIndraResonance = (contextId) => {
     const [loading, setLoading] = useState(false);
     const [remoteData, setRemoteData] = useState(null);
 
-    console.log(`🧪 [Hook:Invoke] contextId: ${contextId} | Bridge listo: ${!!bridge}`);
+    // console.log(`🧪 [Hook:Invoke] contextId: ${contextId} | Bridge listo: ${!!bridge}`);
 
     const localDefinition = state.inventory?.find(ex => (ex?.meta?.component_id || ex?.metadata?.component_id) === contextId);
 

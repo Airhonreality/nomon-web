@@ -1,7 +1,10 @@
 import React from 'react';
 import { useIndraResonance } from '../../score/hooks/useIndraResonance.js';
+import { useSovereign } from '../../score/SovereignContext.jsx';
 import { MateriaRelations } from './MateriaRelations.jsx';
 import { MateriaComposer } from './MateriaComposer.jsx';
+import { Lock } from 'lucide-react';
+
 
 /**
  * 🏛️ MATERIA DETAIL (Expanded View)
@@ -46,9 +49,10 @@ export const MateriaDetail = ({ params }) => {
 
     if (!isAuthorized()) {
         return (
-            <section style={{ padding: '5rem 2rem', textAlign: 'center', minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>🔐</span>
+            <section style={{ padding: '5rem 2rem', textAlign: 'center', minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)' }}>
+                <Lock size={64} strokeWidth={1} style={{ marginBottom: '2rem', opacity: 0.2 }} />
                 <h2 style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '0.1em' }}>{access.restricted_title || 'CONTENIDO RESERVADO'}</h2>
+
                 <div style={{ maxWidth: '30rem', opacity: 0.7, fontSize: '0.9rem', lineHeight: 1.6, margin: '1.5rem 0' }}>
                     {access.restricted_message || 'Esta materia contiene recursos de alta sensibilidad o profundidad técnica. Para proyectarlos, es necesario validar tu identidad soberana.'}
                 </div>

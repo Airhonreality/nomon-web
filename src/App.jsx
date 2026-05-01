@@ -16,22 +16,6 @@ const App = () => {
             <div id="auth-overlay"></div>
 
             <style dangerouslySetInnerHTML={{ __html: `
-                :root {
-                    --bg-primary: #ffffff;
-                    --text-primary: #000000;
-                    --border-primary: #eeeeee;
-                    --bg-secondary: #fcfcfc;
-                    --accent-color: #000000;
-                }
-
-                .theme-dark {
-                    --bg-primary: #000000;
-                    --text-primary: #ffffff;
-                    --border-primary: #222222;
-                    --bg-secondary: #0a0a0a;
-                    --accent-color: #ffffff;
-                }
-
                 body {
                     margin: 0;
                     background: var(--bg-primary);
@@ -43,41 +27,36 @@ const App = () => {
                     min-height: 100vh;
                     display: flex;
                     flex-direction: column;
+                    background: var(--bg-primary);
+                    color: var(--text-primary);
                 }
 
+                /* 🛰️ GLOBAL AGNOSTIC FIXES */
                 .main-navbar {
                     background: var(--bg-primary) !important;
                     border-bottom: 1px solid var(--border-primary) !important;
-                    color: var(--text-primary) !important;
                 }
 
-                .nav-logo { color: var(--text-primary) !important; }
-                .nav-links li { color: var(--text-primary) !important; }
+                input, select, textarea {
+                    background: var(--bg-secondary) !important;
+                    color: var(--text-primary) !important;
+                    border: 1px solid var(--border-primary) !important;
+                    outline: none;
+                }
+
+                ::placeholder {
+                    color: var(--text-secondary);
+                    opacity: 0.5;
+                }
 
                 /* Forja V5 Theme Adjustments */
-                .materia-forge-v5 {
-                    background: var(--bg-primary) !important;
-                    color: var(--text-primary) !important;
-                }
                 .forge-sidebar {
                     background: var(--bg-secondary) !important;
                     border-right: 1px solid var(--border-primary) !important;
                 }
-                .forge-sidebar div {
-                    border-bottom: 1px solid var(--border-primary) !important;
-                }
+                
                 .forge-main-editor {
                     background: var(--bg-primary) !important;
-                }
-                
-                input, select, textarea {
-                    background: var(--bg-primary) !important;
-                    color: var(--text-primary) !important;
-                    border-color: var(--border-primary) !important;
-                }
-
-                .editor-body h4, .editor-body label {
-                    color: var(--text-primary) !important;
                 }
             `}} />
         </div>

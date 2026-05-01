@@ -26,16 +26,21 @@ export const BannerInfo = ({ definition: initialDefinition }) => {
                 const title = bannerMateria.data?.content?.title?.es || bannerMateria.metadata?.title || bannerMateria.name;
                 const text = bannerMateria.data?.content?.summary?.es || bannerMateria.metadata?.summary || bannerMateria.description;
 
-                console.log("🎯 [Banner:Success] Materia encontrada!");
-                
-                // 1. Actualizar estado local para visualización inmediata
-                setLocalContent({ title, text });
+                // Evitar bucles de actualización si la materia es la misma
+                const currentData = currentDefinition?.data?.content;
+                const hasChanged = currentData?.title?.es !== title || currentData?.text?.es !== text;
 
-                // 2. Sincronizar con el inventario global
-                dispatch('inventory_update_component', {
-                    id: componentId,
-                    data: { content: { title: { es: title }, text: { es: text } } }
-                });
+                if (hasChanged) {
+                    console.log("🎯 [Banner:Success] Materia encontrada y actualizada!");
+                    setLocalContent({ title, text });
+                    dispatch('inventory_update_component', {
+                        id: componentId,
+                        data: { content: { title: { es: title }, text: { es: text } } }
+                    });
+                } else if (!localContent) {
+                    // Si no ha cambiado pero no tenemos contenido local, lo sincronizamos una vez
+                    setLocalContent({ title, text });
+                }
             } else {
                 console.warn(`⚠️ [Banner:NotFound] No se encontró materia con slug: ${targetId}`);
             }

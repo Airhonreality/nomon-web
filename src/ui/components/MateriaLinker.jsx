@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { Link as LinkIcon, Upload, Sparkles, FileText } from 'lucide-react';
 
 /**
  * 🛰️ MATERIA LINKER (Agnostic Connection Cell - V2 Simplified)
  * Un módulo universal para vincular recursos. Sin botones redundantes.
  */
 export const MateriaLinker = ({ value, onChange, label = "Vincular Recurso" }) => {
+
     const [isDragging, setIsDragging] = useState(false);
     const [mode, setMode] = useState('URL'); 
 
@@ -65,9 +67,14 @@ export const MateriaLinker = ({ value, onChange, label = "Vincular Recurso" }) =
             <div className="linker-header">
                 <span className="linker-label">{label}</span>
                 <div className="linker-modes">
-                    <button type="button" onClick={() => setMode('URL')} className={mode === 'URL' ? 'active' : ''}>LINK</button>
-                    <button type="button" onClick={() => setMode('UPLOAD')} className={mode === 'UPLOAD' ? 'active' : ''}>ARCHIVO</button>
+                    <button type="button" onClick={() => setMode('URL')} className={mode === 'URL' ? 'active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                        <LinkIcon size={12} strokeWidth={2.5} /> LINK
+                    </button>
+                    <button type="button" onClick={() => setMode('UPLOAD')} className={mode === 'UPLOAD' ? 'active' : ''} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                        <Upload size={12} strokeWidth={2.5} /> ARCHIVO
+                    </button>
                 </div>
+
             </div>
 
             <div className="linker-body">
@@ -84,9 +91,13 @@ export const MateriaLinker = ({ value, onChange, label = "Vincular Recurso" }) =
                 ) : (
                     <div className="upload-zone">
                         <input type="file" id="file-upload" onChange={(e) => processFile(e.target.files[0])} style={{ display: 'none' }} />
-                        <label htmlFor="file-upload" className="upload-label">
-                            {isUploading ? '✨ CRISTALIZANDO MATERIA...' : (isDragging ? '¡SUELTA LA MATERIA!' : 'ARRASTRA AQUÍ O SELECCIONA ARCHIVO')}
+                        <label htmlFor="file-upload" className="upload-label" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                            {isUploading ? <Sparkles size={24} className="animate-pulse" /> : <Upload size={24} style={{ opacity: 0.2 }} />}
+                            <span style={{ fontSize: '0.65rem', letterSpacing: '0.1em' }}>
+                                {isUploading ? 'CRISTALIZANDO MATERIA...' : (isDragging ? '¡SUELTA LA MATERIA!' : 'ARRASTRA AQUÍ O SELECCIONA ARCHIVO')}
+                            </span>
                         </label>
+
                     </div>
                 )}
             </div>

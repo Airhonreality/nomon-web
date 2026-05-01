@@ -3,6 +3,12 @@ import { useSovereign } from '../../score/SovereignContext.jsx';
 import { useIndraResonance } from '../../score/hooks/useIndraResonance.js';
 import { MateriaEditor } from './MateriaEditor.jsx';
 import { MateriaLinker } from './MateriaLinker.jsx';
+import { 
+    Plus, X, Shield, Unlock, Users, Key, 
+    ArrowUp, ArrowDown, Trash2, Zap, 
+    Layers, Search, FileText, Image as ImageIcon,
+    UserPlus, Sparkles
+} from 'lucide-react';
 
 /**
  * 🖋️ COMPONENTE AUXILIAR: Barra de Inserción
@@ -16,18 +22,19 @@ const InsertBar = ({ onInsert, blockTypes, index }) => {
                 type="button" 
                 onClick={() => setOpen(!open)}
                 style={{ 
-                    background: '#000', color: '#fff', border: 'none', 
+                    background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', 
                     borderRadius: '50%', width: '1.5rem', height: '1.5rem', 
                     cursor: 'pointer', display: 'flex', alignItems: 'center', 
                     justifyContent: 'center', fontSize: '0.8rem', fontWeight: 900 
                 }}
             >
-                {open ? '×' : '+'}
+                {open ? <X size={12} strokeWidth={3} /> : <Plus size={12} strokeWidth={3} />}
             </button>
+
             {open && (
                 <div style={{ 
                     position: 'absolute', top: '2rem', zIndex: 100, 
-                    background: '#fff', border: '1px solid #000', padding: '0.5rem', 
+                    background: 'var(--bg-primary)', border: '1px solid var(--border-primary)', padding: '0.5rem', 
                     display: 'flex', gap: '0.5rem', boxShadow: '0 1rem 3rem rgba(0,0,0,0.2)' 
                 }}>
                     {Object.keys(blockTypes).map(t => (
@@ -36,7 +43,7 @@ const InsertBar = ({ onInsert, blockTypes, index }) => {
                             onClick={() => { onInsert(t, index); setOpen(false); }}
                             style={{ 
                                 fontSize: '0.65rem', padding: '0.6rem', textAlign: 'left', 
-                                background: '#f9f9f9', border: 'none', cursor: 'pointer', 
+                                background: 'var(--bg-secondary)', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', 
                                 fontWeight: 'bold', textTransform: 'uppercase' 
                             }}
                         >
@@ -305,9 +312,10 @@ export const MateriaForge = () => {
                             key={item.slug || idx} 
                             onClick={() => handleEdit(item)}
                             style={{ 
-                                padding: '0.8rem', borderBottom: '1px solid #f0f0f0', cursor: 'pointer',
+                                padding: '0.8rem', borderBottom: '1px solid var(--border-primary)', cursor: 'pointer',
                                 background: formData.slug === item.slug ? 'var(--bg-primary)' : 'transparent',
-                                borderLeft: formData.slug === item.slug ? '4px solid var(--accent-color)' : '4px solid transparent'
+                                borderLeft: formData.slug === item.slug ? '4px solid var(--accent-color)' : '4px solid transparent',
+                                color: 'var(--text-primary)'
                             }}
                         >
                             <span style={{ fontSize: '0.5rem', fontWeight: 900, opacity: 0.4, textTransform: 'uppercase' }}>{item.meta?.component_type || 'DATA_CARD'}</span>
@@ -319,11 +327,12 @@ export const MateriaForge = () => {
                     ))}
                 </div>
                 
-                <div style={{ padding: '1.5rem', borderTop: '1px solid #eee' }}>
-                    <button onClick={resetForm} style={{ width: '100%', background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', padding: '0.8rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
-                        + NUEVA ENTIDAD
+                <div style={{ padding: '1.5rem', borderTop: '1px solid var(--border-primary)' }}>
+                    <button onClick={resetForm} style={{ width: '100%', background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', padding: '0.8rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                        <Plus size={14} strokeWidth={2.5} /> NUEVA ENTIDAD
                     </button>
                 </div>
+
             </aside>
 
             {/* 🖋️ MAIN AREA: EDITOR DINÁMICO (80%) */}
@@ -334,74 +343,36 @@ export const MateriaForge = () => {
                     </header>
 
                     <header style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                        <div style={{ flex: 1 }}>
-                            <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>ARQUETIPO</label>
-                            <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)} style={{ display: 'block', padding: '0.5rem 0', border: 'none', borderBottom: '1px solid var(--accent-color)', fontSize: '1rem', fontWeight: 900, textTransform: 'uppercase', background: 'transparent' }}>
-                                <option value="ENTITY_PROJECT">Proyecto</option>
-                                <option value="ENTITY_NEWS">Noticia</option>
-                                <option value="ENTITY_ALLY">Aliado</option>
-                                <option value="LIBRARY_RESOURCE">Biblioteca</option>
-                                <option value="ENTITY_WHITELIST">Whitelist</option>
-                                <option value="BANNER_INFO">Informativo</option>
-                                <option value="BANNER_ACTION">Acción</option>
-                            </select>
-                        </div>
-                        <div style={{ display: 'flex', gap: '1rem' }}>
-                            {isEditing && (
-                                <button type="button" onClick={handleDelete} style={{ background: 'transparent', border: '1px solid #d32f2f', color: '#d32f2f', padding: '0.8rem 1.5rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
-                                    ELIMINAR
-                                </button>
-                            )}
-                            <button type="submit" style={{ background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', padding: '0.8rem 2.5rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
-                                {isEditing ? 'CRISTALIZAR CAMBIOS' : 'CRISTALIZAR MATERIA'}
-                            </button>
-                        </div>
-                    </header>
+                        <div style={{ flex: 1, display: 'flex', gap: '2rem' }}>
+                            <div>
+                                <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>ARQUETIPO</label>
+                                <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)} style={{ display: 'block', padding: '0.5rem 0', border: 'none', borderBottom: '1px solid var(--accent-color)', fontSize: '1rem', fontWeight: 900, textTransform: 'uppercase', background: 'transparent' }}>
+                                    <option value="ENTITY_PROJECT">Proyecto</option>
+                                    <option value="ENTITY_NEWS">Noticia</option>
+                                    <option value="ENTITY_ALLY">Aliado</option>
+                                    <option value="LIBRARY_RESOURCE">Biblioteca</option>
+                                    <option value="ENTITY_WHITELIST">Whitelist</option>
+                                    <option value="BANNER_INFO">Informativo</option>
+                                    <option value="BANNER_ACTION">Acción</option>
+                                </select>
+                            </div>
 
-                    <div className="editor-body">
-                        {/* TÍTULO GIGANTE */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>TÍTULO DE LA ENTIDAD</label>
-                            <input 
-                                type="text" 
-                                placeholder="Nombre de la materia..." 
-                                value={typeof formData.title === 'object' ? formData.title?.es : formData.title} 
-                                onChange={e => setFormData({...formData, title: e.target.value})} 
-                                required 
-                                style={{ fontSize: '2.5rem', fontWeight: 900, width: '100%', border: 'none', borderBottom: '2px solid var(--border-primary)', padding: '1rem 0' }} 
-                            />
-                        </div>
-
-                        {/* RESUMEN / SUMMARY */}
-                        <div style={{ marginBottom: '3rem' }}>
-                            <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>RESUMEN EJECUTIVO</label>
-                            <textarea 
-                                placeholder="Escribe una breve descripción..." 
-                                value={typeof formData.summary === 'object' ? formData.summary?.es : formData.summary} 
-                                onChange={e => setFormData({...formData, summary: e.target.value})} 
-                                style={{ fontSize: '1rem', width: '100%', border: 'none', borderBottom: '1px solid var(--border-primary)', padding: '1rem 0', minHeight: '4rem', resize: 'none', fontFamily: 'inherit' }} 
-                            />
-                        </div>
-
-
-                        {/* 🛡️ REGLAS DE SOBERANÍA (AHORA ARRIBA) */}
-                        {selectedClass !== 'ENTITY_WHITELIST' && (
-                            <div style={{ background: 'var(--bg-secondary)', padding: '1.5rem', border: '1px solid var(--border-primary)', marginBottom: '3rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
-                                    <h4 style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '0.15em', margin: 0 }}>🛡️ SOBERANÍA DE ACCESO</h4>
+                            {selectedClass !== 'ENTITY_WHITELIST' && (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', background: 'var(--bg-secondary)', padding: '0.4rem 1rem', border: '1px solid var(--border-primary)' }}>
+                                    <Shield size={14} strokeWidth={2.5} style={{ opacity: 0.5 }} />
                                     <select 
                                         value={formData.access_control?.strategy || 'PUBLIC'} 
                                         onChange={e => setFormData({
                                             ...formData, 
                                             access_control: { ...formData.access_control, strategy: e.target.value }
                                         })}
-                                        style={{ padding: '0.4rem', border: '1px solid var(--border-primary)', fontSize: '0.65rem', fontWeight: 900, background: 'transparent' }}
+                                        style={{ border: 'none', fontSize: '0.65rem', fontWeight: 900, background: 'transparent', textTransform: 'uppercase' }}
                                     >
-                                        <option value="PUBLIC">🔓 PÚBLICO</option>
-                                        <option value="REGISTERED_ONLY">👥 REGISTRADOS</option>
-                                        <option value="REFERENCE_WHITELIST">🔑 WHITELIST</option>
+                                        <option value="PUBLIC">PÚBLICO</option>
+                                        <option value="REGISTERED_ONLY">REGISTRADOS</option>
+                                        <option value="REFERENCE_WHITELIST">WHITELIST</option>
                                     </select>
-
+                                    
                                     {formData.access_control?.strategy === 'REFERENCE_WHITELIST' && (
                                         <select 
                                             value={formData.access_control?.whitelist_slug || ''} 
@@ -409,29 +380,83 @@ export const MateriaForge = () => {
                                                 ...formData, 
                                                 access_control: { ...formData.access_control, whitelist_slug: e.target.value }
                                             })}
-                                            style={{ padding: '0.4rem', border: '1px solid var(--border-primary)', fontSize: '0.65rem', background: 'transparent' }}
+                                            style={{ border: 'none', borderLeft: '1px solid var(--border-primary)', paddingLeft: '0.8rem', fontSize: '0.65rem', background: 'transparent' }}
                                         >
-                                            <option value="">Selecciona...</option>
+                                            <option value="">WHITELIST...</option>
                                             {whitelists.map(item => (
                                                 <option key={item.slug} value={item.slug}>{item.data?.content?.title?.es || item.slug}</option>
                                             ))}
                                         </select>
                                     )}
                                 </div>
-                                {formData.access_control?.strategy !== 'PUBLIC' && (
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                        <input type="text" placeholder="Título bloqueo..." value={formData.access_control?.restricted_title || ''} onChange={e => setFormData({...formData, access_control: {...formData.access_control, restricted_title: e.target.value}})} style={{ fontSize: '0.7rem', padding: '0.5rem', border: '1px solid var(--border-primary)' }} />
-                                        <input type="text" placeholder="Mensaje bloqueo..." value={formData.access_control?.restricted_message || ''} onChange={e => setFormData({...formData, access_control: {...formData.access_control, restricted_message: e.target.value}})} style={{ fontSize: '0.7rem', padding: '0.5rem', border: '1px solid var(--border-primary)' }} />
+                            )}
+                        </div>
+                        <div style={{ display: 'flex', gap: '1rem' }}>
+                            {isEditing && (
+                                <button type="button" onClick={handleDelete} style={{ background: 'transparent', border: '1px solid #d32f2f', color: '#d32f2f', padding: '0.8rem 1.5rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <Trash2 size={14} strokeWidth={2} /> ELIMINAR
+                                </button>
+                            )}
+                            <button type="submit" style={{ background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', padding: '0.8rem 2.5rem', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <Sparkles size={14} strokeWidth={2} /> {isEditing ? 'CRISTALIZAR CAMBIOS' : 'CRISTALIZAR MATERIA'}
+                            </button>
+                        </div>
+
+                    </header>
+
+                    <div className="editor-body">
+                        {/* TÍTULO GIGANTE */}
+                        <div style={{ marginBottom: '2rem' }}>
+
+                            <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>TÍTULO DE LA ENTIDAD</label>
+                            <input 
+                                type="text" 
+                                placeholder="Nombre de la materia..." 
+                                value={typeof formData.title === 'object' ? formData.title?.es : formData.title} 
+                                onChange={e => setFormData({...formData, title: e.target.value})} 
+                                required 
+                                style={{ fontSize: '2.5rem', fontWeight: 900, width: '100%', border: 'none', borderBottom: '2px solid var(--border-primary)', padding: '1rem 0', background: 'transparent', color: 'var(--text-primary)' }} 
+                            />
+                        </div>
+
+                        {/* RESUMEN / SUMMARY */}
+                        <div style={{ marginBottom: '3rem', position: 'relative' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <label style={{ fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.2em', opacity: 0.5 }}>RESUMEN EJECUTIVO</label>
+                                <span style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.3 }}>{(formData.summary?.es || formData.summary || "").length} / 280</span>
+                            </div>
+                            <textarea 
+                                placeholder="Escribe una breve descripción..." 
+                                maxLength={280}
+                                value={typeof formData.summary === 'object' ? formData.summary?.es : formData.summary} 
+                                onChange={e => setFormData({...formData, summary: e.target.value})} 
+                                style={{ fontSize: '1rem', width: '100%', border: 'none', borderBottom: '1px solid var(--border-primary)', padding: '1rem 0', minHeight: '4rem', resize: 'none', fontFamily: 'inherit', background: 'transparent', color: 'var(--text-primary)' }} 
+                            />
+                        </div>
+
+
+                        {/* BLOQUEO CONFIGURACIÓN (EXTRA) */}
+                        {selectedClass !== 'ENTITY_WHITELIST' && formData.access_control?.strategy !== 'PUBLIC' && (
+                            <div style={{ background: 'var(--bg-secondary)', padding: '1.5rem', border: '1px solid var(--border-primary)', marginBottom: '3rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                                        <label style={{ fontSize: '0.5rem', fontWeight: 900, opacity: 0.5 }}>TÍTULO BLOQUEO</label>
+                                        <input type="text" placeholder="Restringido..." value={formData.access_control?.restricted_title || ''} onChange={e => setFormData({...formData, access_control: {...formData.access_control, restricted_title: e.target.value}})} style={{ fontSize: '0.7rem', padding: '0.5rem', border: '1px solid var(--border-primary)' }} />
                                     </div>
-                                )}
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                                        <label style={{ fontSize: '0.5rem', fontWeight: 900, opacity: 0.5 }}>MENSAJE BLOQUEO</label>
+                                        <input type="text" placeholder="Inicia sesión para ver..." value={formData.access_control?.restricted_message || ''} onChange={e => setFormData({...formData, access_control: {...formData.access_control, restricted_message: e.target.value}})} style={{ fontSize: '0.7rem', padding: '0.5rem', border: '1px solid var(--border-primary)', background: 'var(--bg-primary)', color: 'var(--text-primary)' }} />
+                                    </div>
+                                </div>
                             </div>
                         )}
+
 
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
                             <div>
                                 <label style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.5 }}>SLUG</label>
-                                <input type="text" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} style={{ width: '100%', padding: '0.6rem', border: '1px solid #eee', fontSize: '0.8rem' }} />
+                                <input type="text" value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} style={{ width: '100%', padding: '0.6rem', border: '1px solid var(--border-primary)', fontSize: '0.8rem', background: 'var(--bg-primary)', color: 'var(--text-primary)' }} />
                             </div>
                             {selectedClass === 'ENTITY_WHITELIST' ? (
                                 <div>
@@ -457,13 +482,22 @@ export const MateriaForge = () => {
                                         {formData.composition.map((b, idx) => (
                                             <div key={b.id} style={{ border: '1px solid var(--border-primary)', padding: '1rem', background: 'var(--bg-primary)' }}>
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', opacity: 0.4 }}>
-                                                    <span style={{ fontSize: '0.5rem', fontWeight: 900 }}>{BLOCK_TYPES[b.type]}</span>
+                                                    <span style={{ fontSize: '0.5rem', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                                                        <Layers size={10} strokeWidth={2} /> {BLOCK_TYPES[b.type]}
+                                                    </span>
                                                     <div style={{ display: 'flex', gap: '0.4rem' }}>
-                                                        <button type="button" onClick={() => moveBlock(idx, -1)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem', color: 'var(--text-primary)' }}>↑</button>
-                                                        <button type="button" onClick={() => moveBlock(idx, 1)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem', color: 'var(--text-primary)' }}>↓</button>
-                                                        <button type="button" onClick={() => deleteBlock(b.id)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem', color: '#d32f2f' }}>[×]</button>
+                                                        <button type="button" onClick={() => moveBlock(idx, -1)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem', color: 'var(--text-primary)' }}>
+                                                            <ArrowUp size={12} strokeWidth={2} />
+                                                        </button>
+                                                        <button type="button" onClick={() => moveBlock(idx, 1)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem', color: 'var(--text-primary)' }}>
+                                                            <ArrowDown size={12} strokeWidth={2} />
+                                                        </button>
+                                                        <button type="button" onClick={() => deleteBlock(b.id)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: '0.6rem', color: '#d32f2f' }}>
+                                                            <Trash2 size={12} strokeWidth={2} />
+                                                        </button>
                                                     </div>
                                                 </div>
+
                                                 {b.type === 'MARKDOWN' ? (
                                                     <MateriaEditor value={b.content || ''} onChange={val => updateBlock(b.id, 'content', val)} />
                                                 ) : (

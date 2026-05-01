@@ -1,5 +1,7 @@
 import React from 'react';
 import { useSovereign } from '../../score/SovereignContext.jsx';
+import { BookOpen, ArrowRight } from 'lucide-react';
+
 
 /**
  * 🕸️ MATERIA RELATIONS ACTOR
@@ -28,10 +30,18 @@ export const MateriaRelations = ({ relations }) => {
                         <div key={i} className={`mini-resonance-card ${isLibrary ? 'res-library' : ''}`} 
                              onClick={() => window.location.hash = isLibrary ? `/biblioteca/${m.slug}` : `/materia/${m.slug}`}>
                             <div className="mini-card-info">
-                                <span className="mini-type">{isLibrary ? '📖 BIBLIOTECA' : m.meta?.component_type}</span>
+                                <span className="mini-type" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                    {isLibrary ? <BookOpen size={10} strokeWidth={2} /> : null}
+                                    {isLibrary ? 'BIBLIOTECA' : m.meta?.component_type}
+                                </span>
                                 <span className="mini-title">{m.data?.content?.title?.es || m.slug}</span>
-                                {isLibrary && <span className="mini-action">LEER AHORA →</span>}
+                                {isLibrary && (
+                                    <span className="mini-action" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                        LEER AHORA <ArrowRight size={12} strokeWidth={2} />
+                                    </span>
+                                )}
                             </div>
+
                         </div>
                     );
                 })}

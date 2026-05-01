@@ -1,14 +1,29 @@
-/* 🏛️ REDNOMON: FLUID MINIMALISM (Mobile-First) */
+/* 🏛️ REDNOMON: FLUID MINIMALISM (Agnostic Design System) */
 :root {
     --bg-primary: #ffffff;
+    --bg-secondary: #fcfcfc;
+    --bg-tertiary: #f5f5f5;
     --text-primary: #000000;
     --text-secondary: #666666;
-    --border-color: #f0f0f0;
-    --radius-subtle: 0.5rem; /* Sutil redondeado */
+    --border-primary: #eeeeee;
+    --accent-color: #000000;
+    --accent-contrast: #ffffff;
+    --radius-subtle: 0.2rem;
     
     /* Escala de Espaciado Fluido */
     --p-mobile: 5%;
     --p-desktop: 8%;
+}
+
+.theme-dark {
+    --bg-primary: #000000;
+    --bg-secondary: #0a0a0a;
+    --bg-tertiary: #111111;
+    --text-primary: #ffffff;
+    --text-secondary: #aaaaaa;
+    --border-primary: #222222;
+    --accent-color: #ffffff;
+    --accent-contrast: #000000;
 }
 
 * {
@@ -95,7 +110,7 @@ body {
 .card-image-placeholder {
     width: 100%;
     aspect-ratio: 16 / 9;
-    background-color: #f9f9f9;
+    background-color: var(--bg-tertiary);
     border-radius: var(--radius-subtle);
     margin-bottom: 1rem;
     object-fit: cover;
@@ -165,7 +180,7 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 3rem;
-    border-bottom: 1px solid var(--text-primary);
+    border-bottom: 1px solid var(--border-primary);
     padding-bottom: 1rem;
 }
 
@@ -178,8 +193,9 @@ body {
 .forge-form input, 
 .forge-form select, 
 .forge-form textarea {
-    padding: 1rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-primary);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     font-family: inherit;
     font-size: 1rem;
     border-radius: var(--radius-subtle);
@@ -191,8 +207,8 @@ body {
 
 .forge-btn {
     padding: 1.5rem;
-    background-color: var(--text-primary);
-    color: var(--bg-primary);
+    background-color: var(--accent-color);
+    color: var(--accent-contrast);
     border: none;
     font-weight: 900;
     text-transform: uppercase;
@@ -219,7 +235,7 @@ body {
 
 .forge-inventory {
     flex: 1 1 300px;
-    border-left: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-primary);
     padding-left: 2rem;
 }
 
@@ -232,14 +248,12 @@ body {
 
 .inventory-item {
     padding: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-subtle);
-    cursor: pointer;
-    transition: background 0.2s;
+    border: 1px solid var(--border-primary);
+    background-color: var(--bg-secondary);
 }
 
 .inventory-item:hover {
-    background: #f9f9f9;
+    background: var(--bg-tertiary);
 }
 
 .inventory-item strong {
@@ -276,7 +290,7 @@ body {
 .forge-btn-cancel {
     padding: 1rem;
     background: none;
-    border: 1px solid var(--text-primary);
+    border: 1px solid var(--accent-color);
     font-weight: 700;
     cursor: pointer;
 }
@@ -287,9 +301,10 @@ body {
     align-items: center;
     gap: 1rem;
     margin-bottom: 2rem;
-    background: #f5f5f5;
+    background: var(--bg-secondary);
     padding: 1rem;
     border-radius: var(--radius-subtle);
+    border: 1px solid var(--border-primary);
 }
 
 .class-selector-header label {
@@ -300,8 +315,8 @@ body {
 
 .new-btn {
     margin-left: auto;
-    background: var(--text-primary);
-    color: white;
+    background: var(--accent-color);
+    color: var(--accent-contrast);
     border: none;
     padding: 0.5rem 1rem;
     font-size: 0.7rem;
@@ -321,7 +336,9 @@ body {
 .body-editor {
     min-height: 300px !important;
     font-family: monospace !important;
-    background: #fafafa;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
 }
 
 .inventory-group {
@@ -334,7 +351,7 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.2em;
     color: var(--text-secondary);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-primary);
     margin-bottom: 1rem;
     padding-bottom: 0.3rem;
 }
@@ -350,12 +367,12 @@ body {
 .banner-info {
     width: 100%;
     padding: 100px var(--p-mobile);
-    background-color: #ffffff;
+    background-color: var(--bg-primary);
     display: flex;
     justify-content: flex-start;
     align-items: center;
     border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-primary);
     margin: 4rem 0;
 }
 
@@ -400,7 +417,7 @@ body {
 .banner-action {
     width: 100%;
     padding: 120px var(--p-mobile);
-    background-color: #fafafa;
+    background-color: var(--bg-secondary);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -434,8 +451,8 @@ body {
 
 .banner-action-btn {
     padding: 1.2rem 3rem;
-    background: #000;
-    color: #fff;
+    background: var(--accent-color);
+    color: var(--accent-contrast);
     border: none;
     font-family: 'Outfit', sans-serif;
     font-size: 0.9rem;
@@ -449,8 +466,9 @@ body {
 }
 
 .banner-action-btn:hover {
-    background: #333;
-    padding-right: 3.5rem;
+    background: var(--accent-contrast);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
 }
 
 @media (min-width: 768px) {
@@ -473,7 +491,7 @@ body {
     width: 100%;
     height: 60vh;
     overflow: hidden;
-    background-color: #f5f5f5;
+    background-color: var(--bg-tertiary);
 }
 
 .detail-image {
@@ -491,7 +509,7 @@ body {
 
 .detail-header {
     margin-bottom: 4rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-primary);
     padding-bottom: 2rem;
 }
 
@@ -518,7 +536,7 @@ body {
     font-family: 'Inter', sans-serif;
     font-size: 1.2rem;
     line-height: 1.8;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .detail-body p {

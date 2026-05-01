@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSovereign } from '../../score/SovereignContext.jsx';
 import { appState } from '../../score/AppState.js';
+import { Sun, Moon, User, LogOut } from 'lucide-react';
 
 // Helper para decodificar JWT
 function decodeJwt(token) {
@@ -79,30 +80,37 @@ export const Navbar = ({ definition }) => {
                         style={{ 
                             background: 'none', border: 'none', cursor: 'pointer', 
                             fontSize: '1rem', padding: '0.2rem', display: 'flex', 
-                            alignItems: 'center', opacity: 0.6, transition: 'opacity 0.2s'
+                            alignItems: 'center', opacity: 0.6, transition: 'opacity 0.2s',
+                            color: 'var(--text-primary)'
                         }}
                         onMouseEnter={e => e.currentTarget.style.opacity = 1}
                         onMouseLeave={e => e.currentTarget.style.opacity = 0.6}
                         title={state.theme === 'dark' ? "Activar Modo Luz" : "Activar Modo Oscuro"}
                     >
-                        {state.theme === 'dark' ? '☀️' : '🌙'}
+                        {state.theme === 'dark' ? <Sun size={18} strokeWidth={1.5} /> : <Moon size={18} strokeWidth={1.5} />}
                     </button>
 
                     {state.identity?.isLoggedIn ? (
                         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.8rem' }}>
-                            <span style={{ fontSize: '0.6rem', fontWeight: 900, color: '#666', wordBreak: 'break-all' }}>
-                                👤 {state.identity.user?.payload?.email || 'USUARIO'}
+                            <span style={{ fontSize: '0.6rem', fontWeight: 900, color: 'var(--text-primary)', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                <User size={12} strokeWidth={2} /> {state.identity.user?.payload?.email || 'USUARIO'}
                             </span>
                             <button 
                                 onClick={() => appState.logout()} 
-                                style={{ background: 'none', border: '1px solid #ddd', padding: '0.4rem 0.8rem', fontSize: '0.55rem', fontWeight: 900, cursor: 'pointer', letterSpacing: '0.05em' }}
+                                style={{ 
+                                    background: 'none', border: '1px solid var(--border-primary)', 
+                                    padding: '0.4rem 0.8rem', fontSize: '0.55rem', fontWeight: 900, 
+                                    cursor: 'pointer', letterSpacing: '0.05em', color: 'var(--text-primary)',
+                                    display: 'flex', alignItems: 'center', gap: '0.3rem'
+                                }}
                             >
-                                SALIR
+                                <LogOut size={10} strokeWidth={2} /> SALIR
                             </button>
                         </div>
                     ) : (
                         <div id="navbar-google-signin"></div>
                     )}
+
                 </div>
 
             </div>

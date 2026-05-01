@@ -29,46 +29,59 @@ export const MateriaEditor = ({ value, onChange, placeholder }) => {
                 .sovereign-editor-container {
                     width: 100%;
                     margin: 1rem 0;
-                    border: 1px solid rgba(0,0,0,0.1);
-                    border-radius: 0.2rem;
+                    border: 1px solid var(--border-primary);
+                    border-radius: var(--radius-subtle);
                     overflow: hidden;
+                    background: var(--bg-primary);
                 }
 
-                /* Personalización Estética NOMON */
+                /* Personalización Estética NOMON (Theme-Aware) */
                 .nomon-md-editor {
-                    background: #fff !important;
-                    color: #000 !important;
+                    background: var(--bg-primary) !important;
+                    color: var(--text-primary) !important;
                     box-shadow: none !important;
                     border: none !important;
                 }
 
-                [data-color-mode='dark'] .nomon-md-editor {
-                    background: #0d1117 !important;
-                    color: #c9d1d9 !important;
+                /* Editor Internals Adjustment */
+                .w-md-editor {
+                    background-color: var(--bg-primary) !important;
+                    color: var(--text-primary) !important;
+                }
+
+                .w-md-editor-text-input, 
+                .w-md-editor-text-pre, 
+                .w-md-editor-text-pre code,
+                .w-md-editor-text-input textarea {
+                    color: var(--text-primary) !important;
+                    -webkit-text-fill-color: var(--text-primary) !important;
                 }
 
                 .w-md-editor-toolbar {
-                    background: #f8f8f8 !important;
-                    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+                    background: var(--bg-secondary) !important;
+                    border-bottom: 1px solid var(--border-primary) !important;
+                    color: var(--text-primary) !important;
                 }
 
-                [data-color-mode='dark'] .w-md-editor-toolbar {
-                    background: #161b22 !important;
-                    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+                .w-md-editor-toolbar ul li button {
+                    color: var(--text-primary) !important;
                 }
 
                 .w-md-editor-content {
                     font-family: 'Inter', sans-serif !important;
+                    background: var(--bg-primary) !important;
                 }
 
                 .w-md-editor-preview {
-                    background: #fcfcfc !important;
-                    border-left: 1px solid rgba(0,0,0,0.05) !important;
+                    background: var(--bg-tertiary) !important;
+                    border-left: 1px solid var(--border-primary) !important;
+                    color: var(--text-primary) !important;
                 }
 
-                [data-color-mode='dark'] .w-md-editor-preview {
-                    background: #0d1117 !important;
-                    border-left: 1px solid rgba(255,255,255,0.05) !important;
+                /* Markdown specific fixes */
+                .wmde-markdown {
+                    background: transparent !important;
+                    color: var(--text-primary) !important;
                 }
 
                 /* Ocultar marca de agua de la librería para limpieza total */

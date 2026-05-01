@@ -49,15 +49,15 @@ export const SovereignProvider = ({ children }) => {
 
     const bridge = React.useMemo(() => new NomonBridge(), []);
 
-    const value = {
+    const value = React.useMemo(() => ({
         state,
         bridge,
         dispatch,
         toggleTheme
-    };
+    }), [state, bridge]);
 
 
-    console.log(`🏛️ [Provider:Render] Bridge disponible: ${!!bridge} | Items en inventario: ${state.inventory?.length}`);
+    // console.log(`🏛️ [Provider:Render] Bridge disponible: ${!!bridge} | Items en inventario: ${state.inventory?.length}`);
 
 
     return (

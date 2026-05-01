@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSovereign } from '../../score/SovereignContext.jsx';
+import { User, Plus, Edit3, Save } from 'lucide-react';
+
 
 /**
  * 👤 IDENTITY PROFILE ACTOR
@@ -43,8 +45,9 @@ export const IdentityProfile = () => {
         <div className="identity-profile-container">
             <header className="profile-header">
                 <div className="profile-avatar">
-                    {user?.handle?.label?.charAt(0) || 'N'}
+                    <User size={48} strokeWidth={1} />
                 </div>
+
                 <div className="profile-id">
                     <h1>{user?.handle?.label || 'Arquitecto'}</h1>
                     <span className="profile-email">{user?.payload?.email}</span>
@@ -57,7 +60,12 @@ export const IdentityProfile = () => {
                     {tags.map((tag, i) => (
                         <span key={i} className="tag-pill">#{tag}</span>
                     ))}
-                    {isEditing && <button className="add-tag">+ AÑADIR INTERÉS</button>}
+                    {isEditing && (
+                        <button className="add-tag" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            <Plus size={12} strokeWidth={2.5} /> AÑADIR INTERÉS
+                        </button>
+                    )}
+
                 </div>
 
                 <div className="profile-bio-section">

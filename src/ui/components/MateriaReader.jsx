@@ -3,6 +3,8 @@ import { useSovereign } from '../../score/SovereignContext.jsx';
 import { appState } from '../../score/AppState.js';
 import { MateriaRelations } from './MateriaRelations.jsx';
 import { MateriaComposer } from './MateriaComposer.jsx';
+import { Sun, Moon, User, ShieldAlert, X as CloseIcon, LogOut } from 'lucide-react';
+
 
 // Helper para decodificar JWT de Google de forma nativa
 function decodeJwt(token) {
@@ -135,18 +137,25 @@ export const MateriaReader = ({ params }) => {
                 <div className="reader-brand">NOMON // {title}</div>
                 <div className="reader-controls">
                     {state.identity?.isLoggedIn && (
-                        <span className="reader-profile" style={{ fontSize: '0.65rem', opacity: 0.8, alignSelf: 'center', marginRight: '1rem' }}>
-                            👤 {state.identity.user.payload.email}
+                        <span className="reader-profile" style={{ fontSize: '0.65rem', opacity: 0.8, alignSelf: 'center', marginRight: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            <User size={12} strokeWidth={2} /> {state.identity.user.payload.email}
                         </span>
                     )}
-                    <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="ctrl-btn">
-                        {theme === 'dark' ? '☀️ MODO CLARO' : '🌙 MODO OSCURO'}
+                    <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="ctrl-btn" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        {theme === 'dark' ? <Sun size={14} strokeWidth={2} /> : <Moon size={14} strokeWidth={2} />}
+                        {theme === 'dark' ? 'MODO CLARO' : 'MODO OSCURO'}
                     </button>
+
                     {state.identity?.isLoggedIn && (
-                        <button onClick={handleLogout} className="ctrl-btn exit">SALIR</button>
+                        <button onClick={handleLogout} className="ctrl-btn exit" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            <LogOut size={12} strokeWidth={2} /> SALIR
+                        </button>
                     )}
-                    <button onClick={() => window.location.hash = '/'} className="ctrl-btn exit">CERRAR</button>
+                    <button onClick={() => window.location.hash = '/'} className="ctrl-btn exit" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <CloseIcon size={12} strokeWidth={2} /> CERRAR
+                    </button>
                 </div>
+
             </header>
 
             <main className="reader-canvas">
@@ -161,12 +170,32 @@ export const MateriaReader = ({ params }) => {
                             <div className="document-shadow-box animate-fade-up">
                                 <iframe 
                                     src={window.innerWidth < 768 
-                                        ? `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl.startsWith('http') ? pdfUrl : window.location.origin + pdfUrl)}&embedded=true`
+                                        ? `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`
                                         : `${pdfUrl}#toolbar=0&navpanes=0&scrollbar=1`
                                     } 
                                     className={`pdf-proyector ${theme === 'dark' ? 'pdf-inverted' : ''}`}
                                     title={title}
+                                    style={{ width: '100%', height: window.innerWidth < 768 ? '60vh' : '90vh', border: 'none' }}
                                 />
+                                {window.innerWidth < 768 && (
+                                    <div style={{ padding: '1.5rem', textAlign: 'center', background: '#f8f8f8', borderTop: '1px solid #eee' }}>
+                                        <p style={{ fontSize: '0.75rem', opacity: 0.6, marginBottom: '1rem', color: '#000' }}>
+                                            ¿El visor no carga correctamente?
+                                        </p>
+                                        <a 
+                                            href={pdfUrl} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            style={{ 
+                                                display: 'inline-block', padding: '0.8rem 1.5rem', 
+                                                background: '#000', color: '#fff', fontSize: '0.7rem', 
+                                                fontWeight: 900, textDecoration: 'none', letterSpacing: '0.1em' 
+                                            }}
+                                        >
+                                            ABRIR DOCUMENTO ORIGINAL
+                                        </a>
+                                    </div>
+                                )}
 
                             </div>
                             
@@ -187,7 +216,7 @@ export const MateriaReader = ({ params }) => {
                 ) : (
                     /* 🛡️ ESCUDO DE IDENTIDAD (ACCESO RESTRINGIDO) */
                     <div className="reader-restricted-box animate-fade-up" style={{ textAlign: 'center', background: '#fff', color: '#000', padding: '4rem 2rem', border: '1px solid #ddd', maxWidth: '35rem', boxShadow: '0 4rem 8rem rgba(0,0,0,0.1)', marginTop: '5rem', zIndex: 10 }}>
-                        <div style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>🔏</div>
+                        <ShieldAlert size={48} strokeWidth={1} style={{ marginBottom: '1.5rem', opacity: 0.3 }} />
                         <h2 style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '-0.02em', marginBottom: '0.8rem' }}>
                             {materia?.data?.content?.restricted_title || "MATERIA DE ACCESO RESTRINGIDO"}
                         </h2>
@@ -195,18 +224,20 @@ export const MateriaReader = ({ params }) => {
                             {materia?.data?.content?.restricted_message || "Esta entidad pertenece a un estrato de conocimiento reservado. Para continuar con su proyección, debes iniciar sesión."}
                         </p>
 
+
                         {!state.identity?.isLoggedIn ? (
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <div id="google-signin-btn"></div>
                             </div>
                         ) : (
                             <div style={{ background: '#fff4f4', padding: '1.5rem', border: '1px solid #ffebeb', borderRadius: '4px' }}>
-                                <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#d32f2f', letterSpacing: '0.1em', display: 'block', marginBottom: '0.5rem' }}>
-                                    ❌ ACCESO NO AUTORIZADO
+                                <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#d32f2f', letterSpacing: '0.1em', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.5rem' }}>
+                                    <ShieldAlert size={12} strokeWidth={2.5} /> ACCESO NO AUTORIZADO
                                 </span>
                                 <p style={{ fontSize: '0.8rem', opacity: 0.7 }}>
                                     {materia?.data?.content?.denied_message || `El correo ${state.identity.user.payload.email} no se encuentra en la whitelist de esta materia.`}
                                 </p>
+
                             </div>
                         )}
                     </div>
