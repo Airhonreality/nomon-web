@@ -1,6 +1,53 @@
 {
     "NOMON_ENTRIES": [
         {
+            "slug": "quienes-somos",
+            "meta": {
+                "component_type": "BANNER_ACTION"
+            },
+            "metadata": {
+                "author": "",
+                "editorial": "",
+                "year": "",
+                "id_universal": "",
+                "license": "CC BY-NC",
+                "language": "es",
+                "tags": "",
+                "curator": "",
+                "rationale": ""
+            },
+            "data": {
+                "content": {
+                    "title": {
+                        "es": "SOMOS NOMON"
+                    },
+                    "summary": {
+                        "es": {
+                            "es": ""
+                        }
+                    },
+                    "image": "",
+                    "composition": [
+                        {
+                            "type": "MARKDOWN",
+                            "id": 1777655584157,
+                            "content": "NOMON es una organización de beneficio de einteres común, consitutidos ante la camara de comercio como SAS BIC, lo que  significa evolucionar del capitalismo tradicional hacia un modelo de Triple Impacto, donde la generación de utilidades convive en igualdad de condiciones con el bienestar social y la protección ambiental. Se trata de un compromiso legal plasmado en los estatutos, donde la organización se obliga a operar con transparencia y a rendir cuentas sobre su impacto positivo en la comunidad y el entorno, transformando el propósito de \"ser la mejor empresa del mundo\" en ser \"la mejor empresa para el mundo\"."
+                        }
+                    ],
+                    "pdf_url": ""
+                },
+                "nav_links": [],
+                "relations": [],
+                "access_control": {
+                    "strategy": "PUBLIC",
+                    "whitelist_slug": "",
+                    "restricted_title": "",
+                    "restricted_message": "",
+                    "denied_message": ""
+                }
+            }
+        },
+        {
             "slug": "libro-digital-guardian-del-sextante",
             "meta": {
                 "component_type": "LIBRARY_RESOURCE"
