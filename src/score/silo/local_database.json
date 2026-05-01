@@ -202,7 +202,13 @@
                         "es": "El Simposio posiciona..."
                     },
                     "image": "/assets/materia/simposio.png",
-                    "composition": [],
+                    "composition": [
+                        {
+                            "type": "MARKDOWN",
+                            "id": 1777661929672,
+                            "content": "Colombia requiere un cambio de paradigma para superar los costos sistémicos de la corrupción y la ineficiencia judicial. El Simposio posiciona la Ética y la Integridad no como conceptos abstractos, sino como Tecnologías de Supervivencia: herramientas de ingeniería social necesarias para diseñar un futuro de prosperidad, seguridad y competitividad global.\n\n2. EJES DE TRANSFORMACIÓN (INGENIERÍA APLICADA)\n\nEl evento desglosa la integridad en cuatro sistemas críticos para la viabilidad del país:\n•\tSistemas Gubernamentales: Transparencia y rendición de cuentas como software de eficiencia estatal.\n•\tSistemas Corporativos: La integridad como activo financiero y motor de las Sociedades BIC\n•\tSistema Judicial: Ingeniería de la resocialización. Del castigo ineficiente a la restauración técnica.\n•\tSistemas Académicos: El papel de la Academia en el diseño de protocolos de integridad para la nueva generación de líderes.\n\n\n\nELIGE TU NODO Y EMPIEZA A DISEÑAR\n\n•\tNodo Gubernamental (Transparencia Operativa): Estamos diseñando protocolos de gestión pública para eliminar la ineficiencia. ¿Tienes ideas técnicas para un Estado más transparente? Aquí es.\n•\tNodo Corporativo (Integridad Rentable): La ética es un activo financiero. Trabajamos con empresas BIC y organizaciones que quieren ser referentes de alto rendimiento. ¿Quieres subir el estándar corporativo? Aquí es.\n•\tNodo Académico (Investigación Aplicada): La universidad es nuestro laboratorio. Estamos conectando investigadores y estudiantes para validar protocolos de integridad real. ¿Quieres llevar tu conocimiento a la calle? Aquí es.\n•\tNodo Jurídico (Ingeniería de la Restauración): Vamos a rediseñar cómo entendemos la justicia y la resocialización. Necesitamos mentes capaces de crear modelos de restauración humana eficaces. ¿Quieres cambiar el sistema desde adentro? Aquí es.\n"
+                        }
+                    ],
                     "pdf_url": ""
                 },
                 "nav_links": [],
