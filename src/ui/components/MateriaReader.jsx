@@ -68,12 +68,14 @@ export const MateriaReader = ({ params }) => {
                 if (btnContainer) {
                     window.google.accounts.id.initialize({
                         client_id: "957715051136-pcma3u1cpl9d4h0jsl81vjbcoe0rt62s.apps.googleusercontent.com",
-                        callback: (res) => {
+                        callback: async (res) => {
                             const payload = decodeJwt(res.credential);
                             if (payload) {
+                                const emailHash = await calcSha256(payload.email);
                                 appState.setIdentity({
                                     id: payload.sub,
                                     email: payload.email,
+                                    email_hash: emailHash,
                                     name: payload.name,
                                     picture: payload.picture,
                                     alias: payload.given_name

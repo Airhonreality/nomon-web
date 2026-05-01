@@ -18,6 +18,14 @@ function decodeJwt(token) {
     }
 }
 
+// Helper para calcular el hash SHA-256 de forma nativa
+async function calcSha256(message) {
+    const msgBuffer = new TextEncoder().encode(message.toLowerCase().trim());
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 /**
  * 🛰️ NAVBAR ACTOR (V2 - Mobile First)
  */
@@ -53,12 +61,14 @@ export const Navbar = ({ definition }) => {
                 if (btnContainer) {
                     window.google.accounts.id.initialize({
                         client_id: "957715051136-pcma3u1cpl9d4h0jsl81vjbcoe0rt62s.apps.googleusercontent.com",
-                        callback: (res) => {
+                        callback: async (res) => {
                             const payload = decodeJwt(res.credential);
                             if (payload) {
+                                const emailHash = await calcSha256(payload.email);
                                 appState.setIdentity({
                                     id: payload.sub,
                                     email: payload.email,
+                                    email_hash: emailHash,
                                     name: payload.name,
                                     picture: payload.picture,
                                     alias: payload.given_name

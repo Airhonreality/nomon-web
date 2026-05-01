@@ -42,7 +42,7 @@ export const MateriaRelations = ({ relations }) => {
                         if (access.strategy === 'REFERENCE_WHITELIST') {
                             const userHash = state.identity?.user?.payload?.email_hash || '';
                             const whitelistNode = entries?.find(w => w.slug === access.whitelist_slug);
-                            return whitelistNode?.whitelist?.includes(userHash);
+                            return whitelistNode?.data?.whitelist?.includes(userHash);
                         }
                         return false;
                     };
