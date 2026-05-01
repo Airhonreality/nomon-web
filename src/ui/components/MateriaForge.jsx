@@ -11,12 +11,61 @@ import {
 } from 'lucide-react';
 
 /**
+ * 🖋️ COMPONENTE AUXILIAR: Barra de Inserción
+ */
+const InsertBar = ({ onInsert, blockTypes, index }) => {
+    const [open, setOpen] = useState(false);
+    return (
+        <div style={{ position: 'relative', height: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: open ? 1 : 0.2, transition: 'opacity 0.2s' }}>
+            <button 
+                type="button" 
+                onClick={() => setOpen(!open)}
+                style={{ 
+                    background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', 
+                    borderRadius: '50%', width: '1.5rem', height: '1.5rem', 
+                    cursor: 'pointer', display: 'flex', alignItems: 'center', 
+                    justifyContent: 'center', fontSize: '0.8rem', fontWeight: 900 
+                }}
+            >
+                {open ? <X size={12} strokeWidth={3} /> : <Plus size={12} strokeWidth={3} />}
+            </button>
+
+            {open && (
+                <div style={{ 
+                    position: 'absolute', top: '2rem', zIndex: 100, 
+                    background: 'var(--bg-primary)', border: '1px solid var(--border-primary)', padding: '0.5rem', 
+                    display: 'flex', gap: '0.5rem', boxShadow: '0 1rem 3rem rgba(0,0,0,0.2)' 
+                }}>
+                    {Object.keys(blockTypes).map(t => (
+                        <button 
+                            key={t} type="button" 
+                            onClick={() => { onInsert(t, index); setOpen(false); }}
+                            style={{ 
+                                fontSize: '0.65rem', padding: '0.6rem', textAlign: 'left', 
+                                background: 'var(--bg-secondary)', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', 
+                                fontWeight: 'bold', textTransform: 'uppercase' 
+                            }}
+                        >
+                            + {blockTypes[t]}
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+/**
  * 🏛️ NOMON ARQUETYPES & CAPABILITIES
  */
 const ARQUETYPES = {
     'ENTITY_ROUTER': { 
         label: 'Ruta / Landing', 
-        capabilities: ['SLUG', 'TITLE', 'NAV_CONFIG', 'COMPOSITION', 'ACCESS'] 
+        capabilities: ['SLUG', 'TITLE', 'COMPOSITION', 'ACCESS'] 
+    },
+    'ENTITY_NAVBAR': {
+        label: 'Definición de Navegación',
+        capabilities: ['SLUG', 'TITLE', 'NAV_LINKS']
     },
     'ENTITY_PROJECT': { 
         label: 'Proyecto', 
@@ -37,6 +86,10 @@ const ARQUETYPES = {
     'BANNER_INFO': { 
         label: 'Informativo (Banner)', 
         capabilities: ['SLUG', 'TITLE', 'SUMMARY'] 
+    },
+    'BANNER_ACTION': {
+        label: 'Acción (Banner)',
+        capabilities: ['SLUG', 'TITLE', 'SUMMARY', 'ACCESS']
     }
 };
 
@@ -52,10 +105,10 @@ export const MateriaForge = () => {
     
     const [formData, setFormData] = useState({
         title: '', summary: '', slug: '', image: '', relations: [], composition: [], pdf_url: '',
-        nav_config: { show_in_nav: false, priority: 0, nav_label: '' },
+        nav_links: [], // Array de { label, slug, priority }
         metadata: { author: '', editorial: '', year: '', id_universal: '', license: 'CC BY-NC', language: 'es', tags: '', curator: '', rationale: '' },
         access_control: { strategy: 'PUBLIC', whitelist_slug: '', restricted_title: '', restricted_message: '', denied_message: '' },
-        whitelist_emails: [] // Array de emails para el manager
+        whitelist_emails: [] 
     });
 
     const currentArquetype = ARQUETYPES[selectedClass] || ARQUETYPES['ENTITY_PROJECT'];
@@ -100,20 +153,19 @@ export const MateriaForge = () => {
         const d = item.data || {};
         const c = d.content || {};
         const m = item.metadata || d.metadata || {};
-        const nav = d.nav_config || {};
         
         setFormData({
-            title: c.title?.es || c.title || item.name || '',
-            summary: c.summary?.es || c.summary || d.summary || '',
+            title: c.title?.es || (typeof c.title === 'string' ? c.title : '') || item.name || '',
+            summary: c.summary?.es || (typeof c.summary === 'string' ? c.summary : '') || d.summary || '',
             slug: item.slug || '',
             image: c.image || d.image || item.image || '',
             relations: d.relations || [],
             composition: c.composition || [],
             pdf_url: c.pdf_url || '',
-            nav_config: { show_in_nav: nav.show_in_nav || false, priority: nav.priority || 0, nav_label: nav.nav_label || '' },
+            nav_links: d.nav_links || [],
             metadata: { author: m.author || '', editorial: m.editorial || '', year: m.year || '', id_universal: m.id_universal || '', license: m.license || 'CC BY-NC', language: m.language || 'es', tags: m.tags || '', curator: m.curator || '', rationale: m.rationale || '' },
             access_control: d.access_control || { strategy: 'PUBLIC', whitelist_slug: '', restricted_title: '', restricted_message: '', denied_message: '' },
-            whitelist_emails: d.emails || [] // Recuperamos emails legibles si existen
+            whitelist_emails: d.emails || [] 
         });
         setSelectedClass(item.meta?.component_type || 'ENTITY_PROJECT');
         setIsEditing(true);
@@ -142,17 +194,30 @@ export const MateriaForge = () => {
                 metadata: formData.metadata,
                 data: {
                     content: { title: { es: formData.title }, summary: { es: formData.summary }, image: formData.image, composition: formData.composition, pdf_url: formData.pdf_url },
-                    nav_config: formData.nav_config,
+                    nav_links: formData.nav_links,
                     relations: formData.relations,
-                    access_control: selectedClass !== 'ENTITY_WHITELIST' ? formData.access_control : undefined,
+                    access_control: (selectedClass !== 'ENTITY_WHITELIST' && selectedClass !== 'ENTITY_NAVBAR') ? formData.access_control : undefined,
                     whitelist: selectedClass === 'ENTITY_WHITELIST' ? hashes : undefined,
-                    emails: selectedClass === 'ENTITY_WHITELIST' ? formData.whitelist_emails : undefined // Guardamos emails para edición futura
+                    emails: selectedClass === 'ENTITY_WHITELIST' ? formData.whitelist_emails : undefined 
                 }
             }
         };
         try {
             await bridge.execute(uqo);
             alert("Materia Cristalizada con éxito.");
+            window.location.reload();
+        } catch (err) { console.error(err); }
+    };
+
+    const handleDelete = async () => {
+        if (!window.confirm("¿Estás seguro de que deseas disolver esta materia permanentemente?")) return;
+        try {
+            await bridge.execute({
+                protocol: 'DELETE',
+                context_id: 'NOMON_ENTRIES',
+                payload: { context_id: 'NOMON_ENTRIES', slug: formData.slug }
+            });
+            alert("Materia Disuelta.");
             window.location.reload();
         } catch (err) { console.error(err); }
     };
@@ -190,7 +255,12 @@ export const MateriaForge = () => {
                                 {Object.keys(ARQUETYPES).map(key => <option key={key} value={key}>{ARQUETYPES[key].label}</option>)}
                             </select>
                         </div>
-                        <button type="submit" style={{ background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', padding: '1rem 3rem', fontSize: '0.7rem', fontWeight: 900, cursor: 'pointer' }}>CRISTALIZAR MATERIA</button>
+                        <div style={{ display: 'flex', gap: '1rem' }}>
+                            {isEditing && (
+                                <button type="button" onClick={handleDelete} style={{ background: 'transparent', color: '#d32f2f', border: '1px solid #d32f2f', padding: '1rem 2rem', fontSize: '0.7rem', fontWeight: 900, cursor: 'pointer' }}>DISOLVER MATERIA</button>
+                            )}
+                            <button type="submit" style={{ background: 'var(--accent-color)', color: 'var(--bg-primary)', border: 'none', padding: '1rem 3rem', fontSize: '0.7rem', fontWeight: 900, cursor: 'pointer' }}>CRISTALIZAR MATERIA</button>
+                        </div>
                     </header>
 
                     {/* 🧊 ZONA ALFA: IDENTIDAD */}
@@ -213,16 +283,35 @@ export const MateriaForge = () => {
                     </div>
 
                     {/* ⚙️ ZONA SIGMA: CONFIGURACIÓN TÉCNICA */}
-                    {(currentArquetype.capabilities.includes('NAV_CONFIG') || currentArquetype.capabilities.includes('ACCESS') || currentArquetype.capabilities.includes('WHITELIST_DATA')) && (
+                    {(currentArquetype.capabilities.includes('NAV_LINKS') || currentArquetype.capabilities.includes('ACCESS') || currentArquetype.capabilities.includes('WHITELIST_DATA')) && (
                         <div className="zone-sigma" style={{ marginBottom: '5rem', background: 'var(--bg-secondary)', padding: '3rem', border: '1px solid var(--border-primary)' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '3rem', opacity: 0.6 }}><Settings size={16}/><span style={{ fontSize: '0.6rem', fontWeight: 900, letterSpacing: '0.2em' }}>ZONA SIGMA: CONFIGURACIÓN Y SOBERANÍA</span></div>
                             
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-                                {currentArquetype.capabilities.includes('NAV_CONFIG') && (
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', paddingBottom: '2rem', borderBottom: '1px solid var(--border-primary)' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><input type="checkbox" checked={formData.nav_config.show_in_nav} onChange={e => setFormData({ ...formData, nav_config: { ...formData.nav_config, show_in_nav: e.target.checked } })}/><label style={{ fontSize: '0.7rem', fontWeight: 900 }}>PROYECTAR EN NAVBAR</label></div>
-                                        <div><label style={{ fontSize: '0.5rem', fontWeight: 900, opacity: 0.5 }}>ORDEN</label><input type="number" value={formData.nav_config.priority} onChange={e => setFormData({ ...formData, nav_config: { ...formData.nav_config, priority: parseInt(e.target.value) } })} style={{ width: '100%', padding: '0.6rem', border: '1px solid var(--border-primary)', background: 'var(--bg-primary)' }}/></div>
-                                        <div><label style={{ fontSize: '0.5rem', fontWeight: 900, opacity: 0.5 }}>ETIQUETA EN MENÚ</label><input type="text" value={formData.nav_config.nav_label} onChange={e => setFormData({ ...formData, nav_config: { ...formData.nav_config, nav_label: e.target.value } })} style={{ width: '100%', padding: '0.6rem', border: '1px solid var(--border-primary)', background: 'var(--bg-primary)' }}/></div>
+                                
+                                {currentArquetype.capabilities.includes('NAV_LINKS') && (
+                                    <div>
+                                        <label style={{ fontSize: '0.6rem', fontWeight: 900, marginBottom: '1.5rem', display: 'block' }}>RESONANCIAS DE NAVEGACIÓN (LINKS)</label>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                            {formData.nav_links.map((link, idx) => (
+                                                <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 2fr 1fr auto', gap: '1rem', background: 'var(--bg-primary)', padding: '1rem', border: '1px solid var(--border-primary)' }}>
+                                                    <input type="text" placeholder="Etiqueta..." value={link.label} onChange={e => {
+                                                        const next = [...formData.nav_links]; next[idx].label = e.target.value; setFormData({...formData, nav_links: next});
+                                                    }} style={{ padding: '0.5rem', fontSize: '0.75rem' }} />
+                                                    <select value={link.slug} onChange={e => {
+                                                        const next = [...formData.nav_links]; next[idx].slug = e.target.value; setFormData({...formData, nav_links: next});
+                                                    }} style={{ padding: '0.5rem', fontSize: '0.75rem' }}>
+                                                        <option value="">Vincular Materia...</option>
+                                                        {inventory.map(ent => <option key={ent.slug} value={ent.slug}>{ent.data?.content?.title?.es || ent.slug}</option>)}
+                                                    </select>
+                                                    <input type="number" placeholder="Prioridad" value={link.priority} onChange={e => {
+                                                        const next = [...formData.nav_links]; next[idx].priority = parseInt(e.target.value); setFormData({...formData, nav_links: next});
+                                                    }} style={{ padding: '0.5rem', fontSize: '0.75rem' }} />
+                                                    <button type="button" onClick={() => setFormData({...formData, nav_links: formData.nav_links.filter((_, i) => i !== idx)})} style={{ background: 'none', border: 'none', color: '#d32f2f' }}><Trash2 size={16}/></button>
+                                                </div>
+                                            ))}
+                                            <button type="button" onClick={() => setFormData({...formData, nav_links: [...formData.nav_links, { label: '', slug: '', priority: 0 }]})} style={{ padding: '1rem', background: '#000', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer', fontSize: '0.6rem' }}>+ AÑADIR LINK DE NAVEGACIÓN</button>
+                                        </div>
                                     </div>
                                 )}
 

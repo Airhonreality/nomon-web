@@ -10,7 +10,8 @@ export const BannerAction = ({ definition }) => {
     const { remoteData } = useIndraResonance('NOMON_ENTRIES');
 
     // Resonancia: Buscamos la materia específica
-    const materia = remoteData?.find(item => item.slug === targetId);
+    const rawItems = remoteData?.items || remoteData;
+    const materia = Array.isArray(rawItems) ? rawItems.find(item => item.slug === targetId) : null;
 
     if (!materia) return null; // O un placeholder de carga sutil
 

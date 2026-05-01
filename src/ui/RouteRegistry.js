@@ -35,13 +35,6 @@ export const ROUTE_MAP = {
         id: 'user_profile',
         components: ['identity_profile']
     },
-    '/quienes-somos': {
-        id: 'quienes_somos',
-        components: [
-            { meta: { component_type: 'banner_info', materia_id: 'quienes-somos-intro' } },
-            { meta: { component_type: 'banner_info', materia_id: 'nuestra-filosofia' } }
-        ]
-    },
     '/admin/forge': {
         id: 'forge',
         components: ['hero_forge', 'materia_forge']

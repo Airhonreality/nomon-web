@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSovereign } from '../../score/SovereignContext.jsx';
+import { useIndraResonance } from '../../score/hooks/useIndraResonance.js';
 import { appState } from '../../score/AppState.js';
 import { Sun, Moon, User, LogOut } from 'lucide-react';
 
@@ -22,8 +23,22 @@ function decodeJwt(token) {
  */
 export const Navbar = ({ definition }) => {
     const { state, toggleTheme } = useSovereign();
+    const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES');
 
-    const links = definition?.data?.content?.links || [];
+    // 🕸️ ESCÁNER DE NAVEGACIÓN AGNOSTICA
+    // Buscamos la entidad maestra de navegación (main-navbar)
+    const navEntity = (entries || []).find(item => 
+        item.meta?.component_type === 'ENTITY_NAVBAR' && item.slug === 'main-navbar'
+    );
+
+    const dynamicLinks = (navEntity?.data?.nav_links || [])
+        .sort((a, b) => (a.priority || 0) - (b.priority || 0))
+        .map(link => ({
+            label: link.label,
+            path: `/${link.slug}`
+        }));
+
+    const allLinks = [...dynamicLinks];
 
     const handleNavigate = (path) => {
         if (window.Router) {
@@ -66,7 +81,8 @@ export const Navbar = ({ definition }) => {
             
             <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1.5rem', flex: '1 1 auto', justifyContent: 'flex-end' }}>
                 <ul className="nav-links" style={{ display: 'flex', flexWrap: 'wrap', listStyle: 'none', gap: '1rem', margin: 0, padding: 0 }}>
-                    {links.map((link, idx) => (
+                    <li onClick={() => handleNavigate('/')} style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', opacity: 0.7 }}>INICIO</li>
+                    {allLinks.map((link, idx) => (
                         <li key={idx} onClick={() => handleNavigate(link.path)} style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', opacity: 0.7 }}>
                             {link.label}
                         </li>

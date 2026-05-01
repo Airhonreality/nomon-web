@@ -17,10 +17,11 @@ export const BannerInfo = ({ definition: initialDefinition }) => {
     const { remoteData } = useIndraResonance('NOMON_ENTRIES');
 
     useEffect(() => {
-        if (remoteData && Array.isArray(remoteData) && targetId) {
+        const rawItems = remoteData?.items || remoteData;
+        if (rawItems && Array.isArray(rawItems) && targetId) {
             console.log(`📡 [Banner:Resonance] Buscando materia_id: ${targetId}`);
             
-            const bannerMateria = remoteData.find(item => item.slug === targetId);
+            const bannerMateria = rawItems.find(item => item.slug === targetId);
 
             if (bannerMateria) {
                 const title = bannerMateria.data?.content?.title?.es || bannerMateria.metadata?.title || bannerMateria.name;

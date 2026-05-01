@@ -18,27 +18,32 @@ export const Grid = ({ definition }) => {
     const { remoteData, loading } = useIndraResonance(resonanceId);
 
     // 🧬 UNIFICACIÓN DE RESONANCIA
+    const [projectedItems, setProjectedItems] = React.useState([]);
+
     useEffect(() => {
-        if (remoteData && Array.isArray(remoteData)) {
-            // Mapeo agnóstico y FILTRADO por tipo universal
-            const itemsToProject = remoteData
+        const rawItems = remoteData?.items || remoteData;
+        if (rawItems && Array.isArray(rawItems)) {
+            // Mapeo agnóstico y FILTRADO por clase (Proyectos y Noticias)
+            const itemsToProject = rawItems
                 .filter(item => {
-                    const type = (item.meta?.component_type || item.metadata?.type || '').toUpperCase();
+                    const type = item.meta?.component_type || '';
+                    const isPortalClass = type === 'ENTITY_PROJECT' || type === 'ENTITY_NEWS';
                     const title = item.data?.content?.title?.es || item.data?.content?.title || item.metadata?.title || item.name;
-                    const isValidType = type.startsWith('ENTITY_') || type === 'DATA_CARD';
-                    return isValidType && title;
+                    return isPortalClass && title;
                 })
                 .map(item => ({
                     ...item,
                     meta: { ...item.meta, component_id: item.slug || item.id },
                     data: item.data || { content: { 
-                        title: { es: item.metadata?.title || item.name },
-                        summary: { es: item.metadata?.summary || item.description },
+                        title: item.metadata?.title || item.name,
+                        summary: item.metadata?.summary || item.description,
                         image: item.metadata?.image || item.image
                     }}
                 }));
 
-            // Solo despachar si hay cambios reales para evitar re-renders infinitos
+            setProjectedItems(itemsToProject);
+
+            // Sincronizamos con el inventario global para persistencia
             const currentItems = definition?.data?.content?.items || [];
             if (JSON.stringify(currentItems) !== JSON.stringify(itemsToProject)) {
                 dispatch('inventory_update_component', { 
@@ -50,7 +55,7 @@ export const Grid = ({ definition }) => {
     }, [remoteData, componentId]);
 
 
-    const items = definition?.data?.content?.items || [];
+    const items = projectedItems.length > 0 ? projectedItems : (definition?.data?.content?.items || []);
 
     if (loading && items.length === 0) {
         return (

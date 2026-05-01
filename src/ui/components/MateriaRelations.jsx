@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSovereign } from '../../score/SovereignContext.jsx';
 import { useIndraResonance } from '../../score/hooks/useIndraResonance.js';
-import { BookOpen, ArrowRight } from 'lucide-react';
+import { BookOpen, ArrowRight, Info, Minus, Lock } from 'lucide-react';
 
 
 /**
@@ -9,6 +9,7 @@ import { BookOpen, ArrowRight } from 'lucide-react';
  * Proyecta la red de conocimiento vinculada a una entidad.
  */
 export const MateriaRelations = ({ relations }) => {
+    const { state } = useSovereign();
     const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES');
     const [expandedBlocks, setExpandedBlocks] = React.useState({});
 
@@ -31,30 +32,49 @@ export const MateriaRelations = ({ relations }) => {
             <div className="relations-grid">
                 {linkedMatter.map((m, i) => {
                     const isLibrary = m.meta?.component_type === 'LIBRARY_RESOURCE';
+                    const access = m.data?.access_control || { strategy: 'PUBLIC' };
                     
+                    // Verificación de acceso para la tarjeta
+                    const checkAccess = () => {
+                        if (access.strategy === 'PUBLIC') return true;
+                        if (!state.identity?.isLoggedIn) return false;
+                        if (access.strategy === 'REGISTERED_ONLY') return true;
+                        if (access.strategy === 'REFERENCE_WHITELIST') {
+                            const userHash = state.identity?.user?.payload?.email_hash || '';
+                            const whitelistNode = entries?.find(w => w.slug === access.whitelist_slug);
+                            return whitelistNode?.whitelist?.includes(userHash);
+                        }
+                        return false;
+                    };
+
+                    const hasAccess = checkAccess();
+
                     if (isLibrary) {
                         const content = m.data?.content || {};
                         const meta = m.metadata || {};
                         const isExpanded = expandedBlocks[m.slug || i];
 
                         return (
-                            <div key={i} className="comp-library-resource premium-resonance" style={{ position: 'relative' }}>
+                            <div key={i} className={`comp-library-resource premium-resonance ${!hasAccess ? 'locked-node' : ''}`} style={{ position: 'relative', opacity: hasAccess ? 1 : 0.7 }}>
                                 <div className="lib-badge" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                    <BookOpen size={12} /> BIBLIOTECA
+                                    {hasAccess ? <BookOpen size={12} /> : <Lock size={12} />} 
+                                    {hasAccess ? 'BIBLIOTECA' : 'NODO RESTRINGIDO'}
                                 </div>
                                 
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '2rem' }}>
-                                    <h3 className="lib-title">{content.title?.es || m.slug}</h3>
-                                    <button 
-                                        type="button"
-                                        onClick={() => toggleBlock(m.slug || i)}
-                                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: isExpanded ? '#000' : '#ccc', padding: '0.5rem', transition: 'all 0.3s ease' }}
-                                    >
-                                        {isExpanded ? <Minus size={18} strokeWidth={2.5} /> : <Info size={18} strokeWidth={2.5} />}
-                                    </button>
+                                    <h3 className="lib-title" style={{ opacity: hasAccess ? 1 : 0.5 }}>{content.title?.es || m.slug}</h3>
+                                    {hasAccess && (
+                                        <button 
+                                            type="button"
+                                            onClick={() => toggleBlock(m.slug || i)}
+                                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: isExpanded ? '#000' : '#ccc', padding: '0.5rem', transition: 'all 0.3s ease' }}
+                                        >
+                                            {isExpanded ? <Minus size={18} strokeWidth={2.5} /> : <Info size={18} strokeWidth={2.5} />}
+                                        </button>
+                                    )}
                                 </div>
                                 
-                                {isExpanded && (
+                                {isExpanded && hasAccess && (
                                     <div className="lib-curation animate-fade-in" style={{ fontSize: '0.85rem', lineHeight: '1.6', color: '#555', borderTop: '1px solid #eee', paddingTop: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                                         {meta.author && <p style={{ margin: 0 }}><b>Autor:</b> {meta.author}</p>}
                                         {meta.year && <p style={{ margin: 0 }}><b>Año:</b> {meta.year}</p>}
@@ -64,13 +84,19 @@ export const MateriaRelations = ({ relations }) => {
                                     </div>
                                 )}
 
-                                <button 
-                                    className="lib-read-btn" 
-                                    onClick={() => window.location.hash = `/biblioteca/${m.slug}?url=${encodeURIComponent(content.pdf_url || "")}`}
-                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}
-                                >
-                                    ACCEDER AL CONOCIMIENTO DIGITAL <ArrowRight size={16} strokeWidth={2} />
-                                </button>
+                                {hasAccess ? (
+                                    <button 
+                                        className="lib-read-btn" 
+                                        onClick={() => window.location.hash = `/biblioteca/${m.slug}?url=${encodeURIComponent(content.pdf_url || "")}`}
+                                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}
+                                    >
+                                        ACCEDER AL CONOCIMIENTO DIGITAL <ArrowRight size={16} strokeWidth={2} />
+                                    </button>
+                                ) : (
+                                    <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(0,0,0,0.05)', textAlign: 'center', fontSize: '0.7rem', fontWeight: 900, color: '#888', letterSpacing: '0.1em' }}>
+                                        ACCESO RESTRINGIDO POR SOBERANÍA
+                                    </div>
+                                )}
                             </div>
                         );
                     }

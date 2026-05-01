@@ -22,8 +22,16 @@ export const DataCard = ({ definition }) => {
 
     const label = typeMap[type] || 'Materia';
 
-    const title = (typeof content.title === 'object' ? content.title?.es : content.title) || 'Sin Título';
-    const summary = (typeof content.summary === 'object' ? content.summary?.es : content.summary) || '';
+    // 🛡️ BLINDAJE DE RENDERIZADO (Prevenir [object Object])
+    const resolveText = (val) => {
+        if (!val) return '';
+        if (typeof val === 'string') return val;
+        if (typeof val === 'object') return val.es || val.en || Object.values(val)[0] || '';
+        return String(val);
+    };
+
+    const title = resolveText(content.title) || resolveText(meta.title) || 'Sin Título';
+    const summary = resolveText(content.summary) || resolveText(meta.summary) || '';
     const image = content.image || meta.image;
 
     const handleNavigate = () => {

@@ -36,13 +36,15 @@ export const MateriaDetail = ({ params }) => {
         if (access.strategy === 'PUBLIC') return true;
         if (!state.identity?.isLoggedIn) return false;
         if (access.strategy === 'REGISTERED_ONLY') return true;
+        
         if (access.strategy === 'REFERENCE_WHITELIST') {
-            const userEmail = state.identity?.user?.payload?.email || '';
-            const userHash = state.identity?.user?.payload?.email_hash || ''; // Asumimos que el hash está disponible
-            // En este prototipo, comparamos directamente o buscamos en la whitelist remota
-            // Para simplicidad en este paso, si es whitelist, delegamos la validación real al reader
-            // pero bloqueamos la vista de detalle si no hay sesión.
-            return !!state.identity?.isLoggedIn;
+            const userHash = state.identity?.user?.payload?.email_hash || '';
+            const whitelistNode = remoteData?.find(item => item.slug === access.whitelist_slug);
+            
+            if (!whitelistNode || !whitelistNode.whitelist) return false;
+            
+            // Verificamos si el hash del usuario está en la lista soberana
+            return whitelistNode.whitelist.includes(userHash);
         }
         return false;
     };

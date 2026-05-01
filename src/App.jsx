@@ -8,7 +8,7 @@ const App = () => {
     const navDef = state.inventory?.find(ex => (ex?.meta?.component_id || ex?.metadata?.component_id) === 'main_navbar');
 
     return (
-        <div className={`indra-satellite-viewport theme-${state.theme || 'dark'}`}>
+        <div className={`indra-satellite-viewport theme-${state.theme || 'light'}`}>
             {navDef && <Navbar definition={navDef} />}
             <div className="main-content-container">
                 <SovereignRouter />
