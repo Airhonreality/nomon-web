@@ -22,16 +22,21 @@
                         "es": "Libro digital Guardián del sextante"
                     },
                     "summary": {
-                        "es": ""
+                        "es": "Libro digital Guardián del sextante"
                     },
                     "image": "",
                     "composition": [],
                     "pdf_url": ""
                 },
+                "nav_config": {
+                    "show_in_nav": false,
+                    "priority": 0,
+                    "nav_label": ""
+                },
                 "relations": [],
                 "access_control": {
-                    "strategy": "PUBLIC",
-                    "whitelist_slug": "",
+                    "strategy": "REFERENCE_WHITELIST",
+                    "whitelist_slug": "digital-sextante",
                     "restricted_title": "",
                     "restricted_message": "",
                     "denied_message": ""
