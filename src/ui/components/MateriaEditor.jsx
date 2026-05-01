@@ -1,7 +1,6 @@
 import React from 'react';
 import MDEditor from '@uiw/react-md-editor';
 import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-md-editor/markdown-preview.css";
 
 /**
  * 🖋️ SOVEREIGN MATERIA EDITOR (Industrial Grade)
