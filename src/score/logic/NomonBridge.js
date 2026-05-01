@@ -87,8 +87,11 @@ class GitHubStrategy extends PersistenceStrategy {
         }
 
         try {
-            console.log(`🔐 [Vault] Solicitando llave soberana para: ${email}...`);
-            const response = await fetch('/api/vault', {
+            // URL de la Bóveda en Vercel (Desacoplada de GitHub Pages)
+            const vaultUrl = 'https://project-wgrrd.vercel.app/api/vault';
+            
+            console.log(`🔐 [Vault] Solicitando llave soberana a la bóveda externa...`);
+            const response = await fetch(vaultUrl, {
                 headers: {
                     'x-sovereign-email': email
                 }
