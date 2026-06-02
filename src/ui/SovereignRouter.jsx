@@ -10,14 +10,24 @@ import { useIndraResonance } from '../score/hooks/useIndraResonance.js';
  * Incluye un motor de resolución dinámica (Fallback) para el Silo.
  */
 export const SovereignRouter = () => {
-    const { state } = useSovereign();
+    const { state, manifest } = useSovereign();
     const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES');
-    const [path, setPath] = useState(window.location.hash.replace('#', '') || '/');
+    
+    // Resolvemos el path inicial. Si es /, usamos el home_slug del manifiesto.
+    const getInitialPath = () => {
+        const hash = window.location.hash.replace('#', '') || '/';
+        return hash === '/' ? `/${manifest.home_slug}` : hash;
+    };
+
+    const [path, setPath] = useState(getInitialPath());
     const [routeConfig, setRouteConfig] = useState(null);
     const [params, setParams] = useState({});
 
     useEffect(() => {
-        const handleHashChange = () => setPath(window.location.hash.replace('#', '') || '/');
+        const handleHashChange = () => {
+            const newHash = window.location.hash.replace('#', '') || '/';
+            setPath(newHash === '/' ? `/${manifest.home_slug}` : newHash);
+        };
         window.addEventListener('hashchange', handleHashChange);
         
         window.Router = { navigate: (newPath) => {

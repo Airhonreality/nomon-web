@@ -1,4 +1,39 @@
 /* 🏛️ REDNOMON: FLUID MINIMALISM (Agnostic Design System) */
+/**
+ * 📐 SOVEREIGN GEOMETRY SYSTEM (12 Columns)
+ * El cimiento matemático para proyecciones agnósticas.
+ */
+.nomon-composition-area {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--grid-gap, 3rem);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+.nomon-block-vessel {
+    grid-column: span var(--block-span, 12);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 100%;
+    min-width: 0; /* Evita desbordamiento en grid */
+}
+
+/* 📱 RESPONSIVE AUTO-PROJECTOR */
+@media (max-width: 960px) {
+    .nomon-composition-area {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0 1.5rem;
+    }
+    .nomon-block-vessel {
+        grid-column: span 1 !important;
+    }
+}
+
 :root {
     --bg-primary: #ffffff;
     --bg-secondary: #fcfcfc;

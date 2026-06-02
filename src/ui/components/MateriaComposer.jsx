@@ -1,15 +1,22 @@
 import React from 'react';
 import { MateriaRelations } from './MateriaRelations.jsx';
 import MDEditor from '@uiw/react-md-editor';
-import { BookOpen, ArrowRight, Info, Minus, Plus } from 'lucide-react';
+import { BookOpen, ArrowRight, Info, Minus, Plus, Grid as GridIcon, Image as ImageIcon } from 'lucide-react';
+import { DataCard } from './DataCard.jsx';
+import { useIndraResonance } from '../../score/hooks/useIndraResonance.js';
+import { useSovereign } from '../../score/SovereignContext.jsx';
+import { RadialMindMap } from '../projections/RadialMindMap.jsx';
 
 
+
+import { BLOCK_REGISTRY } from '../projections/BlockRegistry.jsx';
 
 /**
  * MATERIA COMPOSER ACTOR
  * Interpreta y proyecta la secuencia lineal de bloques de una entidad.
  */
 export const MateriaComposer = ({ composition, slug }) => {
+    const { state } = useSovereign();
     const [expandedBlocks, setExpandedBlocks] = React.useState({});
 
     const toggleBlock = (id) => {
@@ -18,100 +25,94 @@ export const MateriaComposer = ({ composition, slug }) => {
 
     if (!composition || composition.length === 0) return null;
 
-    const safeStr = (val) => {
-        if (typeof val === 'object' && val !== null) return val.es || val.en || '';
-        return val || '';
-    };
-
     return (
-        <div className="materia-composition-lane">
+        <div className="nomon-composition-area">
             {composition.map((block, i) => {
-                switch (block.type) {
-                    case 'TITLE':
-                        return <h2 key={block.id || i} className="comp-title">{safeStr(block.content)}</h2>;
-                    
-                    case 'MARKDOWN':
-                        return (
-                            <div key={block.id || i} className="comp-markdown">
-                                <MDEditor.Markdown source={safeStr(block.content)} style={{ background: 'transparent', color: 'inherit' }} />
-                            </div>
-                        );
+                const span = block.layout?.span || 12;
+                const align = block.layout?.align || 'stretch';
+                
+                // 📡 AUTO-PROYECCIÓN POR REGISTRO
+                const BlockActor = BLOCK_REGISTRY[block.type];
 
-                    case 'IMAGE':
-                        return (
-                            <div key={block.id || i} className="comp-gallery">
-                                {block.images?.map((img, idx) => (
-                                    img && <img key={idx} src={img} alt={`Materia ${idx}`} className="comp-img" />
-                                ))}
-                            </div>
-                        );
-
-                    case 'RESONANCE':
-                        return <MateriaRelations key={block.id || i} relations={[block.content]} />;
-
-                    case 'LIBRARY_RESOURCE':
-                        const isExpanded = expandedBlocks[block.id || i];
-                        const hasMetadata = block.rationale || block.curator;
-                        return (
-                            <div key={block.id || i} className="comp-library-resource">
-                                <div className="lib-badge" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                    <BookOpen size={12} /> {block.resType}
-                                </div>
-                                <h3 className="lib-title">{safeStr(block.desc) || 'Recurso de Biblioteca'}</h3>
-                                
-                                {hasMetadata && (
-                                    <div className="materia-disclosure" onClick={() => toggleBlock(block.id || i)}>
-                                        <div className={`disclosure-line ${isExpanded ? 'active' : ''}`}></div>
-                                        <span className="disclosure-label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                            {isExpanded ? <Minus size={12} /> : <Info size={12} />}
-                                            {isExpanded ? 'MENOS' : 'INFO'}
-                                        </span>
-                                    </div>
-                                )}
-
-                                {isExpanded && hasMetadata && (
-                                    <div className="lib-curation animate-fade-in">
-                                        {block.rationale && <p><b>Por qué NOMON:</b> {safeStr(block.rationale)}</p>}
-                                        {block.curator && <span><b>Curado por:</b> {safeStr(block.curator)}</span>}
-                                    </div>
-                                )}
-
-                                <button 
-                                    className="lib-read-btn" 
-                                    onClick={() => {
-                                        const safeUrl = encodeURIComponent(block.url || "");
-                                        window.location.hash = `/biblioteca/${slug}?url=${safeUrl}`;
-                                    }}
-                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}
-                                >
-                                    ACCEDER AL CONOCIMIENTO DIGITAL <ArrowRight size={16} strokeWidth={2} />
-                                </button>
-
-                            </div>
-                        );
-
-                    default:
-                        return null;
-                }
+                return (
+                    <div 
+                        key={block.id || i} 
+                        className="nomon-block-vessel" 
+                        style={{ '--block-span': span, alignItems: align }}
+                    >
+                        {BlockActor ? (
+                            <BlockActor 
+                                block={block} 
+                                state={state} 
+                                slug={slug} 
+                                expanded={expandedBlocks[block.id || i]}
+                                onToggle={() => toggleBlock(block.id || i)}
+                            />
+                        ) : (
+                            <div className="unknown-block">Materia Desconocida: {block.type}</div>
+                        )}
+                    </div>
+                );
             })}
 
             <style dangerouslySetInnerHTML={{ __html: `
-                .materia-composition-lane {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 5rem;
-                    margin: 4rem auto;
-                    max-width: 90%;
+                .nomon-composition-area {
+                    padding: 4rem 2rem;
+                }
+
+                .grid-block-title { 
+                    font-size: 0.7rem; 
+                    font-weight: 900; 
+                    letter-spacing: 0.2em; 
+                    text-transform: uppercase; 
+                    margin-bottom: 2rem; 
+                    opacity: 0.4; 
+                    border-bottom: 1px solid var(--border-primary);
+                    padding-bottom: 1rem;
+                }
+
+                .dynamic-grid-layout {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                    gap: 2rem;
+                }
+
+                .comp-gallery-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                    gap: 1rem;
+                }
+
+                .gallery-item img { 
+                    width: 100%; 
+                    height: 200px; 
+                    object-fit: cover; 
+                    display: block; 
+                    filter: grayscale(1); 
+                    transition: all 0.5s ease; 
+                }
+                
+                .gallery-item:hover img { 
+                    filter: grayscale(0); 
+                    transform: scale(1.05);
+                }
+
+                .grid-loading {
+                    padding: 3rem;
+                    text-align: center;
+                    font-size: 0.7rem;
+                    letter-spacing: 0.1em;
+                    opacity: 0.5;
                 }
 
                 .comp-library-resource {
                     padding: 3rem;
-                    background: #fdfdfd;
-                    border: 0.05rem solid rgba(0,0,0,0.1);
+                    background: var(--bg-secondary);
+                    border: 1px solid var(--border-primary);
                     display: flex;
                     flex-direction: column;
                     gap: 1.5rem;
-                    border-left: 0.5rem solid #000;
+                    border-left: 0.5rem solid var(--text-primary);
                 }
 
                 .lib-badge {
@@ -127,7 +128,6 @@ export const MateriaComposer = ({ composition, slug }) => {
                     margin: 0;
                 }
 
-                /* ⚖️ PATRÓN CANÓNICO: DISCLOSURE */
                 .materia-disclosure {
                     display: flex;
                     align-items: center;
@@ -146,7 +146,7 @@ export const MateriaComposer = ({ composition, slug }) => {
 
                 .disclosure-line.active {
                     width: 4rem;
-                    background: #000;
+                    background: var(--text-primary);
                 }
 
                 .disclosure-label {
@@ -157,7 +157,7 @@ export const MateriaComposer = ({ composition, slug }) => {
                 }
 
                 .materia-disclosure:hover .disclosure-label {
-                    color: #000;
+                    color: var(--text-primary);
                 }
 
                 .animate-fade-in {
@@ -173,15 +173,15 @@ export const MateriaComposer = ({ composition, slug }) => {
                     font-size: 0.9rem;
                     line-height: 1.6;
                     color: #555;
-                    border-top: 0.05rem solid #eee;
+                    border-top: 1px solid var(--border-primary);
                     padding-top: 1.5rem;
                 }
 
                 .lib-read-btn {
                     margin-top: 1rem;
                     padding: 1.2rem;
-                    background: #000;
-                    color: #fff;
+                    background: var(--text-primary);
+                    color: var(--bg-primary);
                     border: none;
                     font-size: 0.75rem;
                     font-weight: 900;
@@ -200,7 +200,7 @@ export const MateriaComposer = ({ composition, slug }) => {
                     font-weight: 500;
                     letter-spacing: -0.03em;
                     text-transform: uppercase;
-                    border-left: 0.35rem solid #000;
+                    border-left: 0.35rem solid var(--text-primary);
                     padding-left: 2rem;
                     margin: 2rem 0;
                 }
@@ -209,8 +209,7 @@ export const MateriaComposer = ({ composition, slug }) => {
                     font-size: 1.1rem;
                     line-height: 1.8;
                     color: var(--text-primary);
-                    max-width: 800px;
-                    margin: 0 auto;
+                    width: 100%;
                 }
 
                 .comp-markdown .wmde-markdown {
@@ -221,16 +220,6 @@ export const MateriaComposer = ({ composition, slug }) => {
 
                 .comp-markdown .wmde-markdown p {
                     margin-bottom: 1.5rem;
-                }
-
-                .comp-markdown .wmde-markdown ul, 
-                .comp-markdown .wmde-markdown ol {
-                    padding-left: 2rem;
-                    margin-bottom: 1.5rem;
-                }
-
-                .comp-markdown .wmde-markdown li {
-                    margin-bottom: 0.5rem;
                 }
 
                 .comp-gallery {
@@ -249,6 +238,57 @@ export const MateriaComposer = ({ composition, slug }) => {
 
                 .comp-img:hover {
                     filter: grayscale(0%);
+                }
+
+                .sovereign-action-btn {
+                    width: 100%;
+                    padding: 2rem;
+                    background: var(--text-primary);
+                    color: var(--bg-primary);
+                    border: none;
+                    font-size: 1.2rem;
+                    font-weight: 900;
+                    letter-spacing: 0.3em;
+                    cursor: pointer;
+                    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                    text-transform: uppercase;
+                }
+
+                .sovereign-action-btn:hover {
+                    transform: scale(1.02);
+                    letter-spacing: 0.5em;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                }
+
+                .comp-hero-logo {
+                    padding: 8rem 0;
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+
+                .hero-logo-text {
+                    font-family: 'Outfit', sans-serif;
+                    font-size: 15vw;
+                    line-height: 0.8;
+                    font-weight: 400;
+                    letter-spacing: -0.05em;
+                    text-transform: uppercase;
+                    margin: 0;
+                    color: var(--text-primary);
+                }
+
+                .hero-logo-line {
+                    width: 60%;
+                    height: 0.4rem;
+                    background: #3eb4d4; /* El azul de acento de NOMON */
+                    margin-top: 2rem;
+                }
+
+                @media (min-width: 768px) {
+                    .hero-logo-text { font-size: 10rem; }
+                    .hero-logo-line { width: 40%; height: 0.6rem; }
                 }
 
                 @media (max-width: 768px) {

@@ -38,6 +38,7 @@ import { MateriaReader } from './components/MateriaReader.jsx';
 import { IdentityProfile } from './components/IdentityProfile.jsx';
 import { ComercialFilbo } from './components/ComercialFilbo.jsx';
 import { ComercialAuditoria } from './components/ComercialAuditoria.jsx';
+import { LandingPage } from './components/LandingPage.jsx';
 
 export const COMPONENT_REGISTRY = {
     'hero_portal_home': Hero,
@@ -54,7 +55,8 @@ export const COMPONENT_REGISTRY = {
     'materia_reader': MateriaReader,
     'identity_profile': IdentityProfile,
     'comercial_portal': ComercialFilbo,
-    'comercial_auditoria': ComercialAuditoria
+    'comercial_auditoria': ComercialAuditoria,
+    'landing_page': LandingPage
 };
 
 

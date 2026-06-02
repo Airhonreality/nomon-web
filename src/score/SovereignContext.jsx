@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { appState } from './AppState.js';
+import { useIndraResonance } from './hooks/useIndraResonance.js';
 import { NomonBridge } from './logic/NomonBridge.js';
 
 console.log("🧬 [Module] SovereignContext.jsx CARGADO FISICAMENTE.");
@@ -48,21 +49,42 @@ export const SovereignProvider = ({ children }) => {
     };
 
     const bridge = React.useMemo(() => new NomonBridge(), []);
+    const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES', { bridge, state });
+
+    // 🛰️ ESCÁNER DEL MANIFIESTO SOBERANO
+    const manifestEntity = (entries || []).find(item => item.slug === 'satellite-config');
+    const manifest = {
+        title: manifestEntity?.data?.content?.title?.es || "NOMON",
+        active_nav_slug: manifestEntity?.data?.manifest?.active_nav_slug || 'main-navbar',
+        home_slug: manifestEntity?.data?.manifest?.home_slug || 'somos-nomon',
+        is_ignited: !!manifestEntity
+    };
 
     // 🔐 HIDRATACIÓN DE LA BÓVEDA (Sovereign Vault)
     // Cuando el usuario inicia sesión, solicitamos la llave a Vercel
     useEffect(() => {
-        if (state.identity?.isLoggedIn && state.identity?.user?.email) {
-            bridge.hydrateVault(state.identity.user.email);
+        const email = state.identity?.user?.payload?.email || state.identity?.user?.email;
+        
+        console.log("🛡️ [SovereignContext] Evaluando identidad para Bóveda:", { 
+            isLoggedIn: state.identity?.isLoggedIn, 
+            email: email 
+        });
+
+        if (state.identity?.isLoggedIn && email) {
+            console.log(`🚀 [SovereignContext] Disparando hidratación para: ${email}`);
+            bridge.hydrateVault(email);
+        } else {
+            console.warn("⚠️ [SovereignContext] No hay identidad activa o email para desbloquear el Silo.");
         }
-    }, [state.identity?.isLoggedIn, state.identity?.user?.email, bridge]);
+    }, [state.identity?.isLoggedIn, state.identity?.user?.payload?.email, bridge]);
 
     const value = React.useMemo(() => ({
         state,
         bridge,
+        manifest,
         dispatch,
         toggleTheme
-    }), [state, bridge]);
+    }), [state, bridge, manifest]);
 
 
     // console.log(`🏛️ [Provider:Render] Bridge disponible: ${!!bridge} | Items en inventario: ${state.inventory?.length}`);

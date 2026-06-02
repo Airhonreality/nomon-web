@@ -48,8 +48,9 @@ export const ROUTE_MAP = {
         id: 'comercial_auditoria',
         components: ['comercial_auditoria'],
         restricted: true
+    },
+    '/landing': {
+        id: 'landing',
+        components: ['landing_page']
     }
-
-
-
 };

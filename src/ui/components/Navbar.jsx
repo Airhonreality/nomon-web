@@ -30,21 +30,41 @@ async function calcSha256(message) {
  * 🛰️ NAVBAR ACTOR (V2 - Mobile First)
  */
 export const Navbar = ({ definition }) => {
-    const { state, toggleTheme } = useSovereign();
+    const { state, toggleTheme, manifest } = useSovereign();
     const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES');
 
     // 🕸️ ESCÁNER DE NAVEGACIÓN AGNOSTICA
-    // Buscamos la entidad maestra de navegación (main-navbar)
-    const navEntity = (entries || []).find(item => 
-        item.meta?.component_type === 'ENTITY_NAVBAR' && item.slug === 'main-navbar'
-    );
+    // Buscamos la entidad que el MANIFIESTO dicta como activa
+    const navEntity = (entries || []).find(item => item.slug === manifest.active_nav_slug);
+
+    const brandName = manifest.title;
+
+    // Escucha activa de cambios de ruta hash para re-renderizado independiente
+    const [currentPath, setCurrentPath] = React.useState(window.location.hash.replace('#', '') || '/');
+
+    useEffect(() => {
+        const handleHash = () => {
+            setCurrentPath(window.location.hash.replace('#', '') || '/');
+        };
+        window.addEventListener('hashchange', handleHash);
+        return () => window.removeEventListener('hashchange', handleHash);
+    }, []);
+
+    const isMinimal = currentPath === '/landing';
 
     const dynamicLinks = (navEntity?.data?.nav_links || [])
         .sort((a, b) => (a.priority || 0) - (b.priority || 0))
-        .map(link => ({
-            label: link.label,
-            path: `/${link.slug}`
-        }));
+        .map(link => {
+            // Si el slug no empieza por / ni http, asumimos que es una materia
+            const isExternal = link.slug?.startsWith('http');
+            const isAbsolute = link.slug?.startsWith('/');
+            const path = (isExternal || isAbsolute) ? link.slug : `/materia/${link.slug}`;
+            
+            return {
+                label: link.label,
+                path: path
+            };
+        });
 
     const allLinks = [...dynamicLinks];
 
@@ -83,43 +103,47 @@ export const Navbar = ({ definition }) => {
                 }
             }, 100);
         }
-    }, [state.identity?.isLoggedIn]);
+    }, [state.identity?.isLoggedIn, currentPath]); // Se actualiza también si cambia la ruta para asegurar el botón
 
     return (
         <nav className="main-navbar" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 5%', background: '#fff', borderBottom: '1px solid #eee', position: 'sticky', top: 0, zIndex: 9999, gap: '1rem', width: '100%', boxSizing: 'border-box' }}>
-            <div className="nav-logo" onClick={() => handleNavigate('/')} style={{ fontSize: '1.2rem', fontWeight: 900, letterSpacing: '0.1em', cursor: 'pointer' }}>NOMON</div>
+            <div className="nav-logo" onClick={() => handleNavigate('/')} style={{ fontSize: '1.2rem', fontWeight: 900, letterSpacing: '0.1em', cursor: 'pointer' }}>{brandName}</div>
             
             <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1.5rem', flex: '1 1 auto', justifyContent: 'flex-end' }}>
-                <ul className="nav-links" style={{ display: 'flex', flexWrap: 'wrap', listStyle: 'none', gap: '1rem', margin: 0, padding: 0 }}>
-                    <li onClick={() => handleNavigate('/')} style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', opacity: 0.7 }}>INICIO</li>
-                    {allLinks.map((link, idx) => (
-                        <li key={idx} onClick={() => handleNavigate(link.path)} style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', opacity: 0.7 }}>
-                            {link.label}
-                        </li>
-                    ))}
-                </ul>
+                {!isMinimal && (
+                    <ul className="nav-links" style={{ display: 'flex', flexWrap: 'wrap', listStyle: 'none', gap: '1rem', margin: 0, padding: 0 }}>
+                        <li onClick={() => handleNavigate('/')} style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', opacity: 0.7 }}>INICIO</li>
+                        {allLinks.map((link, idx) => (
+                            <li key={idx} onClick={() => handleNavigate(link.path)} style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', opacity: 0.7 }}>
+                                {link.label}
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
 
-                <div className="nav-identity-box" style={{ display: 'flex', alignItems: 'center', borderLeft: '1px solid #eee', paddingLeft: '1rem', minHeight: '2.5rem', gap: '1rem' }}>
-                    <button 
-                        onClick={() => toggleTheme()}
-                        style={{ 
-                            background: 'none', border: 'none', cursor: 'pointer', 
-                            fontSize: '1rem', padding: '0.2rem', display: 'flex', 
-                            alignItems: 'center', opacity: 0.6, transition: 'opacity 0.2s',
-                            color: 'var(--text-primary)'
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.opacity = 1}
-                        onMouseLeave={e => e.currentTarget.style.opacity = 0.6}
-                        title={state.theme === 'dark' ? "Activar Modo Luz" : "Activar Modo Oscuro"}
-                    >
-                        {state.theme === 'dark' ? <Sun size={18} strokeWidth={1.5} /> : <Moon size={18} strokeWidth={1.5} />}
-                    </button>
+                <div className="nav-identity-box" style={{ display: 'flex', alignItems: 'center', borderLeft: isMinimal ? 'none' : '1px solid #eee', paddingLeft: isMinimal ? 0 : '1rem', minHeight: '2.5rem', gap: '1rem' }}>
+                    {!isMinimal && (
+                        <button 
+                            onClick={() => toggleTheme()}
+                            style={{ 
+                                background: 'none', border: 'none', cursor: 'pointer', 
+                                fontSize: '1rem', padding: '0.2rem', display: 'flex', 
+                                alignItems: 'center', opacity: 0.6, transition: 'opacity 0.2s',
+                                color: 'var(--text-primary)'
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.opacity = 1}
+                            onMouseLeave={e => e.currentTarget.style.opacity = 0.6}
+                            title={state.theme === 'dark' ? "Activar Modo Luz" : "Activar Modo Oscuro"}
+                        >
+                            {state.theme === 'dark' ? <Sun size={18} strokeWidth={1.5} /> : <Moon size={18} strokeWidth={1.5} />}
+                        </button>
+                    )}
 
                     {state.identity?.isLoggedIn ? (
                         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.8rem' }}>
                             <span style={{ fontSize: '0.6rem', fontWeight: 900, color: 'var(--text-primary)', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                <User size={12} strokeWidth={2} /> {state.identity.user?.payload?.email || 'USUARIO'}
+                                <User size={12} strokeWidth={2} /> {state.identity.user?.payload?.email || state.identity.user?.email || 'USUARIO'}
                             </span>
                             <button 
                                 onClick={() => appState.logout()} 

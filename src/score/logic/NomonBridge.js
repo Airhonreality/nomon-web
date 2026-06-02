@@ -108,6 +108,8 @@ class GitHubStrategy extends PersistenceStrategy {
                 this.token = data.token;
                 console.log("✅ [Vault] Llave soberana obtenida con éxito. Silo desbloqueado.");
                 return true;
+            } else {
+                console.warn("⚠️ [Vault] La bóveda no entregó ningún token.");
             }
         } catch (error) {
             console.error("❌ [Vault] Error de conexión con la bóveda:", error);
@@ -181,8 +183,13 @@ class GitHubStrategy extends PersistenceStrategy {
 
     async commitToGitHub(newDb, commitMessage) {
         const apiUrl = `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${this.dbPath}`;
-        console.log("📤 [Bridge:Commit] Iniciando ciclo de persistencia en GitHub...");
+        console.log(`📤 [Bridge:Commit] Iniciando persistencia. Token presente: ${!!this.token}`);
         
+        if (!this.token) {
+            console.error("❌ [Bridge:Commit] ERROR: No hay token cargado. Abortando.");
+            throw new Error("No hay llave soberana. Por favor, re-inicia sesión.");
+        }
+
         try {
             const res = await fetch(apiUrl, {
                 headers: { 
@@ -236,9 +243,35 @@ class GitHubStrategy extends PersistenceStrategy {
 // -------------------------------------------------------------------------
 // 🌉 NOMON BRIDGE ACTOR
 // -------------------------------------------------------------------------
+import { SovereignWorkflows } from './SovereignWorkflows.js';
+
 export class NomonBridge {
     constructor() {
+        this.token = null;
+        this.identity = null;
         this.strategy = Config.BRIDGE_STRATEGY === 'CLOUD' ? new GitHubStrategy() : null;
+    }
+
+    /**
+     * ⚡ EXECUTE WORKFLOW (The Intent Dispatcher)
+     * Ejecuta una secuencia de lógica de negocio centralizada.
+     */
+    async executeWorkflow(workflowId, payload) {
+        const workflow = SovereignWorkflows[workflowId];
+        if (!workflow) {
+            throw new Error(`ERROR_BRIDGE: El workflow '${workflowId}' no existe en el sistema.`);
+        }
+        return await workflow(this, payload);
+    }
+
+    async hydrateVault(email) {
+        if (!this.strategy) return false;
+        const success = await this.strategy.hydrateVault(email);
+        if (success) {
+            // Sincronizamos el token hacia la clase principal por si acaso
+            this.token = this.strategy.token;
+        }
+        return success;
     }
 
     async execute(uqo) {

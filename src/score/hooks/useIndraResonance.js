@@ -3,8 +3,20 @@ import { useSovereign } from '../SovereignContext.jsx';
 
 console.log("🧬 [Module] useIndraResonance.js CARGADO.");
 
-export const useIndraResonance = (contextId) => {
-    const { bridge, state } = useSovereign();
+export const useIndraResonance = (contextId, externalContext = null) => {
+    // Si se provee un contexto externo (ej. desde el Provider), lo usamos. 
+    // Si no, recurrimos al hook estándar (que fallará si está fuera del provider).
+    let bridge, state;
+    
+    if (externalContext) {
+        bridge = externalContext.bridge;
+        state = externalContext.state;
+    } else {
+        const sovereign = useSovereign();
+        bridge = sovereign.bridge;
+        state = sovereign.state;
+    }
+
     const [loading, setLoading] = useState(false);
     const [remoteData, setRemoteData] = useState(null);
 
