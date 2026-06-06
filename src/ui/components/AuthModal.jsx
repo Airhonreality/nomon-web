@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { appState } from '../../score/AppState.js';
+import { useIndraResonance } from '../../score/hooks/useIndraResonance.js';
 import { X } from 'lucide-react';
 
 // Calcula SHA-256 nativo (mismo helper que usaba Navbar con Google)
@@ -11,12 +12,13 @@ async function calcSha256(message) {
 }
 
 /**
- * AUTH MODAL — Registro / Acceso con email propio.
+ * AUTH MODAL — Registro / Acceso con email propio y contraseña.
  * Reemplaza Google Sign-In. Usa appState.setIdentity() con la misma estructura.
  * Props:
  *   onClose: () => void
  */
 export const AuthModal = ({ onClose }) => {
+    const { remoteData: allies } = useIndraResonance('NOMON_ALLY');
     const [tab, setTab] = useState('register'); // 'register' | 'login'
     const [form, setForm] = useState({ 
         name: '', 
@@ -24,7 +26,9 @@ export const AuthModal = ({ onClose }) => {
         emailConfirm: '', 
         alias: '', 
         phone: '', 
-        interestArea: '' 
+        interestArea: '',
+        password: '',
+        passwordConfirm: ''
     });
     const [status, setStatus] = useState(null); // null | 'loading' | 'error' | 'success'
     const [errorMsg, setErrorMsg] = useState('');
@@ -44,8 +48,10 @@ export const AuthModal = ({ onClose }) => {
             const emailConfirm = form.emailConfirm.trim().toLowerCase();
             const phone = form.phone.trim();
             const interestArea = form.interestArea.trim();
+            const password = form.password;
+            const passwordConfirm = form.passwordConfirm;
 
-            if (!form.name.trim() || !email || !emailConfirm || !phone || !interestArea) {
+            if (!form.name.trim() || !email || !emailConfirm || !phone || !interestArea || !password || !passwordConfirm) {
                 setErrorMsg('Por favor completa todos los campos.');
                 setStatus('error');
                 return;
@@ -57,8 +63,21 @@ export const AuthModal = ({ onClose }) => {
                 return;
             }
 
+            if (password !== passwordConfirm) {
+                setErrorMsg('Las contraseñas no coinciden.');
+                setStatus('error');
+                return;
+            }
+
+            if (password.length < 6) {
+                setErrorMsg('La contraseña debe tener al menos 6 caracteres.');
+                setStatus('error');
+                return;
+            }
+
             try {
                 const emailHash = await calcSha256(email);
+                const passwordHash = await calcSha256(password);
 
                 // Guardamos el perfil en appState.setIdentity y su metadata asociada
                 appState.setIdentity({
@@ -74,10 +93,7 @@ export const AuthModal = ({ onClose }) => {
                 });
 
                 // Intentamos guardar al usuario en la base de datos centralizada NOMON_ALLY si el bridge tiene llave soberana
-                // En un frontend estático, esto guardará localmente si no hay token de administrador, o hará commit al silo si sí lo hay.
                 try {
-                    const localSession = appState.get();
-                    // Ejecutamos persistencia en el backend descentralizado si es posible
                     if (window.NomonBridgeInstance) {
                         await window.NomonBridgeInstance.execute({
                             protocol: 'CREATE',
@@ -88,6 +104,7 @@ export const AuthModal = ({ onClose }) => {
                                 name: form.name.trim(),
                                 phone,
                                 interest_area: interestArea,
+                                password_hash: passwordHash, // Persistencia del hash
                                 timestamp: new Date().toISOString()
                             }
                         });
@@ -104,21 +121,36 @@ export const AuthModal = ({ onClose }) => {
             }
         } else {
             // Login básico
-            if (!email) {
-                setErrorMsg('Por favor introduce tu correo electrónico.');
+            const password = form.password;
+            if (!email || !password) {
+                setErrorMsg('Por favor introduce correo y contraseña.');
                 setStatus('error');
                 return;
             }
 
             try {
                 const emailHash = await calcSha256(email);
+                const passwordHash = await calcSha256(password);
+
+                // Verificación contra la lista central
+                const foundAlly = (allies || []).find(a => a.email.toLowerCase() === email);
+                if (foundAlly && foundAlly.password_hash) {
+                    if (foundAlly.password_hash !== passwordHash) {
+                        setErrorMsg('Contraseña incorrecta.');
+                        setStatus('error');
+                        return;
+                    }
+                }
+
                 appState.setIdentity({
                     id: emailHash,
                     email,
                     email_hash: emailHash,
-                    name: email.split('@')[0],
-                    alias: email.split('@')[0],
+                    name: foundAlly?.name || email.split('@')[0],
+                    alias: foundAlly?.name?.split(' ')[0] || email.split('@')[0],
                     picture: null,
+                    phone: foundAlly?.phone || '',
+                    interest_area: foundAlly?.interest_area || '',
                     role: 'ALLY'
                 });
 
@@ -239,6 +271,34 @@ export const AuthModal = ({ onClose }) => {
                                 onChange={handleChange}
                                 required
                                 autoComplete="email"
+                            />
+                        </div>
+                    )}
+
+                    <div className="auth-field">
+                        <label htmlFor="auth-password">Contraseña</label>
+                        <input
+                            id="auth-password"
+                            name="password"
+                            type="password"
+                            placeholder="••••••"
+                            value={form.password}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    {tab === 'register' && (
+                        <div className="auth-field">
+                            <label htmlFor="auth-passwordConfirm">Confirmar contraseña</label>
+                            <input
+                                id="auth-passwordConfirm"
+                                name="passwordConfirm"
+                                type="password"
+                                placeholder="••••••"
+                                value={form.passwordConfirm}
+                                onChange={handleChange}
+                                required
                             />
                         </div>
                     )}
