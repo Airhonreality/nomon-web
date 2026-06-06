@@ -328,5 +328,22 @@
             }
         }
     ],
-    "NOMON_ALLY": []
+    "NOMON_ALLY": [
+        {
+            "slug": "ally-5a8b3c1d9e",
+            "email": "catalina.restrepo@nomon.co",
+            "name": "Catalina Restrepo",
+            "phone": "+57 312 456 7890",
+            "interest_area": "Diseño especulativo y futuros bio-inspirados",
+            "timestamp": "2026-06-05T14:30:00.000Z"
+        },
+        {
+            "slug": "ally-f3e2d1c0b9",
+            "email": "marcos.jurado@derechoetico.org",
+            "name": "Marcos Jurado",
+            "phone": "+57 315 987 6543",
+            "interest_area": "Ciencias jurídicas aplicadas y gobernanza BIC",
+            "timestamp": "2026-06-06T09:15:22.000Z"
+        }
+    ]
 }

@@ -18,7 +18,14 @@ async function calcSha256(message) {
  */
 export const AuthModal = ({ onClose }) => {
     const [tab, setTab] = useState('register'); // 'register' | 'login'
-    const [form, setForm] = useState({ name: '', email: '', alias: '' });
+    const [form, setForm] = useState({ 
+        name: '', 
+        email: '', 
+        emailConfirm: '', 
+        alias: '', 
+        phone: '', 
+        interestArea: '' 
+    });
     const [status, setStatus] = useState(null); // null | 'loading' | 'error' | 'success'
     const [errorMsg, setErrorMsg] = useState('');
 
@@ -32,31 +39,95 @@ export const AuthModal = ({ onClose }) => {
         setErrorMsg('');
 
         const email = form.email.trim().toLowerCase();
-        if (!email || (!form.name.trim() && tab === 'register')) {
-            setErrorMsg('Por favor completa todos los campos requeridos.');
-            setStatus('error');
-            return;
-        }
+        
+        if (tab === 'register') {
+            const emailConfirm = form.emailConfirm.trim().toLowerCase();
+            const phone = form.phone.trim();
+            const interestArea = form.interestArea.trim();
 
-        try {
-            const emailHash = await calcSha256(email);
+            if (!form.name.trim() || !email || !emailConfirm || !phone || !interestArea) {
+                setErrorMsg('Por favor completa todos los campos.');
+                setStatus('error');
+                return;
+            }
 
-            // Construimos la misma estructura que Google generaba
-            appState.setIdentity({
-                id: emailHash,              // SHA-256 del email como ID determinístico
-                email,
-                email_hash: emailHash,
-                name: form.name.trim() || email.split('@')[0],
-                alias: form.alias.trim() || email.split('@')[0],
-                picture: null,
-                role: 'ALLY'
-            });
+            if (email !== emailConfirm) {
+                setErrorMsg('Los correos electrónicos no coinciden.');
+                setStatus('error');
+                return;
+            }
 
-            setStatus('success');
-            setTimeout(() => onClose(), 800);
-        } catch (err) {
-            setErrorMsg('Error al procesar el acceso. Intenta de nuevo.');
-            setStatus('error');
+            try {
+                const emailHash = await calcSha256(email);
+
+                // Guardamos el perfil en appState.setIdentity y su metadata asociada
+                appState.setIdentity({
+                    id: emailHash,
+                    email,
+                    email_hash: emailHash,
+                    name: form.name.trim(),
+                    alias: form.alias.trim() || form.name.trim().split(' ')[0],
+                    picture: null,
+                    phone: phone,
+                    interest_area: interestArea,
+                    role: 'ALLY'
+                });
+
+                // Intentamos guardar al usuario en la base de datos centralizada NOMON_ALLY si el bridge tiene llave soberana
+                // En un frontend estático, esto guardará localmente si no hay token de administrador, o hará commit al silo si sí lo hay.
+                try {
+                    const localSession = appState.get();
+                    // Ejecutamos persistencia en el backend descentralizado si es posible
+                    if (window.NomonBridgeInstance) {
+                        await window.NomonBridgeInstance.execute({
+                            protocol: 'CREATE',
+                            context_id: 'NOMON_ALLY',
+                            data: {
+                                slug: `ally-${emailHash.substring(0, 10)}`,
+                                email,
+                                name: form.name.trim(),
+                                phone,
+                                interest_area: interestArea,
+                                timestamp: new Date().toISOString()
+                            }
+                        });
+                    }
+                } catch (silenceErr) {
+                    console.warn("⚠️ No se pudo persistir el registro en el Silo de GitHub (esperado en modo GUEST sin llave de escritura).", silenceErr);
+                }
+
+                setStatus('success');
+                setTimeout(() => onClose(), 800);
+            } catch (err) {
+                setErrorMsg('Error al procesar el registro. Intenta de nuevo.');
+                setStatus('error');
+            }
+        } else {
+            // Login básico
+            if (!email) {
+                setErrorMsg('Por favor introduce tu correo electrónico.');
+                setStatus('error');
+                return;
+            }
+
+            try {
+                const emailHash = await calcSha256(email);
+                appState.setIdentity({
+                    id: emailHash,
+                    email,
+                    email_hash: emailHash,
+                    name: email.split('@')[0],
+                    alias: email.split('@')[0],
+                    picture: null,
+                    role: 'ALLY'
+                });
+
+                setStatus('success');
+                setTimeout(() => onClose(), 800);
+            } catch (err) {
+                setErrorMsg('Error al iniciar sesión.');
+                setStatus('error');
+            }
         }
     };
 
@@ -115,6 +186,30 @@ export const AuthModal = ({ onClose }) => {
                                     autoComplete="nickname"
                                 />
                             </div>
+                            <div className="auth-field">
+                                <label htmlFor="auth-phone">Teléfono de contacto</label>
+                                <input
+                                    id="auth-phone"
+                                    name="phone"
+                                    type="tel"
+                                    placeholder="+57 300 000 0000"
+                                    value={form.phone}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="auth-field">
+                                <label htmlFor="auth-interestArea">Área o rama del conocimiento de interés</label>
+                                <input
+                                    id="auth-interestArea"
+                                    name="interestArea"
+                                    type="text"
+                                    placeholder="diseño especulativo, biológica, ciencias jurídicas..."
+                                    value={form.interestArea}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
                         </>
                     )}
 
@@ -131,6 +226,22 @@ export const AuthModal = ({ onClose }) => {
                             autoComplete="email"
                         />
                     </div>
+
+                    {tab === 'register' && (
+                        <div className="auth-field">
+                            <label htmlFor="auth-emailConfirm">Confirmar correo electrónico</label>
+                            <input
+                                id="auth-emailConfirm"
+                                name="emailConfirm"
+                                type="email"
+                                placeholder="tu@correo.com"
+                                value={form.emailConfirm}
+                                onChange={handleChange}
+                                required
+                                autoComplete="email"
+                            />
+                        </div>
+                    )}
 
                     {errorMsg && <p className="auth-error-msg">{errorMsg}</p>}
 

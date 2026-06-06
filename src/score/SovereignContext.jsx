@@ -48,7 +48,11 @@ export const SovereignProvider = ({ children }) => {
         appState.update({ theme: newTheme }, true);
     };
 
-    const bridge = React.useMemo(() => new NomonBridge(), []);
+    const bridge = React.useMemo(() => {
+        const b = new NomonBridge();
+        window.NomonBridgeInstance = b;
+        return b;
+    }, []);
     const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES', { bridge, state });
 
     // 🛰️ ESCÁNER DEL MANIFIESTO SOBERANO

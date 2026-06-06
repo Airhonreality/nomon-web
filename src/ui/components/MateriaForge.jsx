@@ -39,7 +39,9 @@ const BLOCK_TYPES = {
 export const MateriaForge = () => {
     const { bridge } = useSovereign();
     const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES');
+    const { remoteData: allies } = useIndraResonance('NOMON_ALLY');
     
+    const [activeTab, setActiveTab] = useState('entities'); // 'entities' | 'allies'
     const [selectedClass, setSelectedClass] = useState('ENTITY_PROJECT');
     const [isEditing, setIsEditing] = useState(false);
     const [isSlugDirty, setIsSlugDirty] = useState(false);
@@ -211,6 +213,44 @@ export const MateriaForge = () => {
         });
     };
 
+    const handleDeleteAlly = async (slug) => {
+        if (!window.confirm(`¿Estás seguro de que deseas eliminar a este aliado?`)) return;
+        try {
+            await bridge.execute({
+                protocol: 'DELETE',
+                context_id: 'NOMON_ALLY',
+                payload: { context_id: 'NOMON_ALLY', slug }
+            });
+            alert("Aliado disuelto de la red.");
+            window.location.reload();
+        } catch (err) {
+            console.error(err);
+            alert("Error al eliminar aliado. Comprueba los permisos de escritura del satélite.");
+        }
+    };
+
+    const handleExportCSV = () => {
+        if (!allies || allies.length === 0) return;
+        const headers = ['Email', 'Nombre', 'Telefono', 'Area de Interes', 'Fecha Registro'];
+        const rows = allies.map(a => [
+            a.email || '',
+            a.name || '',
+            a.phone || '',
+            a.interest_area || '',
+            a.timestamp || ''
+        ]);
+        const csvContent = "data:text/csv;charset=utf-8,\uFEFF" 
+            + [headers.join(','), ...rows.map(e => e.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))].join('\n');
+        
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `nomon_allies_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <section className="materia-forge-v7" style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: 'var(--bg-primary)' }}>
             
@@ -220,52 +260,136 @@ export const MateriaForge = () => {
                 arquetypes={ARQUETYPES}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
             />
 
             <main style={{ flex: 1, overflowY: 'auto', background: 'var(--bg-primary)' }}>
-                <ForgeHeader 
-                    selectedClass={selectedClass}
-                    setSelectedClass={setSelectedClass}
-                    arquetypes={ARQUETYPES}
-                    isEditing={isEditing}
-                    onSave={handleSave}
-                    onDelete={() => handleDelete()}
-                    onNew={handleNew}
-                />
+                {activeTab === 'entities' ? (
+                    <>
+                        <ForgeHeader 
+                            selectedClass={selectedClass}
+                            setSelectedClass={setSelectedClass}
+                            arquetypes={ARQUETYPES}
+                            isEditing={isEditing}
+                            onSave={handleSave}
+                            onDelete={() => handleDelete()}
+                            onNew={handleNew}
+                        />
 
-                <div style={{ maxWidth: '65rem', margin: '0 auto', padding: '0 4rem 10rem 4rem' }}>
-                    <ForgeAlfa 
-                        formData={formData} 
-                        setFormData={setFormData} 
-                        currentArquetype={currentArquetype}
-                        onSlugChange={(val) => { setIsSlugDirty(true); setFormData({...formData, slug: val}); }}
-                    />
+                        <div style={{ maxWidth: '65rem', margin: '0 auto', padding: '0 4rem 10rem 4rem' }}>
+                            <ForgeAlfa 
+                                formData={formData} 
+                                setFormData={setFormData} 
+                                currentArquetype={currentArquetype}
+                                onSlugChange={(val) => { setIsSlugDirty(true); setFormData({...formData, slug: val}); }}
+                            />
 
-                    <ForgeSigma 
-                        formData={formData} 
-                        setFormData={setFormData}
-                        currentArquetype={currentArquetype}
-                        inventory={entries || []}
-                        whitelists={(entries || []).filter(item => item.meta?.component_type === 'ENTITY_WHITELIST')}
-                        newEmail={newEmail}
-                        setNewEmail={setNewEmail}
-                        addEmail={addEmail}
-                        removeEmail={removeEmail}
-                    />
+                            <ForgeSigma 
+                                formData={formData} 
+                                setFormData={setFormData}
+                                currentArquetype={currentArquetype}
+                                inventory={entries || []}
+                                whitelists={(entries || []).filter(item => item.meta?.component_type === 'ENTITY_WHITELIST')}
+                                newEmail={newEmail}
+                                setNewEmail={setNewEmail}
+                                addEmail={addEmail}
+                                removeEmail={removeEmail}
+                            />
 
-                    <ForgeOmega 
-                        formData={formData} 
-                        setFormData={setFormData}
-                        currentArquetype={currentArquetype}
-                        inventory={entries || []}
-                        arquetypes={ARQUETYPES}
-                        blockTypes={BLOCK_TYPES}
-                        addBlock={addBlock}
-                        updateBlock={updateBlock}
-                        deleteBlock={deleteBlock}
-                        moveBlock={moveBlock}
-                    />
-                </div>
+                            <ForgeOmega 
+                                formData={formData} 
+                                setFormData={setFormData}
+                                currentArquetype={currentArquetype}
+                                inventory={entries || []}
+                                arquetypes={ARQUETYPES}
+                                blockTypes={BLOCK_TYPES}
+                                addBlock={addBlock}
+                                updateBlock={updateBlock}
+                                deleteBlock={deleteBlock}
+                                moveBlock={moveBlock}
+                            />
+                        </div>
+                    </>
+                ) : (
+                    <div style={{ padding: '4rem', maxWidth: '75rem', margin: '0 auto' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid var(--border-primary)', paddingBottom: '2rem', marginBottom: '3rem' }}>
+                            <div>
+                                <span style={{ fontSize: '0.6rem', fontWeight: 900, letterSpacing: '0.25em', color: 'var(--text-secondary)', opacity: 0.5 }}>PANEL DE CONTROL</span>
+                                <h1 style={{ fontSize: '2.2rem', fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, margin: '0.5rem 0 0', color: 'var(--text-primary)' }}>Aliados Registrados</h1>
+                            </div>
+                            <button
+                                onClick={handleExportCSV}
+                                disabled={!allies || allies.length === 0}
+                                style={{
+                                    background: 'var(--text-primary)', color: 'var(--bg-primary)',
+                                    border: 'none', padding: '0.8rem 1.6rem', fontSize: '0.65rem',
+                                    fontWeight: 900, cursor: 'pointer', letterSpacing: '0.08em',
+                                    opacity: (!allies || allies.length === 0) ? 0.5 : 1
+                                }}
+                            >
+                                EXPORTAR A CSV (EXCEL)
+                            </button>
+                        </div>
+
+                        {/* ⚠️ DIDÁCTICA DEV E INFORME DE OBSTÁCULOS */}
+                        <div style={{ background: '#f9f9fb', borderLeft: '4px solid #002d62', padding: '1.5rem', marginBottom: '3rem' }}>
+                            <h4 style={{ fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.5rem', color: '#002d62' }}>💡 Nota de Arquitectura y Persistencia</h4>
+                            <p style={{ fontSize: '0.75rem', lineHeight: '1.6', margin: 0, opacity: 0.75 }}>
+                                Este satélite web opera bajo una <strong>arquitectura desacoplada y estática (Jamstack)</strong>. Los registros de usuarios 
+                                se inician localmente en el cliente. Para consolidarlos en la base de datos centralizada (almacenada en el repositorio remoto <code>local_database.json</code>) 
+                                y que aparezcan en esta lista global, se requiere contar con la sesión de administrador activa y con la <strong>llave soberana de escritura</strong> cargada a través del modal de ingreso.
+                            </p>
+                        </div>
+
+                        {/* 📊 LISTA / TABLA DE REGISTROS */}
+                        <div style={{ border: '1px solid var(--border-primary)', background: 'var(--bg-primary)' }}>
+                            {allies && allies.length > 0 ? (
+                                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.8rem' }}>
+                                    <thead>
+                                        <tr style={{ borderBottom: '1px solid var(--border-primary)', background: 'var(--bg-secondary)' }}>
+                                            <th style={{ padding: '1.2rem 1.5rem', fontWeight: 800 }}>Nombre</th>
+                                            <th style={{ padding: '1.2rem 1.5rem', fontWeight: 800 }}>Correo Electrónico</th>
+                                            <th style={{ padding: '1.2rem 1.5rem', fontWeight: 800 }}>Teléfono</th>
+                                            <th style={{ padding: '1.2rem 1.5rem', fontWeight: 800 }}>Área de Interés</th>
+                                            <th style={{ padding: '1.2rem 1.5rem', fontWeight: 800 }}>Fecha</th>
+                                            <th style={{ padding: '1.2rem 1.5rem', fontWeight: 800, textAlign: 'center' }}>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {allies.map((ally, idx) => (
+                                            <tr key={ally.slug || idx} style={{ borderBottom: '1px solid var(--border-primary)' }}>
+                                                <td style={{ padding: '1.2rem 1.5rem', fontWeight: 700 }}>{ally.name}</td>
+                                                <td style={{ padding: '1.2rem 1.5rem', fontFamily: 'monospace', opacity: 0.85 }}>{ally.email}</td>
+                                                <td style={{ padding: '1.2rem 1.5rem' }}>{ally.phone || 'N/A'}</td>
+                                                <td style={{ padding: '1.2rem 1.5rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>{ally.interest_area || 'N/A'}</td>
+                                                <td style={{ padding: '1.2rem 1.5rem', fontSize: '0.7rem', opacity: 0.6 }}>
+                                                    {ally.timestamp ? new Date(ally.timestamp).toLocaleString() : 'N/A'}
+                                                </td>
+                                                <td style={{ padding: '1.2rem 1.5rem', textAlign: 'center' }}>
+                                                    <button
+                                                        onClick={() => handleDeleteAlly(ally.slug)}
+                                                        style={{
+                                                            background: 'none', border: 'none', color: '#d32f2f',
+                                                            fontWeight: 900, fontSize: '0.65rem', cursor: 'pointer',
+                                                            textTransform: 'uppercase', letterSpacing: '0.05em'
+                                                        }}
+                                                    >
+                                                        Eliminar
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                <div style={{ padding: '4rem', textAlign: 'center', opacity: 0.5, fontSize: '0.9rem' }}>
+                                    No hay aliados registrados en el silo remoto en este momento.
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
             </main>
         </section>
     );
