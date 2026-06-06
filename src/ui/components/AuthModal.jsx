@@ -24,7 +24,6 @@ export const AuthModal = ({ onClose }) => {
         name: '', 
         email: '', 
         emailConfirm: '', 
-        alias: '', 
         phone: '', 
         interestArea: '',
         password: '',
@@ -85,7 +84,7 @@ export const AuthModal = ({ onClose }) => {
                     email,
                     email_hash: emailHash,
                     name: form.name.trim(),
-                    alias: form.alias.trim() || form.name.trim().split(' ')[0],
+                    alias: form.name.trim().split(' ')[0],
                     picture: null,
                     phone: phone,
                     interest_area: interestArea,
@@ -204,18 +203,6 @@ export const AuthModal = ({ onClose }) => {
                                     onChange={handleChange}
                                     required
                                     autoComplete="name"
-                                />
-                            </div>
-                            <div className="auth-field">
-                                <label htmlFor="auth-alias">Alias (opcional)</label>
-                                <input
-                                    id="auth-alias"
-                                    name="alias"
-                                    type="text"
-                                    placeholder="Cómo te llamamos"
-                                    value={form.alias}
-                                    onChange={handleChange}
-                                    autoComplete="nickname"
                                 />
                             </div>
                             <div className="auth-field">
