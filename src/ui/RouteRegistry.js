@@ -5,23 +5,7 @@
 export const ROUTE_MAP = {
     '/': {
         id: 'home',
-        components: [
-            'hero_portal_home',
-            { 
-                meta: { 
-                    component_type: 'banner_action', 
-                    materia_id: 'somos-nomon' 
-                } 
-            },
-            'grid_entries_newsfeed',
-            { 
-                meta: { 
-                    component_id: 'banner_info_footer', 
-                    component_type: 'banner_info',
-                    materia_id: 'ideas-que-echan-raices' 
-                } 
-            }
-        ]
+        components: ['landing_page']
     },
     '/materia/:slug': {
         id: 'materia_detail',
@@ -49,8 +33,11 @@ export const ROUTE_MAP = {
         components: ['comercial_auditoria'],
         restricted: true
     },
-    '/landing': {
-        id: 'landing',
-        components: ['landing_page']
+    '/red': {
+        id: 'red_home',
+        components: [
+            'hero_portal_home',
+            'grid_entries_newsfeed'
+        ]
     }
 };

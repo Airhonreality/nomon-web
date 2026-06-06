@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { AuthModal } from './AuthModal.jsx';
+import { useSovereign } from '../../score/SovereignContext.jsx';
 
 /**
  * 🏛️ EDITORIAL MAGAZINE LANDING PAGE ACTOR
- * Rediseñado bajo el estándar de diagramación de revista de alta costura.
- * Integra el logotipo oficial Sociedad BIC de forma limpia y nítida.
- * Remueve redundancias y aporta una experiencia visual digna de una editorial elite.
+ * Página de inicio pública. Presenta la organización e integra el
+ * formulario de registro propio (sin dependencia de Google).
  */
 export const LandingPage = () => {
+    const [showAuth, setShowAuth] = useState(false);
+    const { state } = useSovereign();
+    const isLoggedIn = state.identity?.isLoggedIn;
     return (
         <section className="landing-portal-container">
             {/* Carga dinámica de tipografías premium desde Google Fonts */}
@@ -108,6 +112,31 @@ export const LandingPage = () => {
                     <span className="drop-cap">I</span>
                     mpulsamos la evolución de organizaciones y comunidades a través de una consultoría estratégica de alto impacto fundamentada en la integridad, programas de formación humana que trascienden el aula para fortalecer un liderazgo ético consciente, y la creación artística como motor de cohesión social.
                 </p>
+
+                {/* CTA principal */}
+                <div className="landing-cta-row">
+                    {isLoggedIn ? (
+                        <button
+                            className="cta-btn-primary"
+                            onClick={() => window.Router?.navigate('/red')}
+                        >
+                            Ir a la Red →
+                        </button>
+                    ) : (
+                        <button
+                            className="cta-btn-primary"
+                            onClick={() => setShowAuth(true)}
+                        >
+                            Únete a NOMON →
+                        </button>
+                    )}
+                    <button
+                        className="cta-btn-secondary"
+                        onClick={() => window.Router?.navigate('/somos-nomon')}
+                    >
+                        Conoce más
+                    </button>
+                </div>
             </div>
 
             {/* 🔗 SECCIÓN SECUNDARIA: NODOS DE ACCIÓN */}
@@ -149,6 +178,9 @@ export const LandingPage = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Modal de autenticación */}
+            {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
 
             {/* Stylesheets encapsulados para dar un estilo premium de vanguardia */}
             <style dangerouslySetInnerHTML={{ __html: `
@@ -272,6 +304,55 @@ export const LandingPage = () => {
                     margin-top: 0.3rem;
                     color: #8f764a;
                     text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
+                }
+
+                /* CTA Row */
+                .landing-cta-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 1.2rem;
+                    margin-top: 3rem;
+                    flex-wrap: wrap;
+                }
+
+                .cta-btn-primary {
+                    background: #002d62;
+                    color: #fff;
+                    border: none;
+                    padding: 0.9rem 2rem;
+                    font-size: 0.82rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    cursor: pointer;
+                    border-radius: 2px;
+                    transition: background 0.2s, transform 0.2s;
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                }
+
+                .cta-btn-primary:hover {
+                    background: #003d80;
+                    transform: translateY(-2px);
+                }
+
+                .cta-btn-secondary {
+                    background: none;
+                    color: var(--text-primary);
+                    border: 1px solid var(--border-primary);
+                    padding: 0.9rem 2rem;
+                    font-size: 0.82rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    cursor: pointer;
+                    border-radius: 2px;
+                    transition: border-color 0.2s, color 0.2s;
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                }
+
+                .cta-btn-secondary:hover {
+                    border-color: var(--text-primary);
+                    opacity: 0.8;
                 }
 
                 /* Nodes Layout */

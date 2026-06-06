@@ -16,7 +16,7 @@ export const SovereignRouter = () => {
     // Resolvemos el path inicial. Si es /, usamos el home_slug del manifiesto.
     const getInitialPath = () => {
         const hash = window.location.hash.replace('#', '') || '/';
-        return hash === '/' ? `/${manifest.home_slug}` : hash;
+        return hash;
     };
 
     const [path, setPath] = useState(getInitialPath());
@@ -26,7 +26,7 @@ export const SovereignRouter = () => {
     useEffect(() => {
         const handleHashChange = () => {
             const newHash = window.location.hash.replace('#', '') || '/';
-            setPath(newHash === '/' ? `/${manifest.home_slug}` : newHash);
+            setPath(newHash);
         };
         window.addEventListener('hashchange', handleHashChange);
         
