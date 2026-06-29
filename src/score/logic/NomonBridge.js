@@ -32,7 +32,6 @@ export const ComponentMap = [
             content: { 
                 links: [
                     { label: 'Inicio', path: '/' },
-                    { label: 'Quiénes Somos', path: '/quienes-somos' },
                     { label: 'Simposio', path: '/presentacion' }
                 ] 
             } 

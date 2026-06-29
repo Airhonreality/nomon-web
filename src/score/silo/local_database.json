@@ -124,19 +124,9 @@
                 },
                 "nav_links": [
                     {
-                        "label": "Quiénes Somos",
-                        "slug": "quienes-somos",
-                        "priority": 10
-                    },
-                    {
                         "label": "Simposio",
                         "slug": "/presentacion",
                         "priority": 20
-                    },
-                    {
-                        "label": "Forja",
-                        "slug": "/admin/forge",
-                        "priority": 30
                     }
                 ],
                 "relations": []
