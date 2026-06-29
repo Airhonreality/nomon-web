@@ -32,7 +32,8 @@ export const ComponentMap = [
             content: { 
                 links: [
                     { label: 'Inicio', path: '/' },
-                    { label: 'Quiénes Somos', path: '/quienes-somos' }
+                    { label: 'Quiénes Somos', path: '/quienes-somos' },
+                    { label: 'Simposio', path: '/presentacion' }
                 ] 
             } 
         }
@@ -145,7 +146,7 @@ class GitHubStrategy extends PersistenceStrategy {
             throw new Error("No se pudo leer la base de datos.");
         } catch (err) {
             console.error("❌ [Bridge:Fetch] Error fatal:", err);
-            return { NOMON_ENTRIES: [] };
+            return localDatabaseFallback || { NOMON_ENTRIES: [] };
         }
     }
 
@@ -241,6 +242,81 @@ class GitHubStrategy extends PersistenceStrategy {
 }
 
 // -------------------------------------------------------------------------
+// 🏠 ESTRATEGIA: PERSISTENCIA LOCAL (Vite Middleware Server)
+// -------------------------------------------------------------------------
+class LocalStrategy extends PersistenceStrategy {
+    constructor() {
+        super();
+        this.dbPath = 'src/score/silo/local_database.json';
+    }
+
+    async read(context_id) {
+        console.log(`🏠 [Bridge:LocalRead] Leyendo del silo local para ${context_id}...`);
+        return localDatabaseFallback[context_id] || [];
+    }
+
+    async persist(context_id, materia) {
+        console.log(`🏠 [Bridge:LocalPersist] Persistiendo materia ${materia.slug} en ${context_id}...`);
+        try {
+            const response = await fetch('/api/persist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ context_id, materia })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Fallo al persistir en el Silo físico local: ${response.statusText}`);
+            }
+
+            const res = await response.json();
+            
+            // Actualizar localmente la referencia en memoria
+            if (!localDatabaseFallback[context_id]) localDatabaseFallback[context_id] = [];
+            const index = localDatabaseFallback[context_id].findIndex(item => item.slug === materia.slug);
+            if (index !== -1) {
+                localDatabaseFallback[context_id][index] = materia;
+            } else {
+                localDatabaseFallback[context_id].unshift(materia);
+            }
+
+            return { status: 'OK', msg: 'Cambios localizados en el disco.', data: res };
+        } catch (error) {
+            console.error("❌ [Bridge:LocalPersist] Error:", error);
+            throw error;
+        }
+    }
+
+    async delete(context_id, slug) {
+        console.log(`🏠 [Bridge:LocalDelete] Disolviendo materia ${slug} de ${context_id}...`);
+        try {
+            const response = await fetch('/api/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ context_id, slug })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Fallo al disolver en el Silo físico local: ${response.statusText}`);
+            }
+
+            const res = await response.json();
+            if (localDatabaseFallback[context_id]) {
+                localDatabaseFallback[context_id] = localDatabaseFallback[context_id].filter(item => item.slug !== slug);
+            }
+
+            return { status: 'OK', msg: 'Cambios localizados en el disco.', data: res };
+        } catch (error) {
+            console.error("❌ [Bridge:LocalDelete] Error:", error);
+            throw error;
+        }
+    }
+}
+
+// -------------------------------------------------------------------------
 // 🌉 NOMON BRIDGE ACTOR
 // -------------------------------------------------------------------------
 import { SovereignWorkflows } from './SovereignWorkflows.js';
@@ -249,7 +325,11 @@ export class NomonBridge {
     constructor() {
         this.token = null;
         this.identity = null;
-        this.strategy = Config.BRIDGE_STRATEGY === 'CLOUD' ? new GitHubStrategy() : null;
+        const isLocal = typeof window !== 'undefined' && 
+            (window.location.hostname === 'localhost' || 
+             window.location.hostname === '127.0.0.1' || 
+             window.location.hostname.startsWith('192.168.'));
+        this.strategy = (Config.BRIDGE_STRATEGY === 'CLOUD' && !isLocal) ? new GitHubStrategy() : new LocalStrategy();
     }
 
     /**

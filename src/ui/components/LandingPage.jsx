@@ -92,7 +92,65 @@ export const LandingPage = () => {
                 <div className="magazine-grid">
                     {/* Columna Izquierda: Título Principal Monumental */}
                     <div className="magazine-title-column">
-                        <h1 className="brand-massive-title">NOMON</h1>
+                        <div style={{ width: '100%', maxWidth: '440px' }}>
+                            <svg viewBox="0 -20 500 145" className="brand-logo-svg" style={{ width: '100%', height: 'auto', display: 'block', color: 'var(--text-primary)' }}>
+                                <path 
+                                    d="M 20,110 L 20,30 L 80,110 L 80,30" 
+                                    stroke="currentColor" 
+                                    strokeWidth="11.5" 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    fill="none" 
+                                />
+                                <circle 
+                                    cx="145" 
+                                    cy="70" 
+                                    r="34.5" 
+                                    stroke="currentColor" 
+                                    strokeWidth="11.5" 
+                                    fill="none" 
+                                />
+                                <path 
+                                    d="M 210,110 L 210,30 L 250,110 L 290,30 L 290,110" 
+                                    stroke="currentColor" 
+                                    strokeWidth="11.5" 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    fill="none" 
+                                />
+                                <circle 
+                                    cx="355" 
+                                    cy="70" 
+                                    r="34.5" 
+                                    stroke="currentColor" 
+                                    strokeWidth="11.5" 
+                                    fill="none" 
+                                />
+                                <path 
+                                    d="M 420,110 L 420,30 L 480,110 L 480,30" 
+                                    stroke="currentColor" 
+                                    strokeWidth="11.5" 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    fill="none" 
+                                />
+                                <path 
+                                    d="M 356,36 C 358,32 357,27 356,22" 
+                                    stroke="#6cb367" 
+                                    strokeWidth="4.5" 
+                                    strokeLinecap="round" 
+                                    fill="none" 
+                                />
+                                <path 
+                                    d="M 355,22 C 343,15 345,0 377,-11 C 369,-4 362,6 355,22 Z" 
+                                    fill="#6cb367" 
+                                />
+                                <path 
+                                    d="M 357,22 C 364,8 371,-2 379,-9 C 381,3 373,16 357,22 Z" 
+                                    fill="#6cb367" 
+                                />
+                            </svg>
+                        </div>
                     </div>
                     
                     {/* Columna Derecha: Slogan en Itálicas Flotantes */}

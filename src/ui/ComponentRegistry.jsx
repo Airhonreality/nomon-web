@@ -39,6 +39,7 @@ import { IdentityProfile } from './components/IdentityProfile.jsx';
 import { ComercialFilbo } from './components/ComercialFilbo.jsx';
 import { ComercialAuditoria } from './components/ComercialAuditoria.jsx';
 import { LandingPage } from './components/LandingPage.jsx';
+import { InteractiveDeck } from './components/InteractiveDeck.jsx';
 
 export const COMPONENT_REGISTRY = {
     'hero_portal_home': Hero,
@@ -56,7 +57,8 @@ export const COMPONENT_REGISTRY = {
     'identity_profile': IdentityProfile,
     'comercial_portal': ComercialFilbo,
     'comercial_auditoria': ComercialAuditoria,
-    'landing_page': LandingPage
+    'landing_page': LandingPage,
+    'interactive_deck': InteractiveDeck
 };
 
 

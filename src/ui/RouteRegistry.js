@@ -39,5 +39,9 @@ export const ROUTE_MAP = {
             'hero_portal_home',
             'grid_entries_newsfeed'
         ]
+    },
+    '/presentacion': {
+        id: 'investor_deck',
+        components: ['interactive_deck']
     }
 };

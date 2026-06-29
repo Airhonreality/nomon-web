@@ -57,7 +57,65 @@ export const Navbar = ({ definition }) => {
     return (
         <>
             <nav className="main-navbar" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 5%', background: '#fff', borderBottom: '1px solid #eee', position: 'sticky', top: 0, zIndex: 9999, gap: '1rem', width: '100%', boxSizing: 'border-box' }}>
-                <div className="nav-logo" onClick={() => handleNavigate('/')} style={{ fontSize: '1.2rem', fontWeight: 900, letterSpacing: '0.1em', cursor: 'pointer' }}>{brandName}</div>
+                <div className="nav-logo" onClick={() => handleNavigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                    <svg viewBox="0 -20 500 145" style={{ height: '24px', width: 'auto', display: 'block', color: 'var(--text-primary)' }}>
+                        <path 
+                            d="M 20,110 L 20,30 L 80,110 L 80,30" 
+                            stroke="currentColor" 
+                            strokeWidth="11.5" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            fill="none" 
+                        />
+                        <circle 
+                            cx="145" 
+                            cy="70" 
+                            r="34.5" 
+                            stroke="currentColor" 
+                            strokeWidth="11.5" 
+                            fill="none" 
+                        />
+                        <path 
+                            d="M 210,110 L 210,30 L 250,110 L 290,30 L 290,110" 
+                            stroke="currentColor" 
+                            strokeWidth="11.5" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            fill="none" 
+                        />
+                        <circle 
+                            cx="355" 
+                            cy="70" 
+                            r="34.5" 
+                            stroke="currentColor" 
+                            strokeWidth="11.5" 
+                            fill="none" 
+                        />
+                        <path 
+                            d="M 420,110 L 420,30 L 480,110 L 480,30" 
+                            stroke="currentColor" 
+                            strokeWidth="11.5" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            fill="none" 
+                        />
+                        <path 
+                            d="M 356,36 C 358,32 357,27 356,22" 
+                            stroke="#6cb367" 
+                            strokeWidth="4.5" 
+                            strokeLinecap="round" 
+                            fill="none" 
+                        />
+                        <path 
+                            d="M 355,22 C 343,15 345,0 377,-11 C 369,-4 362,6 355,22 Z" 
+                            fill="#6cb367" 
+                        />
+                        <path 
+                            d="M 357,22 C 364,8 371,-2 379,-9 C 381,3 373,16 357,22 Z" 
+                            fill="#6cb367" 
+                        />
+                    </svg>
+                </div>
                 
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1.5rem', flex: '1 1 auto', justifyContent: 'flex-end' }}>
                     {!isMinimal && (

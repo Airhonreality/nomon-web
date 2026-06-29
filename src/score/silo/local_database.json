@@ -1,7 +1,101 @@
 {
     "NOMON_ENTRIES": [
         {
-            "slug": "nav-bar",
+            "slug": "simposio-deck",
+            "meta": {
+                "component_type": "SLIDESHOW_DECK"
+            },
+            "metadata": {
+                "author": "NOMON SAS BIC",
+                "editorial": "",
+                "year": "2026",
+                "id_universal": "",
+                "license": "CC BY-NC",
+                "language": "es",
+                "tags": "simposio, etica, inversion",
+                "curator": "",
+                "rationale": ""
+            },
+            "data": {
+                "content": {
+                    "title": {
+                        "es": "Simposio de Ética"
+                    },
+                    "summary": {
+                        "es": "Presentación interactiva para inversores del Simposio Internacional de Ética."
+                    }
+                },
+                "slides": [
+                    {
+                        "id": "cover",
+                        "title": "SIMPOSIO INTERNACIONAL DE ÉTICA",
+                        "subtitle": "Protocolos de Integridad para la Supervivencia multi especie y la Sustentabilidad Sistémica.",
+                        "accent": "#f37024"
+                    },
+                    {
+                        "id": "justification",
+                        "title": "Justificación",
+                        "content": "Urgente articulación de academia, gobierno, industria, sociedad civil y medio ambiente. Buscamos transformar la ética discursiva en protocolos prácticos de supervivencia colectiva y controles inalterables contra la corrupción, orientando el desarrollo hacia un equilibrio sustentable.",
+                        "emphasis": "Se espera consolidar un marco ético aplicado capaz de traducirse en una cultura institucional coherente y transparente.",
+                        "accent": "#ffcc00"
+                    },
+                    {
+                        "id": "objective",
+                        "title": "Objetivo General",
+                        "content": "Integrar a los actores de la Quíntuple Hélice para cocrear protocolos éticos y tecnologías aplicables, anticipando el cambio social y promoviendo el bienestar multiespecie mediante metodologías prospectivas del Buen Vivir.",
+                        "accent": "#009fe3"
+                    },
+                    {
+                        "id": "specific-objectives",
+                        "title": "Objetivos Específicos",
+                        "bullets": [
+                            "Analizar desafíos éticos y de supervivencia en redes de vida locales e internacionales.",
+                            "Identificar contribuciones estratégicas de cada sector de la Quíntuple Hélice.",
+                            "Promover el diálogo pragma-dialéctico y la cocreación transdisciplinaria.",
+                            "Diseñar protocolos de integridad y herramientas tecnológicas contra desviaciones.",
+                            "Utilizar prospectiva aplicada para anticipar y orientar escenarios de futuro.",
+                            "Establecer la sustentabilidad de largo plazo como métrica de éxito sistémico."
+                        ],
+                        "accent": "#f37024"
+                    },
+                    {
+                        "id": "methodology",
+                        "title": "Metodología",
+                        "subtitle": "El Diferencial Metodológico",
+                        "content": "Superamos la conferencia clásica mediante laboratorios de cocreación en escenarios académicos, culturales y naturales, induciendo reflexiones fuera de los esquemas tradicionales de trabajo.",
+                        "accent": "#96157f"
+                    },
+                    {
+                        "id": "actors-1",
+                        "title": "Actores Clave (I)",
+                        "nodes": [
+                            { "role": "NOMON SAS BIC", "desc": "Coordinación general y secretaría técnica del Simposio." },
+                            { "role": "Javier García", "desc": "Diseñador especulativo: Diseño e implementación del proyecto." },
+                            { "role": "Isabel Álvarez", "desc": "Coordinadora Costa Caribe: Articulación de actores clave regionales." },
+                            { "role": "Marina Álvarez", "desc": "Junta directiva Club de Leones: Articulación de sociedad civil." },
+                            { "role": "Dra. Nidia Sara Donado", "desc": "Presidenta Corpojueces: Panelista de Justicia y Derechos Humanos." },
+                            { "role": "Alfonso Bohórquez", "desc": "Director Diseño Industrial (UNAL): Aval e integración académica." }
+                        ],
+                        "accent": "#3da849"
+                    },
+                    {
+                        "id": "actors-2",
+                        "title": "Actores Clave (II)",
+                        "nodes": [
+                            { "role": "Isabel Cristina", "desc": "Directora Investigación (UNAL): Validación de marco y Libro Blanco." },
+                            { "role": "Juan Mendoza Collazos", "desc": "Profesor UNAL: Aporte en teoría sistémica y co-creación." },
+                            { "role": "Samuel Herrera", "desc": "Profesor UNAL: Implementación pedagógica de guías éticas." },
+                            { "role": "Andrés Felipe Sussman", "desc": "Profesor UNAL: Co-diseño de dinámicas de diseño de vida." },
+                            { "role": "Juan Sebastián Salazar", "desc": "Diseño especulativo de futuros y estética Solarpunk." },
+                            { "role": "Misa", "desc": "Agente de Cultura (UNAL): Mediación cultural y performance artística." }
+                        ],
+                        "accent": "#3da849"
+                    }
+                ]
+            }
+        },
+        {
+            "slug": "main-navbar",
             "meta": {
                 "component_type": "ENTITY_NAVBAR"
             },
@@ -19,16 +113,32 @@
             "data": {
                 "content": {
                     "title": {
-                        "es": "nav bar"
+                        "es": "Navegación Principal"
                     },
                     "summary": {
-                        "es": ""
+                        "es": "Enlaces de navegación del satélite."
                     },
                     "image": "",
                     "composition": [],
                     "pdf_url": ""
                 },
-                "nav_links": [],
+                "nav_links": [
+                    {
+                        "label": "Quiénes Somos",
+                        "slug": "quienes-somos",
+                        "priority": 10
+                    },
+                    {
+                        "label": "Simposio",
+                        "slug": "/presentacion",
+                        "priority": 20
+                    },
+                    {
+                        "label": "Forja",
+                        "slug": "/admin/forge",
+                        "priority": 30
+                    }
+                ],
                 "relations": []
             }
         },
