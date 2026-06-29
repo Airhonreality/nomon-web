@@ -1,4 +1,4 @@
-import{i as e,r as t,s as n,t as r}from"./esm-DviQszWk.js";n();var i=e(),a=({value:e,onChange:n,placeholder:a})=>{let{state:o}=t();return(0,i.jsxs)(`div`,{className:`sovereign-editor-container`,"data-color-mode":o.theme||`dark`,children:[(0,i.jsx)(r,{value:e,onChange:n,placeholder:a,preview:`live`,height:400,visibleDragbar:!0,className:`nomon-md-editor`}),(0,i.jsx)(`style`,{dangerouslySetInnerHTML:{__html:`
+import{i as e,r as t,s as n,t as r}from"./esm-DuIRG8Vy.js";n();var i=e(),a=({value:e,onChange:n,placeholder:a})=>{let{state:o}=t();return(0,i.jsxs)(`div`,{className:`sovereign-editor-container`,"data-color-mode":o.theme||`dark`,children:[(0,i.jsx)(r,{value:e,onChange:n,placeholder:a,preview:`live`,height:400,visibleDragbar:!0,className:`nomon-md-editor`}),(0,i.jsx)(`style`,{dangerouslySetInnerHTML:{__html:`
                 .sovereign-editor-container {
                     width: 100%;
                     margin: 1rem 0;
