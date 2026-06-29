@@ -35,7 +35,7 @@
                     {
                         "id": "justification",
                         "title": "Justificación",
-                        "content": "Urgente articulación de academia, gobierno, industria, sociedad civil y medio ambiente. Buscamos transformar la ética discursiva en protocolos prácticos de supervivencia colectiva y controles inalterables contra la corrupción, orientando el desarrollo hacia un equilibrio sustentable.",
+                        "content": "Articulación de academia, gobierno, industria, sociedad civil y medio ambiente. Buscamos transformar la ética discursiva en protocolos prácticos de supervivencia colectiva y controles inalterables contra la corrupción, orientando el desarrollo hacia un equilibrio sustentable.",
                         "emphasis": "Se espera consolidar un marco ético aplicado capaz de traducirse en una cultura institucional coherente y transparente.",
                         "accent": "#ffcc00"
                     },
@@ -69,12 +69,30 @@
                         "id": "actors-1",
                         "title": "Actores Clave (I)",
                         "nodes": [
-                            { "role": "NOMON SAS BIC", "desc": "Coordinación general y secretaría técnica del Simposio." },
-                            { "role": "Javier García", "desc": "Diseñador especulativo: Diseño e implementación del proyecto." },
-                            { "role": "Isabel Álvarez", "desc": "Coordinadora Costa Caribe: Articulación de actores clave regionales." },
-                            { "role": "Marina Álvarez", "desc": "Junta directiva Club de Leones: Articulación de sociedad civil." },
-                            { "role": "Dra. Nidia Sara Donado", "desc": "Presidenta Corpojueces: Panelista de Justicia y Derechos Humanos." },
-                            { "role": "Alfonso Bohórquez", "desc": "Director Diseño Industrial (UNAL): Aval e integración académica." }
+                            {
+                                "role": "NOMON SAS BIC",
+                                "desc": "Coordinación general y secretaría técnica del Simposio."
+                            },
+                            {
+                                "role": "Javier García",
+                                "desc": "Diseñador especulativo: Diseño e implementación del proyecto."
+                            },
+                            {
+                                "role": "Isabel Álvarez",
+                                "desc": "Coordinadora Costa Caribe: Articulación de actores clave regionales."
+                            },
+                            {
+                                "role": "Marina Álvarez",
+                                "desc": "Junta directiva Club de Leones: Articulación de sociedad civil."
+                            },
+                            {
+                                "role": "Dra. Nidia Sara Donado",
+                                "desc": "Presidenta Corpojueces: Panelista de Justicia y Derechos Humanos."
+                            },
+                            {
+                                "role": "Alfonso Bohórquez",
+                                "desc": "Director Diseño Industrial (UNAL): Aval e integración académica."
+                            }
                         ],
                         "accent": "#3da849"
                     },
@@ -82,12 +100,30 @@
                         "id": "actors-2",
                         "title": "Actores Clave (II)",
                         "nodes": [
-                            { "role": "Isabel Cristina", "desc": "Directora Investigación (UNAL): Validación de marco y Libro Blanco." },
-                            { "role": "Juan Mendoza Collazos", "desc": "Profesor UNAL: Aporte en teoría sistémica y co-creación." },
-                            { "role": "Samuel Herrera", "desc": "Profesor UNAL: Implementación pedagógica de guías éticas." },
-                            { "role": "Andrés Felipe Sussman", "desc": "Profesor UNAL: Co-diseño de dinámicas de diseño de vida." },
-                            { "role": "Juan Sebastián Salazar", "desc": "Diseño especulativo de futuros y estética Solarpunk." },
-                            { "role": "Misa", "desc": "Agente de Cultura (UNAL): Mediación cultural y performance artística." }
+                            {
+                                "role": "Isabel Cristina",
+                                "desc": "Directora Investigación (UNAL): Validación de marco y Libro Blanco."
+                            },
+                            {
+                                "role": "Juan Mendoza Collazos",
+                                "desc": "Profesor UNAL: Aporte en teoría sistémica y co-creación."
+                            },
+                            {
+                                "role": "Samuel Herrera",
+                                "desc": "Profesor UNAL: Implementación pedagógica de guías éticas."
+                            },
+                            {
+                                "role": "Andrés Felipe Sussman",
+                                "desc": "Profesor UNAL: Co-diseño de dinámicas de diseño de vida."
+                            },
+                            {
+                                "role": "Juan Sebastián Salazar",
+                                "desc": "Diseño especulativo de futuros y estética Solarpunk."
+                            },
+                            {
+                                "role": "Misa",
+                                "desc": "Agente de Cultura (UNAL): Mediación cultural y performance artística."
+                            }
                         ],
                         "accent": "#3da849"
                     }
