@@ -17,28 +17,42 @@ const FALLBACK_DECK = {
                 accent: "#f37024"
             },
             {
+                id: "marco-teorico",
+                title: "Marco Teórico",
+                content: "La ética no se limita a normas, sino que orienta la acción hacia la confianza, convivencia y sostenibilidad de la vida individual y colectiva.",
+                readMoreTitle: "Marco Teórico Completo",
+                readMoreContent: "La ética, entendida en sentido práctico, no se limita a normas o prohibiciones, sino que orienta la acción humana hacia la confianza, la convivencia y la sostenibilidad de la vida individual y colectiva. Por eso desde esta perspectiva la Ética ayuda a preservar el buen funcionamiento de los sistemas sociales e institucionales. Cuando se debilita aparecen problemas como la corrupción, el abuso de poder, la mentira, el incumplimiento y la pérdida de legitimidad.\n\nEn este simposio, los protocolos vivos de integridad se entienden como herramientas dinámicas de prevención, orientación y corrección, capaces de adaptarse a distintos contextos. No pretenden ser documentos estáticos, sino instrumentos prácticos que fortalecerán la toma de decisiones éticas en la cultura, velando por su aplicación en todas las dinámicas sociales, la academia, las empresas, el gobierno, la sociedad civil y el ecosistema multi-especie.",
+                accent: "#e63946"
+            },
+            {
                 id: "justification",
                 title: "Justificación",
-                content: "Urgente articulación de academia, gobierno, industria, sociedad civil y medio ambiente. Buscamos transformar la ética discursiva en protocolos prácticos de supervivencia colectiva y controles inalterables contra la corrupción, orientando el desarrollo hacia un equilibrio sustentable.",
-                emphasis: "Se espera consolidar un marco ético aplicado capaz de traducirse en una cultura institucional coherente y transparente.",
+                content: "Ante la crisis civilizatoria, surge la necesidad de articular actores en torno a sostener la vida, fortalecer confianza y responsabilidad.",
+                readMoreTitle: "Justificación Completa",
+                readMoreContent: "Ante la urgencia que plantea la actual crisis civilizatoria, este simposio surge de la necesidad de articular a los principales actores del país en torno a un propósito común: sostener la vida, fortalecer la confianza, la responsabilidad, los derechos humanos y la sustentabilidad social. En este escenario, la ética es una herramienta práctica de supervivencia buscando ir más allá de la reflexión teórica para promover acuerdos útiles para la acción en distintos sectores de la vida social.\n\nNinguna institución puede ser verdaderamente viable si no actúa en equilibrio dinámico con el medio ambiente y bajo criterios estrictos de sostenibilidad. Por ello, el simposio se proyecta hacia resultados tangibles: la consolidación de un marco compartido de integridad aplicada capaz de traducirse en protocolos sectoriales concretos. Con ello, el simposio aspira a contribuir a una cultura institucional más coherente, transparente, responsable y comprometida con la transformación social.",
                 accent: "#ffcc00"
             },
             {
                 id: "objective",
                 title: "Objetivo General",
-                content: "Integrar a los actores de la Quíntuple Hélice para cocrear protocolos éticos y tecnologías aplicables, anticipando el cambio social y promoviendo el bienestar multiespecie mediante metodologías prospectivas del Buen Vivir.",
+                content: "Integrar actores de la Quíntuple Hélice para cocrear protocolos éticos anticipando el cambio social.",
+                readMoreTitle: "Objetivo General Completo",
+                readMoreContent: "Integrar a los actores de la quíntuple hélice —academia, industria, gobierno, sociedad civil y medio ambiente — para desarrollar, mediante diálogo, co-creación y metodologías prospectivas, protocolos y tecnologías éticas aplicables que permitan anticipar el cambio social, orientar escenarios de futuro viables y aumentar el bienestar multiespecie desde una perspectiva de Buen Vivir y argumentación pragma-dialéctica.",
                 accent: "#009fe3"
             },
             {
                 id: "specific-objectives",
                 title: "Objetivos Específicos",
+                content: "Propuestas concretas para alcanzar protocolos de integridad aplicables.",
                 bullets: [
-                    "Analizar desafíos éticos y de supervivencia en redes de vida locales e internacionales.",
-                    "Identificar contribuciones estratégicas de cada sector de la Quíntuple Hélice.",
-                    "Promover el diálogo pragma-dialéctico y la cocreación transdisciplinaria.",
-                    "Diseñar protocolos de integridad y herramientas tecnológicas contra desviaciones.",
-                    "Utilizar prospectiva aplicada para anticipar y orientar escenarios de futuro.",
-                    "Establecer la sustentabilidad de largo plazo como métrica de éxito sistémico."
+                    "Analizar desafíos éticos, sociales y sistémicos que afectan la supervivencia de la red de vida.",
+                    "Identificar aportes concretos de academia, industria, gobierno, sociedad civil y enfoque ambiental.",
+                    "Promover el diálogo interdisciplinario y la cocreación como base para soluciones éticas.",
+                    "Diseñar protocolos de integridad y herramientas tecnológicas contra desviaciones sistémicas.",
+                    "Explorar metodologías prospectivas para anticipar escenarios de cambio social.",
+                    "Incorporar principios del Buen Vivir y argumentación pragma-dialéctica como marcos.",
+                    "Fomentar construcción de tecnologías éticas para bienestar multiespecie.",
+                    "Articular redes de cooperación entre actores de la Quíntuple Hélice."
                 ],
                 accent: "#f37024"
             },
@@ -46,32 +60,36 @@ const FALLBACK_DECK = {
                 id: "methodology",
                 title: "Metodología",
                 subtitle: "El Diferencial Metodológico",
-                content: "Superamos la conferencia clásica mediante laboratorios de cocreación en escenarios académicos, culturales y naturales, induciendo reflexiones fuera de los esquemas tradicionales de trabajo.",
+                content: "Laboratorios de cocreación en escenarios académicos, culturales y naturales con pensamiento lateral.",
+                readMoreTitle: "Metodología Completa",
+                readMoreContent: "El simposio se desarrollará bajo un modelo participativo de investigación-creación que conecta capacidades multidisciplinares para generar acciones concretas, estructurado de la siguiente manera:\n\nFormatos de Interacción: Se programarán mesas de trabajo técnico, conversatorios, laboratorios de ideación y talleres de diseño especulativo para el co-diseño de soluciones aplicadas.\n\nEscenarios: Las actividades se realizarán en entornos académicos, culturales y naturales, utilizando la deslocalización para propiciar el pensamiento lateral y la cooperación entre actores.\n\nEquipo Misional: Un comité interdisciplinar coordinará el evento para asegurar el cumplimiento de los objetivos de investigación, regular los debates y tabular los datos resultantes.\n\nCasos de Aplicación Práctica:\n• Sector Industrial/Extractivo: Diseño de estrategias para la migración hacia modelos productivos sustentables.\n• Sector Educativo: Articulación de pedagogos y asesores jurídicos para metodologías alternativas.\n• Sector Justicia/Penal: Estructuración de programas de resocialización basados en justicia restaurativa.",
                 accent: "#96157f"
             },
             {
                 id: "actors-1",
                 title: "Actores Clave (I)",
+                content: "Coordinadores y facilitadores principales del Simposio.",
                 nodes: [
-                    { "role": "NOMON SAS BIC", "desc": "Coordinación general y secretaría técnica del Simposio." },
-                    { "role": "Javier García", "desc": "Diseñador especulativo: Diseño e implementación del proyecto." },
-                    { "role": "Isabel Álvarez", "desc": "Coordinadora Costa Caribe: Articulación de actores clave regionales." },
-                    { "role": "Marina Álvarez", "desc": "Junta directiva Club de Leones: Articulación de sociedad civil." },
-                    { "role": "Dra. Nidia Sara Donado", "desc": "Presidenta Corpojueces: Panelista de Justicia y Derechos Humanos." },
-                    { "role": "Alfonso Bohórquez", "desc": "Director Diseño Industrial (UNAL): Aval e integración académica." }
+                    { "role": "NOMON SAS BIC", "desc": "Coordinador general y secretaría técnica" },
+                    { "role": "Javier García", "desc": "Diseñador especulativo: Diseño e implementación" },
+                    { "role": "Isabel Álvarez", "desc": "Coordinadora Costa Caribe: Articulación regional" },
+                    { "role": "Marina Álvarez", "desc": "Club de Leones: Sociedad civil" },
+                    { "role": "Dra. Nidia Sara Donado", "desc": "Presidenta Corpojueces: Justicia y DDHH" },
+                    { "role": "Alfonso Bohórquez", "desc": "Director Diseño Industrial UNAL" }
                 ],
                 accent: "#3da849"
             },
             {
                 id: "actors-2",
                 title: "Actores Clave (II)",
+                content: "Equipo académico y creativo del Simposio.",
                 nodes: [
-                    { "role": "Isabel Cristina", "desc": "Directora Investigación (UNAL): Validación de marco y Libro Blanco." },
-                    { "role": "Juan Mendoza Collazos", "desc": "Profesor UNAL: Aporte en teoría sistémica y co-creación." },
-                    { "role": "Samuel Herrera", "desc": "Profesor UNAL: Implementación pedagógica de guías éticas." },
-                    { "role": "Andrés Felipe Sussman", "desc": "Profesor UNAL: Co-diseño de dinámicas de diseño de vida." },
-                    { "role": "Juan Sebastián Salazar", "desc": "Diseño especulativo de futuros y estética Solarpunk." },
-                    { "role": "Misa", "desc": "Agente de Cultura (UNAL): Mediación cultural y performance artística." }
+                    { "role": "Isabel Cristina", "desc": "Directora de Investigación UNAL" },
+                    { "role": "Juan Mendoza Collazos", "desc": "Profesor Maestría Diseño: Teoría sistémica" },
+                    { "role": "Samuel Herrera", "desc": "Profesor Diseño Industrial: Pedagogía ética" },
+                    { "role": "Andrés Felipe Sussman", "desc": "Profesor Diseño Industrial: Dinámicas participativas" },
+                    { "role": "Juan Sebastián Salazar", "desc": "Diseño especulativo de futuros Solarpunk" },
+                    { "role": "Misa", "desc": "Agente de Cultura UNAL: Mediación artística" }
                 ],
                 accent: "#3da849"
             }
@@ -82,7 +100,7 @@ const FALLBACK_DECK = {
 export const InteractiveDeck = () => {
     const { state, bridge } = useSovereign();
     const { remoteData: entries } = useIndraResonance('NOMON_ENTRIES');
-    
+
     const deckRaw = entries?.find(item => item.slug === 'simposio-deck') || FALLBACK_DECK;
     const slides = deckRaw.data?.slides || FALLBACK_DECK.data.slides;
 
@@ -90,6 +108,7 @@ export const InteractiveDeck = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedSlides, setEditedSlides] = useState([]);
     const [indexOpen, setIndexOpen] = useState(false);
+    const [expandedModal, setExpandedModal] = useState(null);
 
     useEffect(() => {
         if (isEditing) {
@@ -737,6 +756,119 @@ export const InteractiveDeck = () => {
                     opacity: 0.8;
                     color: ${accentColor};
                 }
+
+                /* Modal de Contenido Expandido */
+                .deck-modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 9999;
+                    padding: 20px;
+                    backdrop-filter: blur(4px);
+                    animation: fadeIn 0.2s ease;
+                }
+
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+
+                .deck-modal-content {
+                    background: #ffffff;
+                    border-radius: 8px;
+                    max-width: 900px;
+                    width: 100%;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    padding: 40px;
+                    box-sizing: border-box;
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+                    animation: slideUp 0.3s ease;
+                    font-family: var(--font-sans);
+                }
+
+                @keyframes slideUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .deck-modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    margin-bottom: 30px;
+                    border-bottom: 2px solid var(--deck-border-light);
+                    padding-bottom: 20px;
+                }
+
+                .deck-modal-title {
+                    font-family: var(--font-serif);
+                    font-size: 2rem;
+                    font-weight: 800;
+                    color: var(--deck-text-dark);
+                    margin: 0;
+                }
+
+                .deck-modal-close-btn {
+                    background: none;
+                    border: none;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    color: var(--deck-text-gray);
+                    padding: 0;
+                    width: 36px;
+                    height: 36px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: color 0.2s ease;
+                }
+
+                .deck-modal-close-btn:hover {
+                    color: var(--deck-text-dark);
+                }
+
+                .deck-modal-text {
+                    font-size: 1rem;
+                    line-height: 1.8;
+                    color: var(--deck-text-gray);
+                    white-space: pre-wrap;
+                    margin: 0;
+                }
+
+                .deck-read-more-btn {
+                    background: none;
+                    border: 1px solid var(--deck-border-light);
+                    padding: 10px 20px;
+                    border-radius: 4px;
+                    font-family: var(--font-sans);
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    color: var(--deck-text-dark);
+                    cursor: pointer;
+                    margin-top: 20px;
+                    transition: all 0.2s ease;
+                    display: inline-block;
+                }
+
+                .deck-read-more-btn:hover {
+                    background: var(--deck-bg-light);
+                    border-color: var(--deck-text-dark);
+                }
             `}} />
 
             {/* MODO EDICIÓN */}
@@ -924,11 +1056,21 @@ export const InteractiveDeck = () => {
                         {activeSlide.subtitle && (
                             <h3 className="deck-slide-subtitle">{activeSlide.subtitle}</h3>
                         )}
-                        
+
                         {activeSlide.content && (
                             <p className="deck-slide-content">{activeSlide.content}</p>
                         )}
-                        
+
+                        {activeSlide.readMoreContent && (
+                            <button
+                                className="deck-read-more-btn"
+                                onClick={() => setExpandedModal(currentSlide)}
+                                style={{ borderColor: accentColor, color: accentColor }}
+                            >
+                                Leer más →
+                            </button>
+                        )}
+
                         {activeSlide.emphasis && (
                             <p className="deck-slide-emphasis">{activeSlide.emphasis}</p>
                         )}
@@ -953,7 +1095,7 @@ export const InteractiveDeck = () => {
                         )}
 
                         {canEdit && (
-                            <button 
+                            <button
                                 className="deck-hidden-edit-trigger"
                                 onClick={() => setIsEditing(true)}
                                 aria-label="Configuración de diapositiva"
@@ -963,6 +1105,27 @@ export const InteractiveDeck = () => {
                         )}
                     </div>
 
+                </div>
+            )}
+
+            {/* MODAL DE CONTENIDO EXPANDIDO */}
+            {expandedModal !== null && slides[expandedModal] && (
+                <div className="deck-modal-overlay" onClick={() => setExpandedModal(null)}>
+                    <div className="deck-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="deck-modal-header" style={{ borderBottomColor: slides[expandedModal].accent || accentColor }}>
+                            <div>
+                                <h2 className="deck-modal-title">{slides[expandedModal].readMoreTitle || slides[expandedModal].title}</h2>
+                            </div>
+                            <button
+                                className="deck-modal-close-btn"
+                                onClick={() => setExpandedModal(null)}
+                                aria-label="Cerrar"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <p className="deck-modal-text">{slides[expandedModal].readMoreContent}</p>
+                    </div>
                 </div>
             )}
         </section>
