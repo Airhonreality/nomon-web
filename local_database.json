@@ -33,28 +33,42 @@
                         "accent": "#f37024"
                     },
                     {
+                        "id": "marco-teorico",
+                        "title": "Marco Teórico",
+                        "content": "La ética no se limita a normas, sino que orienta la acción hacia la confianza, convivencia y sostenibilidad de la vida individual y colectiva.",
+                        "readMoreTitle": "Marco Teórico Completo",
+                        "readMoreContent": "La ética, entendida en sentido práctico, no se limita a normas o prohibiciones, sino que orienta la acción humana hacia la confianza, la convivencia y la sostenibilidad de la vida individual y colectiva. Por eso desde esta perspectiva la Ética ayuda a preservar el buen funcionamiento de los sistemas sociales e institucionales. Cuando se debilita aparecen problemas como la corrupción, el abuso de poder, la mentira, el incumplimiento y la pérdida de legitimidad.\n\nEn este simposio, los protocolos vivos de integridad se entienden como herramientas dinámicas de prevención, orientación y corrección, capaces de adaptarse a distintos contextos. No pretenden ser documentos estáticos, sino instrumentos prácticos que fortalecerán la toma de decisiones éticas en la cultura, velando por su aplicación en todas las dinámicas sociales, la academia, las empresas, el gobierno, la sociedad civil y el ecosistema multi-especie.",
+                        "accent": "#e63946"
+                    },
+                    {
                         "id": "justification",
                         "title": "Justificación",
-                        "content": "Articulación de academia, gobierno, industria, sociedad civil y medio ambiente. Buscamos transformar la ética discursiva en protocolos prácticos de supervivencia colectiva y controles inalterables contra la corrupción, orientando el desarrollo hacia un equilibrio sustentable.",
-                        "emphasis": "Se espera consolidar un marco ético aplicado capaz de traducirse en una cultura institucional coherente y transparente.",
+                        "content": "Ante la crisis civilizatoria, surge la necesidad de articular actores en torno a sostener la vida, fortalecer confianza y responsabilidad.",
+                        "readMoreTitle": "Justificación Completa",
+                        "readMoreContent": "Ante la urgencia que plantea la actual crisis civilizatoria, este simposio surge de la necesidad de articular a los principales actores del país en torno a un propósito común: sostener la vida, fortalecer la confianza, la responsabilidad, los derechos humanos y la sustentabilidad social. En este escenario, la ética es una herramienta práctica de supervivencia buscando ir más allá de la reflexión teórica para promover acuerdos útiles para la acción en distintos sectores de la vida social.\n\nNinguna institución puede ser verdaderamente viable si no actúa en equilibrio dinámico con el medio ambiente y bajo criterios estrictos de sostenibilidad. Por ello, el simposio se proyecta hacia resultados tangibles: la consolidación de un marco compartido de integridad aplicada capaz de traducirse en protocolos sectoriales concretos. Con ello, el simposio aspira a contribuir a una cultura institucional más coherente, transparente, responsable y comprometida con la transformación social.",
                         "accent": "#ffcc00"
                     },
                     {
                         "id": "objective",
                         "title": "Objetivo General",
-                        "content": "Integrar a los actores de la Quíntuple Hélice para cocrear protocolos éticos y tecnologías aplicables, anticipando el cambio social y promoviendo el bienestar multiespecie mediante metodologías prospectivas del Buen Vivir.",
+                        "content": "Integrar actores de la Quíntuple Hélice para cocrear protocolos éticos anticipando el cambio social.",
+                        "readMoreTitle": "Objetivo General Completo",
+                        "readMoreContent": "Integrar a los actores de la quíntuple hélice —academia, industria, gobierno, sociedad civil y medio ambiente — para desarrollar, mediante diálogo, co-creación y metodologías prospectivas, protocolos y tecnologías éticas aplicables que permitan anticipar el cambio social, orientar escenarios de futuro viables y aumentar el bienestar multiespecie desde una perspectiva de Buen Vivir y argumentación pragma-dialéctica.",
                         "accent": "#009fe3"
                     },
                     {
                         "id": "specific-objectives",
                         "title": "Objetivos Específicos",
+                        "content": "Propuestas concretas para alcanzar protocolos de integridad aplicables.",
                         "bullets": [
-                            "Analizar desafíos éticos y de supervivencia en redes de vida locales e internacionales.",
-                            "Identificar contribuciones estratégicas de cada sector de la Quíntuple Hélice.",
-                            "Promover el diálogo pragma-dialéctico y la cocreación transdisciplinaria.",
-                            "Diseñar protocolos de integridad y herramientas tecnológicas contra desviaciones.",
-                            "Utilizar prospectiva aplicada para anticipar y orientar escenarios de futuro.",
-                            "Establecer la sustentabilidad de largo plazo como métrica de éxito sistémico."
+                            "Analizar desafíos éticos, sociales y sistémicos que afectan la supervivencia de la red de vida.",
+                            "Identificar aportes concretos de academia, industria, gobierno, sociedad civil y enfoque ambiental.",
+                            "Promover el diálogo interdisciplinario y la cocreación como base para soluciones éticas.",
+                            "Diseñar protocolos de integridad y herramientas tecnológicas contra desviaciones sistémicas.",
+                            "Explorar metodologías prospectivas para anticipar escenarios de cambio social.",
+                            "Incorporar principios del Buen Vivir y argumentación pragma-dialéctica como marcos.",
+                            "Fomentar construcción de tecnologías éticas para bienestar multiespecie.",
+                            "Articular redes de cooperación entre actores de la Quíntuple Hélice."
                         ],
                         "accent": "#f37024"
                     },
@@ -62,68 +76,36 @@
                         "id": "methodology",
                         "title": "Metodología",
                         "subtitle": "El Diferencial Metodológico",
-                        "content": "Superamos la conferencia clásica mediante laboratorios de cocreación en escenarios académicos, culturales y naturales, induciendo reflexiones fuera de los esquemas tradicionales de trabajo.",
+                        "content": "Laboratorios de cocreación en escenarios académicos, culturales y naturales con pensamiento lateral.",
+                        "readMoreTitle": "Metodología Completa",
+                        "readMoreContent": "El simposio se desarrollará bajo un modelo participativo de investigación-creación que conecta capacidades multidisciplinares para generar acciones concretas, estructurado de la siguiente manera:\n\nFormatos de Interacción: Se programarán mesas de trabajo técnico, conversatorios, laboratorios de ideación y talleres de diseño especulativo para el co-diseño de soluciones aplicadas.\n\nEscenarios: Las actividades se realizarán en entornos académicos, culturales y naturales, utilizando la deslocalización para propiciar el pensamiento lateral y la cooperación entre actores.\n\nEquipo Misional: Un comité interdisciplinar coordinará el evento para asegurar el cumplimiento de los objetivos de investigación, regular los debates y tabular los datos resultantes.\n\nCasos de Aplicación Práctica:\n• Sector Industrial/Extractivo: Diseño de estrategias para la migración hacia modelos productivos sustentables.\n• Sector Educativo: Articulación de pedagogos y asesores jurídicos para metodologías alternativas.\n• Sector Justicia/Penal: Estructuración de programas de resocialización basados en justicia restaurativa.",
                         "accent": "#96157f"
                     },
                     {
                         "id": "hub-1",
                         "title": "Hub de Profesionales (I)",
+                        "content": "Coordinadores y facilitadores principales del Simposio.",
                         "nodes": [
-                            {
-                                "role": "NOMON SAS BIC",
-                                "desc": "Coordinación general y secretaría técnica del Simposio."
-                            },
-                            {
-                                "role": "Javier García",
-                                "desc": "Diseñador especulativo: Diseño e implementación del proyecto."
-                            },
-                            {
-                                "role": "Isabel Álvarez",
-                                "desc": "Coordinadora Costa Caribe: Articulación de actores clave regionales."
-                            },
-                            {
-                                "role": "Marina Álvarez",
-                                "desc": "Junta directiva Club de Leones: Articulación de sociedad civil."
-                            },
-                            {
-                                "role": "Dra. Nidia Sara Donado",
-                                "desc": "Presidenta Corpojueces: Panelista de Justicia y Derechos Humanos."
-                            },
-                            {
-                                "role": "Alfonso Bohórquez",
-                                "desc": "Director Diseño Industrial (UNAL): Aval e integración académica."
-                            }
+                            { "role": "NOMON SAS BIC", "desc": "Coordinador general y secretaría técnica" },
+                            { "role": "Javier García", "desc": "Diseñador especulativo: Diseño e implementación" },
+                            { "role": "Isabel Álvarez", "desc": "Coordinadora Costa Caribe: Articulación regional" },
+                            { "role": "Marina Álvarez", "desc": "Club de Leones: Sociedad civil" },
+                            { "role": "Dra. Nidia Sara Donado", "desc": "Presidenta Corpojueces: Justicia y DDHH" },
+                            { "role": "Alfonso Bohórquez", "desc": "Director Diseño Industrial UNAL" }
                         ],
                         "accent": "#3da849"
                     },
                     {
                         "id": "hub-2",
                         "title": "Hub de Profesionales (II)",
+                        "content": "Equipo académico y creativo del Simposio.",
                         "nodes": [
-                            {
-                                "role": "Isabel Cristina",
-                                "desc": "Directora Investigación (UNAL): Validación de marco y Libro Blanco."
-                            },
-                            {
-                                "role": "Juan Mendoza Collazos",
-                                "desc": "Profesor UNAL: Aporte en teoría sistémica y co-creación."
-                            },
-                            {
-                                "role": "Samuel Herrera",
-                                "desc": "Profesor UNAL: Implementación pedagógica de guías éticas."
-                            },
-                            {
-                                "role": "Andrés Felipe Sussman",
-                                "desc": "Profesor UNAL: Co-diseño de dinámicas de diseño de vida."
-                            },
-                            {
-                                "role": "Juan Sebastián Salazar",
-                                "desc": "Diseño especulativo de futuros y estética Solarpunk."
-                            },
-                            {
-                                "role": "Misa",
-                                "desc": "Agente de Cultura (UNAL): Mediación cultural y performance artística."
-                            }
+                            { "role": "Isabel Cristina", "desc": "Directora de Investigación UNAL" },
+                            { "role": "Juan Mendoza Collazos", "desc": "Profesor Maestría Diseño: Teoría sistémica" },
+                            { "role": "Samuel Herrera", "desc": "Profesor Diseño Industrial: Pedagogía ética" },
+                            { "role": "Andrés Felipe Sussman", "desc": "Profesor Diseño Industrial: Dinámicas participativas" },
+                            { "role": "Juan Sebastián Salazar", "desc": "Diseño especulativo de futuros Solarpunk" },
+                            { "role": "Misa", "desc": "Agente de Cultura UNAL: Mediación artística" }
                         ],
                         "accent": "#3da849"
                     }
@@ -165,330 +147,9 @@
                         "priority": 20
                     }
                 ],
-                "relations": []
+                "theme": "light",
+                "color": "#000000"
             }
-        },
-        {
-            "slug": "quienes-somos",
-            "meta": {
-                "component_type": "ENTITY_ROUTER"
-            },
-            "metadata": {
-                "author": "",
-                "editorial": "",
-                "year": "",
-                "id_universal": "",
-                "license": "CC BY-NC",
-                "language": "es",
-                "tags": "",
-                "curator": "",
-                "rationale": ""
-            },
-            "data": {
-                "content": {
-                    "title": {
-                        "es": "SOMOS NOMON"
-                    },
-                    "summary": {
-                        "es": {
-                            "es": ""
-                        }
-                    },
-                    "image": "",
-                    "composition": [
-                        {
-                            "type": "MARKDOWN",
-                            "id": 1777655584157,
-                            "content": "NOMON es una organización de beneficio de einteres común, consitutidos ante la camara de comercio como SAS BIC, lo que  significa evolucionar del capitalismo tradicional hacia un modelo de Triple Impacto, donde la generación de utilidades convive en igualdad de condiciones con el bienestar social y la protección ambiental. Se trata de un compromiso legal plasmado en los estatutos, donde la organización se obliga a operar con transparencia y a rendir cuentas sobre su impacto positivo en la comunidad y el entorno, transformando el propósito de \"ser la mejor empresa del mundo\" en ser \"la mejor empresa para el mundo\"."
-                        }
-                    ],
-                    "pdf_url": ""
-                },
-                "nav_links": [],
-                "relations": [],
-                "access_control": {
-                    "strategy": "PUBLIC",
-                    "whitelist_slug": "",
-                    "restricted_title": "",
-                    "restricted_message": "",
-                    "denied_message": ""
-                }
-            }
-        },
-        {
-            "slug": "libro-digital-guardian-del-sextante",
-            "meta": {
-                "component_type": "LIBRARY_RESOURCE"
-            },
-            "metadata": {
-                "author": "",
-                "editorial": "",
-                "year": "",
-                "id_universal": "",
-                "license": "CC BY-NC",
-                "language": "es",
-                "tags": "",
-                "curator": "",
-                "rationale": ""
-            },
-            "data": {
-                "content": {
-                    "title": {
-                        "es": "Libro digital Guardián del sextante"
-                    },
-                    "summary": {
-                        "es": "Libro digital Guardián del sextante"
-                    },
-                    "image": "",
-                    "composition": [],
-                    "pdf_url": "/assets/materia/el-guardian-del-sextante-red-nomon.pdf"
-                },
-                "nav_config": {
-                    "show_in_nav": false,
-                    "priority": 0,
-                    "nav_label": ""
-                },
-                "relations": [],
-                "access_control": {
-                    "strategy": "REFERENCE_WHITELIST",
-                    "whitelist_slug": "digital-sextante",
-                    "restricted_title": "",
-                    "restricted_message": "",
-                    "denied_message": ""
-                }
-            }
-        },
-        {
-            "slug": "nuestra-filosofia",
-            "meta": {
-                "component_type": "BANNER_INFO"
-            },
-            "data": {
-                "content": {
-                    "title": {
-                        "es": "Nuestra Filosofía"
-                    },
-                    "summary": {
-                        "es": "Pragmatismo Ético: entendemos la integridad no como un dogma moral, sino como una herramienta de ingeniería indispensable para la supervivencia y la expansión..."
-                    },
-                    "image": "",
-                    "body": ""
-                }
-            }
-        },
-        {
-            "slug": "somos-nomon",
-            "meta": {
-                "component_type": "BANNER_ACTION"
-            },
-            "data": {
-                "content": {
-                    "title": {
-                        "es": "SOMOS NOMON Y ESTA ES NUESTRA FORMA DE NAVEGAR"
-                    },
-                    "summary": {
-                        "es": "No estamos aquí para ser un adorno en la sociedad. Estamos aquí para mover la aguja. "
-                    },
-                    "image": "",
-                    "composition": [
-                        {
-                            "type": "MARKDOWN",
-                            "id": "legacy-body-1777655184929",
-                            "content": "No estamos aquí para ser un adorno en la sociedad. Estamos aquí para mover la aguja. No somos un club de lectura, somos gente que hace. Este es el código que nos guía cuando la vida se pone complicada y necesitamos ayuda para saber qué camino tomar:\n\n1. Tú: Eres el faro.\nSi te rompes, tu luz se apaga. Tu integridad no es para presumirla, es una forma de autorespeto. Aprende, mejora, equivócate y levántate. Cuando tengas éxito, haz un alto en el camino y gózalo; y cuando fracases, levántate, sacúdete y sigue adelante. La vida debe continuar.\n\n2. Cuida a tu tribu.\nNo llegas a ningún lado solo. Rodéate de gente que te sume, que te rete y que te haga mejor persona. Protege a tu gente, apóyalos y deja que ellos te apoyen. La lealtad no es una palabra vieja, es lo que hace que un equipo sea invencible.\n\n3. Haz equipo.\nDeja de lado el ego. Cuando te unes a otros con un propósito claro, dejas de ser un estudiante o un profesional más y te conviertes en un agente de cambio. No se trata de quién brilla más, sino de que el proyecto llegue a la meta. Sumar siempre, dividir nunca.\n\n4. Mira más allá de tu propia nariz.\n¿Qué pasa afuera de tu burbuja? Si solo piensas en ti, te vas a quedar corto. Nos importa el vecino, la comunidad, el que tiene menos. Nuestra meta es dejar el campo de juego un poco mejor de como lo encontramos. Empatía activa.\n\n5. La vida es sagrada.\nNo estamos solos en este planeta. Los animales, las plantas, el ecosistema... todo cuenta. No somos dueños de la naturaleza, somos sus guardianes. Si destruimos nuestro entorno, nos destruimos a nosotros mismos.\n\n6. Cuida tu casa.\nUsa bien tus recursos. No desperdicies, no rompas, no ensucies. La eficiencia es una forma de respeto. Si te prestan una herramienta, cuídala; si te dan un espacio, mejóralo. Tu entorno es el reflejo de tu mente.\n\n7. Sigue tu norte.\n¿Qué es lo correcto? En el fondo, ya lo sabes. Cuando estés en una encrucijada, piensa: ¿qué opción beneficia a la mayoría y daña al mínimo posible? Elige el camino que te permita dormir tranquilo. La ética no es ningún castigo, es la forma de actuar que te permite no cometer embarradas en la vida. Es lo que te hace libre.\n\n8. Deja una huella.\nEstamos aquí por un parpadeo. ¿Qué vas a dejar? Cuando todo pase, no importará cuánto dinero tuviste, sino cuánta gente ayudaste, cuánto creciste y qué tan coherente fuiste con tus sueños. Haz algo que valga la pena, algo que sea más grande que tú."
-                        }
-                    ],
-                    "pdf_url": ""
-                },
-                "relations": [],
-                "access_control": {
-                    "strategy": "PUBLIC",
-                    "whitelist_slug": "",
-                    "restricted_title": "",
-                    "restricted_message": "",
-                    "denied_message": ""
-                }
-            }
-        },
-        {
-            "slug": "ideas-que-echan-raices",
-            "meta": {
-                "component_type": "BANNER_INFO"
-            },
-            "data": {
-                "content": {
-                    "title": {
-                        "es": "Ideas que echan raíces, acciones que transforman."
-                    },
-                    "summary": {
-                        "es": "Ayudamos a empresas y grupos..."
-                    },
-                    "image": "",
-                    "body": ""
-                }
-            }
-        },
-        {
-            "slug": "semillero-bio-inspiracion",
-            "meta": {
-                "component_type": "ENTITY_PROJECT"
-            },
-            "data": {
-                "content": {
-                    "title": {
-                        "es": "SEMILLERO: Bio inspiración UNAL"
-                    },
-                    "summary": {
-                        "es": "Semillero de Investigación..."
-                    },
-                    "image": "/assets/materia/IMG_7531.JPG",
-                    "body": "..."
-                }
-            }
-        },
-        {
-            "slug": "simposio-etica-e-integridad",
-            "meta": {
-                "component_type": "ENTITY_PROJECT"
-            },
-            "metadata": {
-                "author": "",
-                "editorial": "",
-                "year": "",
-                "id_universal": "",
-                "license": "CC BY-NC",
-                "language": "es",
-                "tags": "",
-                "curator": "",
-                "rationale": ""
-            },
-            "data": {
-                "content": {
-                    "title": {
-                        "es": "SIMPOSIO INTERNACIONAL DE INGENIERÍA DE FUTUROS \"Ética e Integridad como Tecnologías de Supervivencia Global\""
-                    },
-                    "summary": {
-                        "es": "Colombia requiere un cambio de paradigma para superar los costos sistémicos de la corrupción y la ineficiencia judicial. El Simposio posiciona la Ética y la Integridad no como conceptos abstractos, sino como Tecnologías de Supervivencia: herramientas de ingeniería social..."
-                    },
-                    "image": "/assets/materia/simposio.png",
-                    "composition": [
-                        {
-                            "type": "MARKDOWN",
-                            "id": 1777661929672,
-                            "content": "Colombia requiere un cambio de paradigma para superar los costos sistémicos de la corrupción y la ineficiencia judicial. El Simposio posiciona la Ética y la Integridad no como conceptos abstractos, sino como Tecnologías de Supervivencia: herramientas de ingeniería social necesarias para diseñar un futuro de prosperidad, seguridad y competitividad global.\n\n2. EJES DE TRANSFORMACIÓN (INGENIERÍA APLICADA)\n\nEl evento desglosa la integridad en cuatro sistemas críticos para la viabilidad del país:\n•\tSistemas Gubernamentales: Transparencia y rendición de cuentas como software de eficiencia estatal.\n•\tSistemas Corporativos: La integridad como activo financiero y motor de las Sociedades BIC\n•\tSistema Judicial: Ingeniería de la resocialización. Del castigo ineficiente a la restauración técnica.\n•\tSistemas Académicos: El papel de la Academia en el diseño de protocolos de integridad para la nueva generación de líderes.\n\n\n\nELIGE TU NODO Y EMPIEZA A DISEÑAR\n\n•\tNodo Gubernamental (Transparencia Operativa): Estamos diseñando protocolos de gestión pública para eliminar la ineficiencia. ¿Tienes ideas técnicas para un Estado más transparente? Aquí es.\n•\tNodo Corporativo (Integridad Rentable): La ética es un activo financiero. Trabajamos con empresas BIC y organizaciones que quieren ser referentes de alto rendimiento. ¿Quieres subir el estándar corporativo? Aquí es.\n•\tNodo Académico (Investigación Aplicada): La universidad es nuestro laboratorio. Estamos conectando investigadores y estudiantes para validar protocolos de integridad real. ¿Quieres llevar tu conocimiento a la calle? Aquí es.\n•\tNodo Jurídico (Ingeniería de la Restauración): Vamos a rediseñar cómo entendemos la justicia y la resocialización. Necesitamos mentes capaces de crear modelos de restauración humana eficaces. ¿Quieres cambiar el sistema desde adentro? Aquí es.\n"
-                        }
-                    ],
-                    "pdf_url": ""
-                },
-                "nav_links": [],
-                "relations": [],
-                "access_control": {
-                    "strategy": "PUBLIC",
-                    "whitelist_slug": "",
-                    "restricted_title": "",
-                    "restricted_message": "",
-                    "denied_message": ""
-                }
-            }
-        },
-        {
-            "slug": "el-guardian-del-sextante",
-            "meta": {
-                "component_type": "ENTITY_PROJECT"
-            },
-            "metadata": {
-                "author": "",
-                "editorial": "",
-                "year": "",
-                "id_universal": "",
-                "license": "CC BY-NC",
-                "language": "es",
-                "tags": "",
-                "curator": "",
-                "rationale": ""
-            },
-            "data": {
-                "content": {
-                    "title": {
-                        "es": "EL GUARDIÁN DEL SEXTANTE: LA HISTORIA QUE FINANCIA EL MAÑANA"
-                    },
-                    "summary": {
-                        "es": "Un libro. Una misión. Un nuevo norte..."
-                    },
-                    "image": "/assets/materia/portada-guardian-del-sextante-nomon.png",
-                    "composition": [
-                        {
-                            "type": "MARKDOWN",
-                            "id": 1777555870091,
-                            "content": "Un libro. Una misión. Un nuevo norte.\n\nEn NOMON no buscamos donaciones pasivas; buscamos socios en la creación de un nuevo estándar ético para Colombia. Por eso, nuestro principal motor de autofinanciación es esta obra: \"El Guardián del Sextante\".\n\nCada ejemplar que adquieres en la FILBo 2026 o a través de nuestro portal, deja de ser un objeto de estantería para convertirse en combustible directo para nuestros proyectos de impacto social. Al comprar este libro, estás financiando la logística de nuestros Nodos de Acción, la investigación técnica en ética aplicada y el desarrollo del programa \"Ciudadano Solar\".\n\n¿De qué trata la travesía?\n\nLa historia de F-E Orión es el espejo de nuestra propia capacidad de transformación. Es una invitación a dejar de ser \"pequeñas barquitas\" confinadas por miedos heredados y convertirnos en el velero portentoso que nuestra comunidad necesita. Es la prueba de que la adversidad no es el final, sino el detonante de nuestra verdadera resiliencia."
-                        },
-                        {
-                            "type": "RESONANCE",
-                            "id": 1777658707477,
-                            "content": "libro-digital-guardian-del-sextante"
-                        }
-                    ],
-                    "pdf_url": ""
-                },
-                "nav_config": {
-                    "show_in_nav": false,
-                    "priority": 0,
-                    "nav_label": ""
-                },
-                "relations": [],
-                "access_control": {
-                    "strategy": "PUBLIC",
-                    "whitelist_slug": "",
-                    "restricted_title": "",
-                    "restricted_message": "",
-                    "denied_message": ""
-                }
-            }
-        },
-        {
-            "slug": "digital-sextante",
-            "meta": {
-                "component_type": "ENTITY_WHITELIST"
-            },
-            "data": {
-                "whitelist": [
-                    "1866c3aafb52a1d5db2a8cf2b1ae48e0a41bffcfea0e052d165f253f70aeb805"
-                ],
-                "activations": [
-                    {
-                        "hash": "1866c3aafb52a1d5db2a8cf2b1ae48e0a41bffcfea0e052d165f253f70aeb805",
-                        "by": "hgarciagonzalezsas@gmail.com",
-                        "timestamp": "2026-05-01T14:33:30.870Z",
-                        "buyer": "hgarciagonzalezsas@gmail.com"
-                    }
-                ]
-            }
-        }
-    ],
-    "NOMON_ALLY": [
-        {
-            "slug": "ally-302683f08e",
-            "email": "escuelanuevavida@yahoo.com",
-            "name": "Victor Hugo García",
-            "phone": "3144806483",
-            "interest_area": "Arte",
-            "password_hash": "5b53bbe2ab14fce7f096a1a3fd28ccfb5ef71a5f96c7fc9673caba36845cd1c3",
-            "timestamp": "2026-06-06T23:16:41.704Z"
-        },
-        {
-            "slug": "ally-5a8b3c1d9e",
-            "email": "catalina.restrepo@nomon.co",
-            "name": "Catalina Restrepo",
-            "phone": "+57 312 456 7890",
-            "interest_area": "Diseño especulativo y futuros bio-inspirados",
-            "timestamp": "2026-06-05T14:30:00.000Z"
-        },
-        {
-            "slug": "ally-f3e2d1c0b9",
-            "email": "marcos.jurado@derechoetico.org",
-            "name": "Marcos Jurado",
-            "phone": "+57 315 987 6543",
-            "interest_area": "Ciencias jurídicas aplicadas y gobernanza BIC",
-            "timestamp": "2026-06-06T09:15:22.000Z"
         }
     ]
 }
