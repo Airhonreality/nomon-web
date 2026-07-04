@@ -66,8 +66,8 @@ const FALLBACK_DECK = {
                 accent: "#96157f"
             },
             {
-                id: "actors-1",
-                title: "Actores Clave (I)",
+                id: "hub-1",
+                title: "Hub de Profesionales (I)",
                 content: "Coordinadores y facilitadores principales del Simposio.",
                 nodes: [
                     { "role": "NOMON SAS BIC", "desc": "Coordinador general y secretaría técnica" },
@@ -80,8 +80,8 @@ const FALLBACK_DECK = {
                 accent: "#3da849"
             },
             {
-                id: "actors-2",
-                title: "Actores Clave (II)",
+                id: "hub-2",
+                title: "Hub de Profesionales (II)",
                 content: "Equipo académico y creativo del Simposio.",
                 nodes: [
                     { "role": "Isabel Cristina", "desc": "Directora de Investigación UNAL" },

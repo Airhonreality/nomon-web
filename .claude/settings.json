@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep -l -i \"simposio\")",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(curl -s http://localhost:5173)",
+      "PowerShell(Get-Process -Name \"node\" -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Force)",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(VITE_PORT=5173 npm run dev -- --port 5173)",
+      "Bash(npm run *)",
+      "Bash(node /tmp/test_with_navigation.js)",
+      "Read(//tmp/**)",
+      "Read(//c/tmp/**)"
+    ]
+  }
+}
