@@ -1,34 +1,43 @@
 "SIMPOSIO INTERNACIONAL DE ÉTICA: Protocolos de Integridad para la Supervivencia multi especie y la Sustentabilidad Sistémica."
 Marco teórico
-La ética, entendida en sentido práctico, no se limita a normas o prohibiciones, sino que orienta la acción humana hacia la confianza, la convivencia y la sostenibilidad de la vida individual y colectiva. Por eso Desde está perspectiva la Ética ayuda a preservar el buen funcionamiento de los sistemas sociales e institucionales. Cuando se debilita aparecen problemas como la corrupción, el abuso de poder, la mentira, el incumplimiento y la pérdida de legitimidad. 
-En este simposio, los protocolos vivos de integridad se entienden como herramientas dinámicas de prevención, orientación y corrección, capaces de adaptarse a distintos contextos. No pretenden cómo documentos estáticos, sino instrumentos prácticos que fortalecerán la toma de decisiones éticas en la cultura, velando por su aplicación en todas las dinámicas sociales, la academia, las empresas, el gobierno, la sociedad civil y el ecosistema multi-especie. 
+La ética, entendida en sentido práctico, no se limita a normas o prohibiciones, sino que orienta la acción humana hacia la confianza, la convivencia y la sostenibilidad de la vida individual y colectiva. Por eso Desde esta perspectiva la Ética ayuda a preservar el buen funcionamiento de los sistemas sociales e institucionales. Cuando se debilita aparecen problemas como la corrupción, el abuso de poder, la mentira, el incumplimiento y la pérdida de legitimidad. 
+En este simposio, los protocolos vivos de integridad se entienden como herramientas dinámicas de prevención, orientación y corrección, capaces de adaptarse a distintos contextos. Lejos de ser documentos estáticos, se trata de instrumentos prácticos que fortalecerán la toma de decisiones éticas en la cultura, velando por su aplicación en todas las dinámicas sociales, la academia, las empresas, el gobierno, la sociedad civil y el ecosistema multi-especie. 
 Justificación del Proyecto
-Ante la urgencia que plantea la actual crisis civilizatoria, este simposio surge de la necesidad de articular a los principales actores del país en torno a un propósito común: sostener la vida, fortalecer la confianza, la responsabilidad, los derechos humanos y la sustentabilidad social. En este escenario, la ética es una herramienta práctica de supervivencia buscando ir más allá de la reflexión teórica para promover acuerdos útiles para la acción en distintos sectores de la vida social.
-Ninguna institución puede ser verdaderamente viable si no actúa en equilibrio dinámico con el medio ambiente y bajo criterios estrictos de sostenibilidad. Por ello, el simposio se proyecta hacia resultados tangibles: la consolidación de un marco compartido de integridad aplicada capaz de traducirse en protocolos sectoriales concretos. Con ello, el simposio aspira a contribuir a una cultura institucional más coherente, transparente, responsable y comprometida con la transformación social.
+Frente a la urgencia de nuestra crisis sistémica actual, este simposio busca articular a los principales sectores del país en torno a un propósito común: sostener la vida, fortalecer la confianza, la responsabilidad, los derechos humanos y la sustentabilidad social. En este escenario, la ética se presenta como una herramienta práctica de supervivencia que va más allá de la reflexión teórica, promoviendo acuerdos útiles y orientados a la acción.
+La viabilidad de cualquier institución depende hoy de su coherencia ética y de su capacidad para operar con profunda responsabilidad frente a su entorno. Por ello, el simposio se proyecta hacia resultados tangibles: la consolidación de un marco compartido de integridad aplicada, capaz de traducirse en protocolos sectoriales concretos. Con esto, aspiramos a forjar una cultura institucional más transparente, coherente y verdaderamente comprometida con la transformación social.
 
 
 Objetivo general
 Integrar a los actores de la quíntuple hélice —academia, industria, gobierno, sociedad civil y medio ambiente — para desarrollar, mediante diálogo, co-creación y metodologías prospectivas, protocolos y tecnologías éticas aplicables que permitan anticipar el cambio social, orientar escenarios de futuro viables y aumentar el bienestar multiespecie desde una perspectiva de Buen Vivir y argumentación pragma-dialéctica.
 Propuesta de Objetivos Específicos 
+Sector empresarial
+1.	Blindaje Ético: Diseñar protocolos de gobernanza corporativa que prevengan riesgos de corrupción en la interacción con comunidades y Estado, transformando la "licencia social" en una alianza de confianza real.
+2.	Productividad con Propósito: Aplicar la ética aplicada como tecnología de gestión para alinear la productividad del sector con el bienestar social, demostrando que la integridad es el activo más rentable para operar en territorios complejos.
+3.	Gestión de Talento y Reintegro: Estructurar modelos de vinculación laboral y desarrollo humano que incorporen población en proceso de reintegración, convirtiendo la responsabilidad social en un factor de cohesión interna y eficiencia operativa.
+Sector público
+1.	Gobernanza basada en la Confianza: Desarrollar mecanismos de transparencia operativa que superen el cumplimiento legal básico, transformando la relación entre el Estado y el ciudadano desde la sospecha hacia una colaboración ética comprobable.
+2.	Gestión de la Política Pública con Enfoque Humano: Integrar la ética aplicada en la estructura de ejecución de proyectos, garantizando que el diseño y la implementación de políticas públicas prioricen la cohesión social y el desarrollo de capacidades instaladas en los territorios.
+3.	Arquitectura de Reintegración y Paz: Diseñar protocolos institucionales de alta eficiencia para la atención y vinculación productiva de poblaciones vulnerables o en proceso de reintegración, convirtiendo el impacto social en una política de Estado sostenible y técnica, no asistencialista.
 
-•	Analizar los desafíos éticos, sociales y sistémicos que afectan la supervivencia de la red de vida en contextos locales e internacionales.
-•	Identificar aportes concretos de la academia, la industria, el gobierno, la sociedad civil y el enfoque ambiental para la construcción de futuros viables.
-•	Promover el diálogo interdisciplinario y la cocreación como base para la formulación de soluciones éticas y aplicables.
-•	Diseñar protocolos de integridad y herramientas tecnológicas orientadas a la prevención de desviaciones sistémicas y al fortalecimiento del bienestar colectivo.
-•	Explorar metodologías prospectivas que permitan anticipar escenarios de cambio social y orientar decisiones responsables.
-•	Incorporar los principios del Buen Vivir y de la argumentación pragma-dialéctica como marcos metodológicos del simposio.
-•	Fomentar la construcción de tecnologías éticas aplicables al bienestar multiespecie y a la sostenibilidad de largo plazo.
-•	Articular redes de cooperación entre los distintos actores de la quíntuple hélice para impulsar acciones concretas y sostenibles.
+Jurídico-penal
+1.	Ruta de reintegro integral: El éxito del sector jurídico-penal depende de la implementación de un programa de reintegro social diseñado como una vía de salida clara, digna y verificable para las personas que han delinquido. 
+2.	Complementariedad Estratégica (Reintegro + Oficio): El programa armoniza de manera natural el acompañamiento social con la formación rigurosa en oficios de alta demanda (como ebanistería, diseño técnico o tecnologías de gestión). Esta vinculación asegura que el individuo no solo reciba apoyo en su proceso de resocialización, sino que desarrolle competencias técnicas concretas que faciliten su acceso al mercado laboral formal. 
+3.	Medición de la Transformación: Se requiere que este modelo incorpore indicadores de impacto que permitan evaluar la efectividad de la resocialización a partir de la autonomía económica y la capacidad de inserción laboral alcanzada por los participantes.
+
+Sector académico
+1.	Generación de Conocimiento Aplicado: Establecer alianzas con centros de investigación para elevar los protocolos de integridad y ética aplicada a estándares académicos, documentando metodologías que sirvan de referencia técnica para el sector educativo y profesional.
+2.	Formación con Sentido Crítico: Integrar la ética aplicada como un componente práctico y transversal en los currículos, capacitando a los estudiantes para gestionar dilemas de gobernanza, responsabilidad social y toma de decisiones complejas en sus futuros entornos profesionales.
+3.	Articulación de Ecosistemas de Innovación: Convertir el simposio en un nodo de conexión donde la investigación universitaria y los proyectos de grado se vinculen directamente con los retos de eficiencia y transparencia de las empresas y el sector público, garantizando una educación con impacto real en el tejido social.
+Fuerza pública
+1.	Blindaje Ético y Legitimidad Institucional: Desarrollar protocolos de actuación donde la integridad sea el eje transversal de las operaciones, fortaleciendo la confianza de la ciudadanía y consolidando la legitimidad de la fuerza pública ante la sociedad civil. 
+2.	Tecnologías de Gestión para la Convivencia: Implementar herramientas de ética aplicada que permitan a los efectivos gestionar situaciones de alta complejidad en los territorios, priorizando la resolución pacífica, el respeto a los derechos humanos y la eficiencia en la protección ciudadana. 
+
 
 Metodología de Trabajo
 El simposio se desarrollará bajo un modelo participativo de investigación-creación que conecta capacidades multidisciplinares para generar acciones concretas, estructurado de la siguiente manera:
 •	Formatos de Interacción: Se programarán mesas de trabajo técnico, conversatorios, laboratorios de ideación y talleres de diseño especulativo para el co-diseño de soluciones aplicadas.
 •	Escenarios: Las actividades se realizarán en entornos académicos, culturales y naturales, utilizando la deslocalización para propiciar el pensamiento lateral y la cooperación entre actores.
 •	Equipo Misional: Un comité interdisciplinar coordinará el evento para asegurar el cumplimiento de los objetivos de investigación, regular los debates y tabular los datos resultantes.
-•	Casos de Aplicación Práctica:
-o	Sector Industrial/Extractivo: Diseño de estrategias para la migración de capacidades instaladas hacia modelos productivos sustentables y bio-inspirados.
-o	Sector Educativo: Articulación entre pedagogos y asesores jurídicos para el diseño de metodologías alternativas aplicables a los planes de educación pública.
-o	Sector Justicia/Penal: Estructuración de programas de resocialización basados en justicia restaurativa, articulando la capacitación en oficios con la reinserción productiva y la dignificación humana.
 Colaboradores:
 
 Nombre del Actor	Cargo / Rol Actual	Contribución Estratégica al Simposio
