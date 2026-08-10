@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 function MailLoginForm() {
 	const [email, setEmail] = useState("");
@@ -11,31 +11,58 @@ function MailLoginForm() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const from = searchParams.get("from") || "/mail";
+	const urlError = searchParams.get("error");
+
+	useEffect(() => {
+		if (urlError === "session_expired") {
+			setError("Tu sesión expiró. Ingresa de nuevo.");
+		}
+	}, [urlError]);
 
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		setLoading(true);
 		setError(null);
 
+		const controller = new AbortController();
+		const timeout = setTimeout(() => controller.abort(), 15000);
+
 		try {
 			const res = await fetch("/api/auth/mail-login", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ email, password }),
+				credentials: "same-origin",
+				redirect: "follow",
+				signal: controller.signal,
 			});
 
-			const data = await res.json();
+			clearTimeout(timeout);
 
-			if (!res.ok) {
-				setError(data.error || "Credenciales inválidas");
+			let data: { success?: boolean; error?: string } = {};
+			try {
+				data = await res.json();
+			} catch {
+				setError(`Respuesta inválida del servidor (HTTP ${res.status})`);
 				setLoading(false);
 				return;
 			}
 
-			router.push(from);
-			router.refresh();
-		} catch {
-			setError("Error de conexión");
+			if (!res.ok) {
+				setError(data.error || `Error HTTP ${res.status}`);
+				setLoading(false);
+				return;
+			}
+
+			window.location.href = from;
+		} catch (err) {
+			clearTimeout(timeout);
+			const isAbort = err instanceof DOMException && err.name === "AbortError";
+			setError(
+				isAbort
+					? "La petición tardó demasiado. Intenta de nuevo."
+					: "Error de conexión",
+			);
 			setLoading(false);
 		}
 	}
