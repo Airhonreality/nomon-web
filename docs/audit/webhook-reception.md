@@ -1,12 +1,24 @@
 # Auditoría de recepción del correo corporativo
 
-Fecha: 2026-08-10
+Fecha: 2026-08-10 (auditoría) | 2026-08-11 (verificación end-to-end)
 
 ## Resultado ejecutivo
 
+**Verificado el 2026-08-11**: el flujo completo `Cloudflare Email Routing → Worker → /api/webhooks/incoming-email → Neon` funciona. Smoke test con `Authorization: Bearer` válido retornó `200 {"success":true}` y la fila quedó en la tabla `Mensaje` con `direccion: RECIBIDO`, `de: smoke@test.com`, `para: contacto@rednomon.com`.
+
+Diagnóstico de infraestructura (todo verificado OK):
+- Worker `rednomon-email-handler` desplegado con bundle de `postal-mime` (109 KiB / 26 KiB gzip).
+- 3 secrets configurados en el Worker: `R2_PUBLIC_URL`, `WEBHOOK_SECRET`, `WEBHOOK_URL`.
+- Binding R2 `EMAIL_BUCKET` → bucket `rednomon-email-assets` resuelto.
+- Email Routing habilitado en `rednomon.com`. Regla activa: `to:contacto@rednomon.com → worker:rednomon-email-handler`.
+- DNS MX apunta a Cloudflare (`route1/2/3.mx.cloudflare.net`).
+- Endpoint `/api/webhooks/incoming-email` responde `401 {"error":"No autorizado"}` sin Bearer (validación de secret operativa).
+
+Si un correo real no aparece en `/mail`, revisar `wrangler tail rednomon-email-handler` para confirmar que el Worker se invocó y que `fetch(env.WEBHOOK_URL, ...)` retornó `ok`. El Worker no inspecciona `response.ok` actualmente (ver punto 9 de la sección "Puntos de falla posibles").
+
 El contrato entre el Email Worker y el endpoint es coherente: el Worker convierte el mensaje MIME a JSON y envía `Authorization: Bearer <WEBHOOK_SECRET>`; el endpoint exige exactamente ese header, valida `from` y `to`, deduplica por `messageId` y llama a `insertarMensaje` con `direccion: "RECIBIDO"`. El endpoint no acepta ni espera `multipart/form-data`.
 
-No se encontró un bug de asignación o autenticación en `app/src/app/api/webhooks/incoming-email/route.ts`. La causa más probable de que un correo real no aparezca es operativa: regla de Email Routing, Worker no desplegado con el bundle de `postal-mime`, variables distintas o ausentes, URL incorrecta, o fallo del POST hacia Vercel. `insertarMensaje` sí persiste remitente, destinatario y dirección; además, ahora genera un UUID como `messageId` de respaldo cuando el proveedor no entrega uno.
+`insertarMensaje` ahora genera un UUID como `messageId` de respaldo cuando el proveedor no entrega uno.
 
 ## Flujo
 
