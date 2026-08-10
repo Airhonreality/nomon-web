@@ -1,0 +1,32 @@
+{
+	"id": "t-004",
+	"titulo": "Crear INDEX.md (índice de contexto)",
+	"intencion_negocio": "Necesito un índice que me diga qué leer al arrancar el proyecto",
+	"zona": "arnes/",
+	"tipo": "andamiaje",
+	"riesgo": "bajo",
+	"archivos_afectados": ["arnes/INDEX.md"],
+	"criterios_aceptacion": [
+		"INDEX.md existe en arnes/",
+		"INDEX.md lista AGENTS.md como primer documento a leer",
+		"INDEX.md lista estado.md como segundo documento",
+		"INDEX.md incluye la estructura del arnés (nucleo/, lineas/, roles/, tareas/)"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "cerrada",
+	"creada_en": "2026-08-08T19:15:00Z",
+	"cerrada_en": "2026-08-08T19:20:00Z"
+}

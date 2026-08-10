@@ -1,0 +1,34 @@
+{
+	"id": "t-015",
+	"titulo": "Crear webhook de recepción de correo entrante",
+	"intencion_negocio": "Necesito que los correos que lleguen a contacto@rednomon.com (reenviados por el Worker de Cloudflare) se guarden en la bandeja de /correo sin duplicados y sin permitir inserciones no autorizadas",
+	"zona": "app/src/app/api/",
+	"tipo": "integracion_externa",
+	"riesgo": "alto",
+	"archivos_afectados": [
+		"app/src/app/api/webhooks/incoming-email/route.ts"
+	],
+	"criterios_aceptacion": [
+		"Rechaza con 401 si el header Authorization no trae el WEBHOOK_SECRET",
+		"Inserta un Mensaje con direccion RECIBIDO via Drizzle",
+		"No duplica un correo si el messageId ya existe",
+		"npx tsc --noEmit pasa sin errores"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "creada",
+	"creada_en": "2026-08-09T16:00:00Z",
+	"cerrada_en": null
+}

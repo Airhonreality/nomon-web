@@ -1,7 +1,0 @@
-export const INDRA_CONFIG = {
-  "core_url": "https://script.google.com/macros/s/AKfycbzNYqBxqYerE57B3BVvJWPtd4OysYlihHSe3Glv-5RmFGhdLS5Xy-nzkV7pfhZkx6gi/exec",
-  "core_token": "SATELLITE_NOMON_V1",
-  "satellite_name": "Satélite Anónimo",
-  "workspace_id": "1v1idHOL6Am3n_Q2NBM_m-qA5OJMAZ3qG",
-  "timestamp": "2026-04-27T00:29:33.763Z"
-};

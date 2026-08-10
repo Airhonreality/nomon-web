@@ -1,0 +1,32 @@
+{
+	"id": "t-005",
+	"titulo": "Crear estado.md (dashboard inicial)",
+	"intencion_negocio": "Necesito un dashboard que me muestre el estado actual del proyecto y las líneas de trabajo",
+	"zona": "arnes/",
+	"tipo": "andamiaje",
+	"riesgo": "bajo",
+	"archivos_afectados": ["arnes/estado.md"],
+	"criterios_aceptacion": [
+		"estado.md existe en arnes/",
+		"estado.md incluye el estado de la línea web-publico",
+		"estado.md incluye el estado de la línea os-interno",
+		"estado.md lista los artefactos canónicos del arnés"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "cerrada",
+	"creada_en": "2026-08-08T19:20:00Z",
+	"cerrada_en": "2026-08-08T19:25:00Z"
+}

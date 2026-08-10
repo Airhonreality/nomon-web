@@ -1,0 +1,32 @@
+{
+	"id": "t-019",
+	"titulo": "Actualizar docs/design/05-correo-aliados.md (resolver open question de recepcion)",
+	"intencion_negocio": "Necesito que el diseño refleje la decisión de recepción tomada: Cloudflare Email Routing + Worker -> webhook en Vercel, y el schema actualizado",
+	"zona": "docs/",
+	"tipo": "andamiaje",
+	"riesgo": "bajo",
+	"archivos_afectados": [
+		"docs/design/05-correo-aliados.md"
+	],
+	"criterios_aceptacion": [
+		"El doc elimina la sección 'Pregunta abierta' de recepción y documenta la decisión Cloudflare Worker -> webhook",
+		"El schema de Mensaje del doc incluye messageId y cuerpoHtml"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "creada",
+	"creada_en": "2026-08-09T16:00:00Z",
+	"cerrada_en": null
+}

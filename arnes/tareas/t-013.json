@@ -1,0 +1,33 @@
+{
+	"id": "t-013",
+	"titulo": "Instalar dependencia resend (envío transaccional)",
+	"intencion_negocio": "Necesito integrar el envío de correos corporativos desde la bandeja usando la API de Resend",
+	"zona": "package.json",
+	"tipo": "integracion_externa",
+	"riesgo": "alto",
+	"archivos_afectados": [
+		"package.json",
+		"package-lock.json"
+	],
+	"criterios_aceptacion": [
+		"npm list resend devuelve la versión instalada sin errores",
+		"El paquete resend figura en dependencies de package.json"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "creada",
+	"creada_en": "2026-08-09T16:00:00Z",
+	"cerrada_en": null
+}

@@ -1,0 +1,35 @@
+{
+	"id": "t-016",
+	"titulo": "Crear APIs de bandeja: GET listar mensajes y POST enviar via Resend",
+	"intencion_negocio": "Necesito que el ADMIN pueda ver la bandeja (recibidos y enviados) y enviar correos desde el sitio",
+	"zona": "app/src/app/api/",
+	"tipo": "logica_negocio",
+	"riesgo": "alto",
+	"archivos_afectados": [
+		"app/src/app/api/correo/route.ts",
+		"app/src/app/api/correo/enviar/route.ts"
+	],
+	"criterios_aceptacion": [
+		"GET /api/correo exige sesión ADMIN y lista mensajes ordenados por fecha descendente",
+		"POST /api/correo/enviar exige sesión ADMIN",
+		"POST /api/correo/enviar llama a Resend y guarda el Mensaje como ENVIADO",
+		"npx tsc --noEmit pasa sin errores"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "creada",
+	"creada_en": "2026-08-09T16:00:00Z",
+	"cerrada_en": null
+}

@@ -1,0 +1,31 @@
+{
+	"id": "t-002",
+	"titulo": "Clonar ARNES_AGENTICO.md desde empresa_muebles_clone_v3",
+	"intencion_negocio": "Necesito traer el documento agnóstico que define los principios del arnés para no olvidarlos",
+	"zona": "arnes/",
+	"tipo": "andamiaje",
+	"riesgo": "bajo",
+	"archivos_afectados": ["arnes/ARNES_AGENTICO.md"],
+	"criterios_aceptacion": [
+		"ARNES_AGENTICO.md existe en arnes/",
+		"El contenido es idéntico al de empresa_muebles_clone_v3/arnes/proceso/ARNES_AGENTICO.md",
+		"No hay modificaciones al documento"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "cerrada",
+	"creada_en": "2026-08-08T19:05:00Z",
+	"cerrada_en": "2026-08-08T19:10:00Z"
+}

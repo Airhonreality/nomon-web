@@ -1,0 +1,18 @@
+# Cómo abrir una línea de trabajo nueva
+
+Una línea nueva (ej: `os-interno`, `analitica`, `marketing`) se abre así:
+
+1. **Crear la carpeta** `lineas/<nombre>/` (nombre corto, sin espacios, en minúsculas).
+2. **Escribir `lineas/<nombre>/estado_<nombre>.md`** — progreso de la línea. Formato mínimo:
+   - Qué se sabe.
+   - Qué está bloqueado.
+   - Próxima acción permitida.
+3. **Escribir `lineas/<nombre>/plan_<nombre>.md`** — el plan vigente de la línea (fuente única de sus decisiones). Si reemplaza o extiende un documento previo, decláralo en el encabezado (regla de sucesión).
+4. **Crear `lineas/<nombre>/archivo/`** — vacía al inicio. Ahí van los borradores, pasadas de subagentes, destilaciones y documentos superados que produce ESTA línea, no la carpeta general.
+5. **Registrar la línea en `lineas/REGISTRO_LINEAS.md`** — una fila nueva en la tabla.
+6. **Si la línea necesita tocar `arnes/nucleo/`** (schema, lógica de negocio, vocabulario), lo propone ahí explícitamente — nunca duplica la entidad dentro de su propia carpeta.
+7. **Si la línea necesita insertar pantallas**, las entrega como determinantes (qué pantalla, por qué, qué requisitos) y cita `lineas/web-publico/pantallas/` como destino — el diseño completo (`PLANTILLA_PANTALLA.md`, 7 secciones) lo escribe la línea técnica cuando le llegue el turno, no la línea que lo pide.
+
+**Los puntos 6 y 7 son condicionales, no obligatorios.** Existen porque `web-publico` y `os-interno` producen software o insumos para software — no es una propiedad de toda línea. Una línea de finanzas, legal, RRHH u operaciones puede cerrar su ciclo entero (estado + plan + decisión) sin tocar `nucleo/` ni pedir una pantalla nunca. Si tu línea no encaja en 6/7, simplemente no los uses — no fuerces un cambio de schema o una pantalla para que "cuente" como progreso.
+
+**No hace falta más ceremonia que esta.** Una línea no necesita su propio `roles/` ni su propio ledger — esos son compartidos (`arnes/roles/`, `arnes/tareas/`).

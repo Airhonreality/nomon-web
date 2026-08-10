@@ -1,0 +1,32 @@
+{
+	"id": "t-006",
+	"titulo": "Crear MODELOS.md (stack de modelos de IA)",
+	"intencion_negocio": "Necesito documentar los modelos de IA que se usarán para rotación e intercalación",
+	"zona": "arnes/",
+	"tipo": "andamiaje",
+	"riesgo": "bajo",
+	"archivos_afectados": ["arnes/MODELOS.md"],
+	"criterios_aceptacion": [
+		"MODELOS.md existe en arnes/",
+		"MODELOS.md define al menos 2 capas de modelos (opencode, OpenRouter)",
+		"MODELOS.md incluye tabla de modelos free",
+		"MODELOS.md incluye regla de intercalación"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "cerrada",
+	"creada_en": "2026-08-08T19:25:00Z",
+	"cerrada_en": "2026-08-08T19:30:00Z"
+}

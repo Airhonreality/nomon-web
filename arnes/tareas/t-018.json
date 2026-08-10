@@ -1,0 +1,35 @@
+{
+	"id": "t-018",
+	"titulo": "Crear pagina /login minima y bandeja /correo (lista + detalle + compositor)",
+	"intencion_negocio": "Necesito que el ADMIN pueda entrar al sitio y ver/enviar correos desde la bandeja corporativa",
+	"zona": "app/src/app/",
+	"tipo": "ui",
+	"riesgo": "bajo",
+	"archivos_afectados": [
+		"app/src/app/login/page.tsx",
+		"app/src/app/correo/page.tsx"
+	],
+	"criterios_aceptacion": [
+		"/login presenta un formulario email+password que llama a POST /api/auth/login",
+		"/correo lista mensajes desde GET /api/correo",
+		"/correo permite redactar y enviar via POST /api/correo/enviar",
+		"npx tsc --noEmit pasa sin errores"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "creada",
+	"creada_en": "2026-08-09T16:00:00Z",
+	"cerrada_en": null
+}

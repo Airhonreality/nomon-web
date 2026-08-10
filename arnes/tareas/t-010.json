@@ -1,0 +1,41 @@
+{
+	"id": "t-010",
+	"titulo": "Crear REGISTRO_LINEAS.md y plantillas",
+	"intencion_negocio": "Necesito definir las líneas de trabajo (web-publico, os-interno) y sus plantillas",
+	"zona": "arnes/lineas/",
+	"tipo": "andamiaje",
+	"riesgo": "bajo",
+	"archivos_afectados": [
+		"arnes/lineas/REGISTRO_LINEAS.md",
+		"arnes/lineas/_plantilla/LEEME.md",
+		"arnes/lineas/web-publico/estado_web-publico.md",
+		"arnes/lineas/web-publico/plan_web-publico.md",
+		"arnes/lineas/os-interno/estado_os-interno.md",
+		"arnes/lineas/os-interno/plan_os-interno.md"
+	],
+	"criterios_aceptacion": [
+		"REGISTRO_LINEAS.md existe y lista web-publico y os-interno",
+		"_plantilla/LEEME.md existe con instrucciones para crear líneas nuevas",
+		"web-publico/estado_web-publico.md existe con estado inicial",
+		"web-publico/plan_web-publico.md existe con fases F0–F9",
+		"os-interno/estado_os-interno.md existe con estado inicial",
+		"os-interno/plan_os-interno.md existe con fases propuestas"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "cerrada",
+	"creada_en": "2026-08-08T20:00:00Z",
+	"cerrada_en": "2026-08-08T20:10:00Z"
+}

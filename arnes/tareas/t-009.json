@@ -1,0 +1,33 @@
+{
+	"id": "t-009",
+	"titulo": "Crear glosario.md (vocabulario de UI)",
+	"intencion_negocio": "Necesito un glosario con todos los términos de UI para que los componentes usen labels consistentes",
+	"zona": "arnes/nucleo/",
+	"tipo": "datos_contrato",
+	"riesgo": "alto",
+	"archivos_afectados": ["arnes/nucleo/glosario.md"],
+	"criterios_aceptacion": [
+		"glosario.md incluye todas las entidades (Usuario, Recurso, Mensaje, Slide, Tarea, Proyecto, Cronograma, Etapa)",
+		"glosario.md incluye todos los estados (PUBLICO, SOLO_REGISTRADOS, LISTA_BLANCA, ENVIADO, RECIBIDO)",
+		"glosario.md incluye todos los verbos (registrar, autenticar, cerrar_sesion, autorizar, etc.)",
+		"glosario.md incluye mapeo campo-schema → label (UI)",
+		"glosario.md incluye mensajes de sistema (AUTH_REQUIRED, RESOURCE_RESERVED, etc.)"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": true,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "cerrada",
+	"creada_en": "2026-08-08T19:50:00Z",
+	"cerrada_en": "2026-08-08T20:00:00Z"
+}

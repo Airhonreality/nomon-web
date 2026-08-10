@@ -1,0 +1,32 @@
+{
+	"id": "t-003",
+	"titulo": "Crear AGENTS.md con zonas, prohibiciones y comandos de verificación",
+	"intencion_negocio": "Necesito definir las zonas del proyecto, qué está prohibido y cómo se verifica el código",
+	"zona": "arnes/",
+	"tipo": "andamiaje",
+	"riesgo": "bajo",
+	"archivos_afectados": ["arnes/AGENTS.md"],
+	"criterios_aceptacion": [
+		"AGENTS.md define al menos 5 zonas",
+		"AGENTS.md incluye tabla de prohibiciones",
+		"AGENTS.md incluye tabla de comandos de verificación",
+		"Los comandos coinciden con el stack de NOMON (Next.js, TypeScript, Biome, Vitest)"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "cerrada",
+	"creada_en": "2026-08-08T19:10:00Z",
+	"cerrada_en": "2026-08-08T19:15:00Z"
+}

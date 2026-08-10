@@ -1,0 +1,33 @@
+{
+	"id": "t-008",
+	"titulo": "Crear logica_de_negocio.md (mapa maestro)",
+	"intencion_negocio": "Necesito un mapa maestro del negocio que documente los flujos de auth, recursos y correo",
+	"zona": "arnes/nucleo/",
+	"tipo": "datos_contrato",
+	"riesgo": "alto",
+	"archivos_afectados": ["arnes/nucleo/logica_de_negocio.md"],
+	"criterios_aceptacion": [
+		"logica_de_negocio.md incluye flujo de autenticación (registro, login, logout)",
+		"logica_de_negocio.md incluye flujo de acceso a recursos (PUBLICO, SOLO_REGISTRADOS, LISTA_BLANCA)",
+		"logica_de_negocio.md incluye flujo de bandeja de correo (envío, recepción)",
+		"logica_de_negocio.md incluye gates de validación (E-01 a E-05)",
+		"logica_de_negocio.md incluye diagrama de flujo (Mermaid)"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": true,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "cerrada",
+	"creada_en": "2026-08-08T19:40:00Z",
+	"cerrada_en": "2026-08-08T19:50:00Z"
+}

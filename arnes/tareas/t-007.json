@@ -1,0 +1,32 @@
+{
+	"id": "t-007",
+	"titulo": "Crear REGISTRO_DE_ENTIDADES.md (schema canónico)",
+	"intencion_negocio": "Necesito un schema canónico para el proyecto NOMON con todas las entidades de negocio",
+	"zona": "arnes/nucleo/",
+	"tipo": "datos_contrato",
+	"riesgo": "alto",
+	"archivos_afectados": ["arnes/nucleo/REGISTRO_DE_ENTIDADES.md"],
+	"criterios_aceptacion": [
+		"REGISTRO_DE_ENTIDADES.md incluye Usuario, Sesion, Recurso, RecursoAcceso, RecursoMetadata, Slide, Mensaje",
+		"REGISTRO_DE_ENTIDADES.md define las estrategias de acceso (PUBLICO, SOLO_REGISTRADOS, LISTA_BLANCA)",
+		"REGISTRO_DE_ENTIDADES.md incluye diagrama de relaciones (Mermaid)",
+		"No hay contradicciones internas en el schema"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": true,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "cerrada",
+	"creada_en": "2026-08-08T19:30:00Z",
+	"cerrada_en": "2026-08-08T19:40:00Z"
+}

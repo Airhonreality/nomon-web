@@ -1,0 +1,33 @@
+{
+	"id": "t-012",
+	"titulo": "Extender schema Mensaje (messageId, cuerpoHtml) y generar migración",
+	"intencion_negocio": "Necesito que los correos recibidos no se dupliquen (message_id único) y que se conserve el HTML original además del texto plano, para la bandeja de /correo",
+	"zona": "app/src/lib/db/",
+	"tipo": "datos_contrato",
+	"riesgo": "alto",
+	"archivos_afectados": [
+		"app/src/lib/db/schema.ts"
+	],
+	"criterios_aceptacion": [
+		"npx tsc --noEmit pasa sin errores",
+		"El schema Mensaje incluye messageId (único) y cuerpoHtml",
+		"npx drizzle-kit generate produce una migración SQL sin errores"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "creada",
+	"creada_en": "2026-08-09T16:00:00Z",
+	"cerrada_en": null
+}

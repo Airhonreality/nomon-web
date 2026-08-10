@@ -1,0 +1,33 @@
+{
+	"id": "t-014",
+	"titulo": "Corregir getCurrentUser para resolver sesión y rol desde BD",
+	"intencion_negocio": "Necesito que el gate E-03 (rol ADMIN) de /correo funcione de verdad: hoy la cookie guarda un token de BD y getCurrentUser intenta validarlo como JWT, lo que siempre falla y redirige a todo el mundo",
+	"zona": "app/src/lib/",
+	"tipo": "logica_negocio",
+	"riesgo": "alto",
+	"archivos_afectados": [
+		"app/src/lib/auth.ts"
+	],
+	"criterios_aceptacion": [
+		"npx tsc --noEmit pasa sin errores",
+		"getCurrentUser resuelve el usuario desde la sesión en BD (no verifica JWT sobre un token uuid)",
+		"El rol devuelto proviene de la fila de Usuario, permitiendo validar E-03 con isAdmin"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "creada",
+	"creada_en": "2026-08-09T16:00:00Z",
+	"cerrada_en": null
+}

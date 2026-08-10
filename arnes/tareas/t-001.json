@@ -1,0 +1,43 @@
+{
+	"id": "t-001",
+	"titulo": "Crear estructura de carpetas del arnés",
+	"intencion_negocio": "Necesito un sistema de gobernanza para el proyecto NOMON, basado en el arnés de empresa_muebles_clone_v3",
+	"zona": "arnes/",
+	"tipo": "andamiaje",
+	"riesgo": "bajo",
+	"archivos_afectados": [
+		"arnes/",
+		"arnes/nucleo/",
+		"arnes/lineas/",
+		"arnes/lineas/web-publico/",
+		"arnes/lineas/web-publico/pantallas/",
+		"arnes/lineas/web-publico/tecnico/",
+		"arnes/lineas/web-publico/archivo/",
+		"arnes/lineas/os-interno/",
+		"arnes/lineas/_plantilla/",
+		"arnes/roles/",
+		"arnes/tareas/"
+	],
+	"criterios_aceptacion": [
+		"La carpeta arnes/ existe",
+		"Las subcarpetas (nucleo/, lineas/, roles/, tareas/) existen",
+		"No hay archivos fuera de arnes/ modificados"
+	],
+	"plan_ref": null,
+	"ejecutor": "opencode",
+	"verificador": null,
+	"qa": {
+		"intentos": 0,
+		"comandos": [],
+		"salida_cruda": "",
+		"veredicto": null
+	},
+	"checkpoint": {
+		"requerido": false,
+		"veredicto_humano": null,
+		"fecha": null
+	},
+	"estado": "cerrada",
+	"creada_en": "2026-08-08T19:00:00Z",
+	"cerrada_en": "2026-08-08T19:05:00Z"
+}
