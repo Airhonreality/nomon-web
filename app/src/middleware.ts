@@ -1,10 +1,15 @@
 // Middleware de autenticación para Next.js App Router
-// Gates: E-01 (Usuario registrado), E-02 (Sesión válida), E-03 (Rol ADMIN)
+// Gates: E-01 (Usuario registrado), E-02 (Sesión válida), E-03 (Acceso a NOMON Mail)
 // Axiomática: Cumple con IF (Independencia) y Simplicidad (Suh)
+//
+// Dos dominios de sesión separados:
+//  - `nomon_session` → membresía (aliados/usuario) en rutas privadas del sitio.
+//  - `nomon_mail`    → NOMON Mail (/mail/**), solo correos @rednomon.com.
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getCurrentUser, isAdmin } from "./lib/auth";
+import { esCorreoCorporativo } from "./lib/auth-mail";
+import { getCurrentUser } from "./lib/auth";
 
 // Rutas públicas (no requieren autenticación)
 const PUBLIC_PATHS = [
@@ -13,11 +18,12 @@ const PUBLIC_PATHS = [
 	"/recursos",
 	"/login",
 	"/register",
+	"/mail/login",
 	"/api/auth",
 ];
 
-// Rutas que requieren ADMIN
-const ADMIN_PATHS = ["/correo", "/admin"];
+// Rutas que requieren sesión de NOMON Mail (cookie `nomon_mail` + dominio @rednomon.com)
+const MAIL_PATHS = ["/mail"];
 
 export default async function middleware(req: NextRequest) {
 	const { nextUrl } = req;
@@ -32,7 +38,33 @@ export default async function middleware(req: NextRequest) {
 		return NextResponse.next();
 	}
 
-	// Obtener token de la cookie
+	// Rutas de NOMON Mail: exigen sesión `nomon_mail` + correo corporativo
+	const isMailPath = MAIL_PATHS.some(
+		(path) => pathname === path || pathname.startsWith(`${path}/`),
+	);
+
+	if (isMailPath) {
+		const mailToken = req.cookies.get("nomon_mail")?.value;
+
+		if (!mailToken) {
+			const url = new URL("/mail/login", nextUrl);
+			url.searchParams.set("from", pathname);
+			return NextResponse.redirect(url);
+		}
+
+		const mailUser = await getCurrentUser(mailToken);
+
+		if (!mailUser || !esCorreoCorporativo(mailUser.email)) {
+			const url = new URL("/mail/login", nextUrl);
+			url.searchParams.set("from", pathname);
+			url.searchParams.set("error", "session_expired");
+			return NextResponse.redirect(url);
+		}
+
+		return NextResponse.next();
+	}
+
+	// Resto del sitio privado de membresía: requiere `nomon_session`
 	const token = req.cookies.get("nomon_session")?.value;
 
 	if (!token) {
@@ -50,18 +82,6 @@ export default async function middleware(req: NextRequest) {
 		const url = new URL("/login", nextUrl);
 		url.searchParams.set("from", pathname);
 		url.searchParams.set("error", "session_expired");
-		return NextResponse.redirect(url);
-	}
-
-	// Verificar rutas de ADMIN
-	const isAdminPath = ADMIN_PATHS.some(
-		(path) => pathname === path || pathname.startsWith(`${path}/`),
-	);
-
-	if (isAdminPath && !isAdmin(user)) {
-		// Gate E-03: Rol insuficiente
-		const url = new URL("/", nextUrl);
-		url.searchParams.set("error", "unauthorized");
 		return NextResponse.redirect(url);
 	}
 
