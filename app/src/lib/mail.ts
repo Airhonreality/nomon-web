@@ -32,7 +32,7 @@ export async function insertarMensaje(data: NuevoMensaje) {
 		.insert(mensajes)
 		.values({
 			id: uuidv4(),
-			messageId: data.messageId,
+			messageId: data.messageId?.trim() || uuidv4(),
 			direccion: data.direccion,
 			de: data.de,
 			para: data.para,

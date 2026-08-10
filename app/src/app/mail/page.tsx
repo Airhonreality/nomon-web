@@ -1,5 +1,6 @@
 "use client";
 
+import { displayName } from "@/lib/mail-display";
 import { useEffect, useState } from "react";
 
 interface Mensaje {
@@ -114,7 +115,9 @@ export default function MailPage() {
 											{m.direccion === "RECIBIDO" ? "Recibido" : "Enviado"}
 										</span>
 										<span className="truncate">
-											{m.direccion === "RECIBIDO" ? m.de : m.para}
+											{m.direccion === "RECIBIDO"
+												? displayName(m.de)
+												: displayName(m.para)}
 										</span>
 										<span className="ml-auto text-xs text-zinc-400">
 											{new Date(m.createdAt).toLocaleDateString()}
