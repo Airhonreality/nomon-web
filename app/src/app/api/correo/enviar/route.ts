@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
 	try {
 		const resend = getResend();
 		const { data, error } = await resend.emails.send({
-			from: BUZON,
+			from: `Contacto Nomon <${BUZON}>`,
 			to: [para],
 			subject: asunto,
 			text: cuerpo,
