@@ -1,5 +1,6 @@
 "use client";
 
+import { FileText, Reply } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -76,9 +77,10 @@ export function MessageDetail({
 					<button
 						type="button"
 						onClick={onReply}
-						className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white hover:bg-zinc-700 transition-colors"
+						className="flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white hover:bg-zinc-700 transition-colors"
 					>
-						↩ Responder
+						<Reply className="size-icon-md" aria-hidden="true" />
+						Responder
 					</button>
 				</div>
 				<div className="text-sm text-zinc-600 flex flex-col gap-1">
@@ -121,7 +123,10 @@ export function MessageDetail({
 										rel="noopener noreferrer"
 										className="flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 text-xs text-zinc-800 hover:bg-zinc-100 transition-colors"
 									>
-										<span className="text-base">📄</span>
+										<FileText
+											className="size-icon-lg shrink-0 text-zinc-500"
+											aria-hidden="true"
+										/>
 										<span className="truncate font-medium">{filename}</span>
 										<span className="ml-auto text-emerald-600 underline">
 											Descargar

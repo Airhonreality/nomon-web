@@ -4,6 +4,29 @@ import { subirAdjuntoR2 } from "@/lib/r2-client";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import {
+	Bold,
+	ChevronDown,
+	Eraser,
+	FileText,
+	GripVertical,
+	Italic,
+	Link2,
+	List,
+	ListOrdered,
+	type LucideIcon,
+	Maximize2,
+	Minimize2,
+	Minus,
+	Paperclip,
+	PenLine,
+	Strikethrough,
+	TextQuote,
+	Trash2,
+	Type,
+	Underline,
+	X,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
@@ -162,54 +185,63 @@ export function Composer({
 	const botonesFormato: Array<{
 		id: string;
 		label: string;
+		icono: LucideIcon;
 		activo: () => boolean;
 		accion: () => void;
 	}> = [
 		{
 			id: "bold",
-			label: "B",
+			label: "Negrita",
+			icono: Bold,
 			activo: () => editor?.isActive("bold") ?? false,
 			accion: () => editor?.chain().focus().toggleBold().run(),
 		},
 		{
 			id: "italic",
-			label: "I",
+			label: "Cursiva",
+			icono: Italic,
 			activo: () => editor?.isActive("italic") ?? false,
 			accion: () => editor?.chain().focus().toggleItalic().run(),
 		},
 		{
 			id: "underline",
-			label: "U",
+			label: "Subrayado",
+			icono: Underline,
 			activo: () => editor?.isActive("underline") ?? false,
 			accion: () => editor?.chain().focus().toggleUnderline().run(),
 		},
 		{
 			id: "strike",
-			label: "S",
+			label: "Tachado",
+			icono: Strikethrough,
 			activo: () => editor?.isActive("strike") ?? false,
 			accion: () => editor?.chain().focus().toggleStrike().run(),
 		},
 		{
 			id: "bulletList",
-			label: "•≡",
+			label: "Lista de viñetas",
+			icono: List,
 			activo: () => editor?.isActive("bulletList") ?? false,
 			accion: () => editor?.chain().focus().toggleBulletList().run(),
 		},
 		{
 			id: "orderedList",
-			label: "1.",
+			label: "Lista numerada",
+			icono: ListOrdered,
 			activo: () => editor?.isActive("orderedList") ?? false,
 			accion: () => editor?.chain().focus().toggleOrderedList().run(),
 		},
 		{
 			id: "blockquote",
-			label: "❝",
+			label: "Cita",
+			icono: TextQuote,
 			activo: () => editor?.isActive("blockquote") ?? false,
 			accion: () => editor?.chain().focus().toggleBlockquote().run(),
 		},
 		{
 			id: "link",
-			label: "🔗",
+			label: "Enlace",
+			icono: Link2,
 			activo: () => editor?.isActive("link") ?? false,
 			accion: () => {
 				const url = window.prompt("URL del enlace");
@@ -218,7 +250,8 @@ export function Composer({
 		},
 		{
 			id: "clean",
-			label: "🧹",
+			label: "Limpiar formato",
+			icono: Eraser,
 			activo: () => false,
 			accion: () => editor?.chain().focus().clearNodes().unsetAllMarks().run(),
 		},
@@ -232,7 +265,8 @@ export function Composer({
 					onClick={() => setVista("normal")}
 					className="flex min-h-12 items-center gap-2 rounded-lg bg-zinc-900 px-4 py-3 text-sm font-medium text-white shadow-xl hover:bg-zinc-700"
 				>
-					✏️ {replyTo ? "Responder mensaje" : "Nuevo mensaje"}
+					<PenLine className="size-icon-md" aria-hidden="true" />
+					{replyTo ? "Responder mensaje" : "Nuevo mensaje"}
 				</button>
 			</div>
 		);
@@ -274,7 +308,7 @@ export function Composer({
 						aria-hidden="true"
 						title="Arrastrar ventana"
 					>
-						⠿
+						<GripVertical className="size-icon-md" />
 					</span>
 					<h2 className="flex-1 truncate text-sm font-medium">
 						{replyTo ? "Responder mensaje" : "Nuevo mensaje"}
@@ -286,7 +320,7 @@ export function Composer({
 						title="Minimizar"
 						className="flex h-12 w-12 items-center justify-center rounded-lg text-zinc-300 hover:bg-zinc-700 hover:text-white"
 					>
-						—
+						<Minus className="size-icon-lg" aria-hidden="true" />
 					</button>
 					<button
 						type="button"
@@ -297,7 +331,11 @@ export function Composer({
 						title={vista === "maximizado" ? "Restaurar" : "Maximizar"}
 						className="flex h-12 w-12 items-center justify-center rounded-lg text-zinc-300 hover:bg-zinc-700 hover:text-white"
 					>
-						{vista === "maximizado" ? "🗗" : "⤢"}
+						{vista === "maximizado" ? (
+							<Minimize2 className="size-icon-lg" aria-hidden="true" />
+						) : (
+							<Maximize2 className="size-icon-lg" aria-hidden="true" />
+						)}
 					</button>
 					<button
 						type="button"
@@ -306,7 +344,7 @@ export function Composer({
 						title="Cerrar"
 						className="flex h-12 w-12 items-center justify-center rounded-lg text-zinc-300 hover:bg-zinc-700 hover:text-white"
 					>
-						✕
+						<X className="size-icon-lg" aria-hidden="true" />
 					</button>
 				</div>
 
@@ -372,8 +410,14 @@ export function Composer({
 									key={a.key}
 									className="flex items-center justify-between gap-2 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-xs text-zinc-800"
 								>
-									<span className="truncate">
-										📄 {a.nombre} ({(a.tamano / 1024).toFixed(0)} KB)
+									<span className="flex min-w-0 items-center gap-1.5">
+										<FileText
+											className="size-icon-sm shrink-0 text-zinc-500"
+											aria-hidden="true"
+										/>
+										<span className="truncate">
+											{a.nombre} ({(a.tamano / 1024).toFixed(0)} KB)
+										</span>
 									</span>
 									<button
 										type="button"
@@ -383,9 +427,9 @@ export function Composer({
 											)
 										}
 										aria-label={`Quitar adjunto ${a.nombre}`}
-										className="shrink-0 font-bold text-red-500 hover:text-red-700"
+										className="shrink-0 text-red-500 hover:text-red-700"
 									>
-										✕
+										<X className="size-icon-sm" aria-hidden="true" />
 									</button>
 								</div>
 							))}
@@ -407,23 +451,26 @@ export function Composer({
 					{/* Barra de formato (rich text) */}
 					{mostrarFormato && (
 						<div className="mx-4 mt-2 flex flex-wrap items-center gap-1 rounded-full border border-zinc-200 bg-zinc-50 px-2 py-1">
-							{botonesFormato.map((b) => (
+						{botonesFormato.map((b) => {
+							const Icono = b.icono;
+							return (
 								<button
 									key={b.id}
 									type="button"
 									onClick={b.accion}
-									aria-label={b.id}
+									aria-label={b.label}
 									aria-pressed={b.activo()}
-									title={b.id}
-									className={`flex h-12 min-w-12 items-center justify-center rounded-full px-2 text-sm ${
+									title={b.label}
+									className={`flex h-12 min-w-12 items-center justify-center rounded-full px-2 ${
 										b.activo()
 											? "bg-zinc-900 text-white"
 											: "text-zinc-600 hover:bg-zinc-200"
 									}`}
 								>
-									{b.label}
+									<Icono className="size-icon-md" aria-hidden="true" />
 								</button>
-							))}
+							);
+						})}
 						</div>
 					)}
 
@@ -436,7 +483,7 @@ export function Composer({
 							title="Descartar borrador"
 							className="flex h-12 w-12 items-center justify-center rounded-lg text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
 						>
-							🗑
+							<Trash2 className="size-icon-lg" aria-hidden="true" />
 						</button>
 						<button
 							type="button"
@@ -445,7 +492,7 @@ export function Composer({
 							title="Adjuntar archivos (PDF, PNG, JPG, XLSX — máx 5 MB)"
 							className="flex h-12 w-12 items-center justify-center rounded-lg text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
 						>
-							📎
+							<Paperclip className="size-icon-lg" aria-hidden="true" />
 						</button>
 						<button
 							type="button"
@@ -453,13 +500,13 @@ export function Composer({
 							aria-label={mostrarFormato ? "Ocultar formato" : "Mostrar formato"}
 							aria-pressed={mostrarFormato}
 							title="Barra de formato"
-							className={`flex h-12 w-12 items-center justify-center rounded-lg font-serif text-sm font-bold ${
+							className={`flex h-12 w-12 items-center justify-center rounded-lg ${
 								mostrarFormato
 									? "bg-zinc-100 text-zinc-900"
 									: "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
 							}`}
 						>
-							A
+							<Type className="size-icon-lg" aria-hidden="true" />
 						</button>
 
 						<span className="ml-auto mr-2 text-xs text-zinc-400">
@@ -481,7 +528,7 @@ export function Composer({
 								aria-expanded={menuEnvio}
 								className="flex min-h-12 items-center rounded-r-lg border-l border-emerald-500 bg-emerald-600 px-2 text-white transition-colors hover:bg-emerald-500"
 							>
-								▼
+								<ChevronDown className="size-icon-md" aria-hidden="true" />
 							</button>
 							{menuEnvio && (
 								<div className="absolute bottom-full right-0 mb-2 w-56 rounded-lg border border-zinc-200 bg-white py-1 shadow-xl">

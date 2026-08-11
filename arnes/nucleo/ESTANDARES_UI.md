@@ -223,6 +223,25 @@ Los estándares de rendimiento de Google que impactan el SEO:
 
 ## 6. Tokens de Diseño para NOMON
 
+### 6.0 Sistema de Íconos (alto estándar)
+**Librería:** `lucide-react` (tree-shaking por ícono, `currentColor`).
+
+**Reglas:**
+1. **Cero emojis hardcodeados en la UI.** Los emojis renderizan distinto por plataforma/SO y no heredan color ni peso tipográfico. Se reemplazan por íconos lucide.
+2. **El color del ícono siempre es `currentColor`** — nunca se hardcodea color en el ícono; lo hereda del texto del control padre.
+3. **El tamaño sale de la escala de tokens** (`--size-icon-*` en `globals.css` → utilidades `size-icon-*`). Prohibido `width`/`height` inline o tamaños fuera de escala.
+4. **Accesibilidad:** ícono decorativo → `aria-hidden="true"`; ícono que comunica solo (sin texto acompañante) → `role="img"` + `aria-label`. El botón contenedor siempre lleva `aria-label`.
+
+| Token | Valor | Uso |
+|-------|-------|-----|
+| `--size-icon-sm` | `0.875rem` (14px) | Indicadores densos: chips, badges, inline |
+| `--size-icon-md` | `1rem` (16px) | Controles de toolbar, botones con texto |
+| `--size-icon-lg` | `1.25rem` (20px) | Botones de ícono solo, controles de ventana |
+| `--size-icon-xl` | `1.5rem` (24px) | Íconos prominentes |
+| `--size-icon-hero` | `3rem` (48px) | Estados vacíos |
+
+**Verificación:** `rg "[\x{1F000}-\x{1FAFF}\x{2190}-\x{27BF}]" app/src` no debe arrojar hits fuera de comentarios.
+
 ### 6.1 Paleta de Colores
 | Token | Valor (HEX) | Valor (HSL) | Uso |
 |-------|-------------|-------------|-----|

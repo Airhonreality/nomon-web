@@ -10,6 +10,15 @@
 	--color-foreground: var(--foreground);
 	--font-sans: var(--font-sans);
 	--font-display: var(--font-display);
+
+	/* Tokens de tamaño de ícono (lucide-react) — generan utilidades size-icon-*.
+	   Convención: los íconos heredan currentColor (nunca llevan color propio)
+	   y se dimensionan solo con esta escala. */
+	--size-icon-sm: 0.875rem; /* 14px — indicadores densos (chips, badges) */
+	--size-icon-md: 1rem; /* 16px — controles de toolbar */
+	--size-icon-lg: 1.25rem; /* 20px — botones con ícono */
+	--size-icon-xl: 1.5rem; /* 24px — controles de ventana */
+	--size-icon-hero: 3rem; /* 48px — estados vacíos */
 }
 
 body {

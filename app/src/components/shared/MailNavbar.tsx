@@ -1,3 +1,4 @@
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { MailLogoutButton } from "./MailLogoutButton";
 
@@ -17,9 +18,10 @@ export function MailNavbar() {
 					<MailLogoutButton />
 					<Link
 						href="/"
-						className="text-sm text-zinc-600 transition-colors hover:text-zinc-900"
+						className="flex items-center gap-1.5 text-sm text-zinc-600 transition-colors hover:text-zinc-900"
 					>
-						← Volver al sitio
+						<ArrowLeft className="size-icon-md" aria-hidden="true" />
+						Volver al sitio
 					</Link>
 				</div>
 			</nav>

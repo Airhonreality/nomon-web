@@ -1,6 +1,7 @@
 "use client";
 
 import { type Slide, slides } from "@/lib/data/simposio";
+import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 // Renderiza **negrita** simple en markdown a <strong>
@@ -156,9 +157,14 @@ export function SimposioDeck() {
 				<button
 					type="button"
 					onClick={() => setIndexOpen((v) => !v)}
-					className="mb-4 text-sm font-semibold uppercase tracking-widest text-zinc-500 transition-colors hover:text-zinc-900"
+					className="mb-4 flex items-center gap-1 text-sm font-semibold uppercase tracking-widest text-zinc-500 transition-colors hover:text-zinc-900"
 				>
-					Índice {indexOpen ? "▴" : "▾"}
+					Índice
+					{indexOpen ? (
+						<ChevronUp className="size-icon-sm" aria-hidden="true" />
+					) : (
+						<ChevronDown className="size-icon-sm" aria-hidden="true" />
+					)}
 				</button>
 				{indexOpen && (
 					<ul className="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -227,17 +233,19 @@ export function SimposioDeck() {
 					type="button"
 					onClick={prev}
 					disabled={isFirst}
-					className="rounded-sm border border-zinc-300 px-5 py-2 text-sm font-semibold text-zinc-700 transition-opacity hover:bg-zinc-50 disabled:opacity-30"
+					className="flex items-center gap-2 rounded-sm border border-zinc-300 px-5 py-2 text-sm font-semibold text-zinc-700 transition-opacity hover:bg-zinc-50 disabled:opacity-30"
 				>
-					← Anterior
+					<ArrowLeft className="size-icon-md" aria-hidden="true" />
+					Anterior
 				</button>
 				<button
 					type="button"
 					onClick={next}
 					disabled={isLast}
-					className="rounded-sm bg-zinc-900 px-5 py-2 text-sm font-semibold text-white transition-opacity hover:bg-zinc-700 disabled:opacity-30"
+					className="flex items-center gap-2 rounded-sm bg-zinc-900 px-5 py-2 text-sm font-semibold text-white transition-opacity hover:bg-zinc-700 disabled:opacity-30"
 				>
-					Siguiente →
+					Siguiente
+					<ArrowRight className="size-icon-md" aria-hidden="true" />
 				</button>
 			</div>
 
