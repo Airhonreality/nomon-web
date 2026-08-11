@@ -1,17 +1,15 @@
-// Debug: imprimir TODO lo que el route handler ve del request
-// Usa un endpoint temporal de diagnóstico
+// Devuelve exactamente lo que requireMailAccess vería
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const allHeaders: Record<string, string> = {};
-  req.headers.forEach((v, k) => { allHeaders[k] = v; });
-
-  const cookies = req.cookies.getAll();
-
+  const token = req.cookies.get("nomon_mail")?.value;
   return NextResponse.json({
-    cookieHeader: req.headers.get("cookie"),
-    parsedCookies: cookies,
-    nomon_mail_value: req.cookies.get("nomon_mail")?.value ?? null,
-    allHeaders,
+    step: "before-require-mail-access",
+    token_present: !!token,
+    token_value: token,
+    token_length: token?.length ?? 0,
+    all_cookie_names: req.cookies.getAll().map(c => c.name),
+    url: req.url,
+    method: req.method,
   });
 }
