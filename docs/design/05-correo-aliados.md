@@ -1,22 +1,33 @@
-# Correo corporativo y bandeja de aliados (`/correo`)
+# NOMON Mail (`/mail`)
 
-Doc vivo. Feature nueva (no existe en el repo viejo) — confirmada con el dueño del proyecto con este alcance exacto:
+Doc vivo. Servicio paralelo de solo mail dentro del sitio — buzón corporativo único de `@rednomon.com`.
+
+## Decisión (2026-08-10)
+
+Hubo una contradicción entre "login de miembros" y "login al correo": el buzón es una herramienta operativa del dueño, no un servicio de socio. Se resuelve con:
+
+- Ruta separada: `/mail` (bandeja) y `/mail/login` (puerta).
+- Cookie de sesión propia: `nomon_mail`. Solo `requireMailAccess` la lee.
+- Acceso restringido por **dominio corporativo** (`@rednomon.com`): lo exige `/api/auth/mail-login` y lo vuelve a exigir el middleware en `/mail/**`.
+
+Los aliados no ven enlaces a `/mail` en ningún lado del sitio público. Ver [04-auth.md](04-auth.md) para la separación de dominios de sesión.
+
+## Alcance
 
 - **Un solo buzón corporativo** (ej. `contacto@rednomon.com`), no un correo por usuario registrado.
 - Objetivo: enviar comunicaciones/cartas a **aliados** (la lista de `Usuario`/`Aliado` ya definida en `04-auth.md`).
-- Se prioriza: la integración de correo + una UI simple de bandeja dentro del sitio. Nada más por ahora.
+- Se prioriza: la integración de correo + una UI simple de bandeja. Nada más por ahora.
 
 ## Infraestructura de correo (fuera del código de la app)
 
-Referencia: `../NOMON WEB/PLan correo dominio propio.md` documenta el plan original:
-- **Recepción**: Cloudflare Email Routing → **Email Worker** → webhook en Vercel → Postgres (ya no pasa por Gmail).
+- **Recepción**: Cloudflare Email Routing → **Email Worker** → webhook en Vercel → Postgres.
 - **Envío**: Resend (API de envío transaccional).
 
-Con el stack confirmado (`../06-stack-y-proceso.md`: Vercel + Postgres + R2), esto encaja directo: la bandeja habla con una función serverless en Vercel, que llama a la API de Resend (la API key vive como variable de entorno en Vercel, nunca en el navegador) y guarda el histórico de mensajes en Postgres. No hace falta Cloudflare Worker aparte ni ningún backend adicional — es una función más del mismo backend de Vercel que ya sirve auth y recursos.
+Con el stack confirmado (`../06-stack-y-proceso.md`: Vercel + Postgres + R2), encaja directo: la bandeja habla con una función serverless en Vercel, que llama a la API de Resend (la API key vive como variable de entorno en Vercel, nunca en el navegador) y guarda el histórico de mensajes en Postgres.
 
 ## Pantalla
 
-- **Bandeja** (`/correo`, restringida a rol `ADMIN`): lista de mensajes (recibidos y enviados), con remitente/destinatario, asunto y fecha.
+- **Bandeja** (`/mail`, restringida a correo `@rednomon.com`): lista de mensajes (recibidos y enviados), con remitente/destinatario, asunto y fecha.
 - **Detalle de mensaje**: cuerpo completo.
 - **Compositor**: redactar/responder, seleccionando destinatario idealmente desde la lista de aliados ya registrados (no un campo de email libre exclusivamente — aunque debe permitir ambos).
 
@@ -51,4 +62,6 @@ Cliente ──> contacto@rednomon.com ──> Cloudflare Email Worker (postal-mi
                               Neon Postgres (Mensaje, direccion RECIBIDO)
 ```
 
-**Envío saliente:** `POST /api/correo/enviar` (rol ADMIN) → Resend (`RESEND_API_KEY`) → guarda en Postgres como `direccion: 'ENVIADO'`. Ambas escrituras pasan por el mismo backend serverless de Vercel ya existente (auth + recursos). No hace falta Cloudflare Worker aparte para envío ni billetera ni backend adicional.
+**⚠️ Advertencia operativa del Worker:** `workers/email-handler/index.js` importa `postal-mime`. Si se pega el archivo a mano en el dashboard de Cloudflare, `postal-mime` no viaja y falla silenciosamente. El Worker debe desplegarse con `npx wrangler deploy` desde `workers/email-handler/` para que sus dependencias se empaqueten. Ver `workers/email-handler/README.md`.
+
+**Envío saliente:** `POST /api/correo/enviar` (correo `@rednomon.com` vía cookie `nomon_mail`) → Resend (`RESEND_API_KEY`) → guarda en Postgres como `direccion: 'ENVIADO'`. Ambas escrituras pasan por el mismo backend serverless de Vercel ya existente.

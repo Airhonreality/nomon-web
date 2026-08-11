@@ -86,9 +86,9 @@ REGISTRO_DE_ENTIDADES.md (este documento) > docs/design/* > schema.ts (Drizzle)
 | `Mensaje` | Correo | Bandeja única (`contacto@rednomon.com`). Campos: `id`, `direccion` (`ENVIADO`/`RECIBIDO`), `de`, `para`, `asunto`, `cuerpo`, `fecha`, `aliado_ref`. | FK→`Usuario` (remitente/destinatario, nullable) |
 
 **Notas:**
-- **Un solo buzón:** No hay un correo por usuario. El buzón es corporativo y lo administra un `ADMIN`.
+- **Un solo buzón:** No hay un correo por usuario. El buzón (`/mail`) es corporativo y solo permite correos `@rednomon.com`.
 - **Envío:** Resend API (variable de entorno: `RESEND_API_KEY`).
-- **Recepción:** Cloudflare Email Routing → Gmail (a futuro: webhook a Vercel).
+- **Recepción:** Cloudflare Email Routing → Email Worker (`workers/email-handler`, `postal-mime`) → webhook `POST /api/webhooks/incoming-email` (Bearer `WEBHOOK_SECRET`).
 - **Almacenamiento:** Histórico de mensajes en Postgres (tabla `Mensaje`).
 - **Adjuntos:** Archivos en Cloudflare R2 (campo `adjuntos` en `Mensaje`: array de URLs).
 
@@ -107,7 +107,7 @@ REGISTRO_DE_ENTIDADES.md (este documento) > docs/design/* > schema.ts (Drizzle)
 
 **Notas:**
 - **Estado:** No implementado aún. Prioridad: **Media** (futuro).
-- **Relación con web público:** El OS interno vivirá en `/admin` o subdominio (ej: `os.rednomon.com`).
+- **Relación con web público:** El OS interno vivirá bajo `/admin` (subdominio `os.rednomon.com` cuando se materialice). Hoy `/admin` no existe — el área `/mail` es la única superficie privada del sitio.
 - **Autenticación:** Middleware de Next.js (`/app/middleware.ts`) + better-auth.
 
 ---

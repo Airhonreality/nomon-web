@@ -5,10 +5,7 @@
 	"zona": "package.json",
 	"tipo": "integracion_externa",
 	"riesgo": "alto",
-	"archivos_afectados": [
-		"package.json",
-		"package-lock.json"
-	],
+	"archivos_afectados": ["package.json", "package-lock.json"],
 	"criterios_aceptacion": [
 		"npm list resend devuelve la versión instalada sin errores",
 		"El paquete resend figura en dependencies de package.json"

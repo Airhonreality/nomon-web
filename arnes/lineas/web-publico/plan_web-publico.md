@@ -17,7 +17,7 @@
 | **F4** | Recursos (Listado) | Diseño + implementación de `/recursos` | Medio | No |
 | **F5** | Recursos (Detalle) | Diseño + implementación de `/recursos/:slug` | Medio | No |
 | **F6** | Auth | Diseño + implementación de modal de login/registro | Alto | Sí |
-| **F7** | Perfil + Correo | Diseño + implementación de `/perfil` y `/correo` | Alto | Sí |
+| **F7** | Perfil + NOMON Mail | Diseño + implementación de `/perfil` (cuando exista panel) y `/mail` + `/mail/login` | Alto | Sí |
 | **F8** | Hardening | Migración de datos, validación de schema, pruebas de integración | Alto | Sí |
 | **F9** | QA y Corte | Verificación de gates, checklist de corte, merge `dev` → `main` | Máximo | Siempre |
 
@@ -225,32 +225,30 @@
 
 ---
 
-### F7: Perfil (`/perfil`) y Correo (`/correo`)
+### F7: NOMON Mail (`/mail`)
 
-**Objetivo:** Implementar el perfil de usuario y la bandeja de correo.
+**Objetivo:** Implementar el buzón del correo corporativo (servicio paralelo de solo mail). `/perfil` queda pendiente hasta tener pantalla de miembro diseñada.
 
 **Diseño:**
-- `arnes/lineas/web-publico/pantallas/disenio_P06_perfil.md` (por crear).
-- `arnes/lineas/web-publico/pantallas/disenio_P07_correo.md` (por crear).
+- `docs/design/05-correo-aliados.md`.
 
 **Componentes:**
-- `PerfilPage`: Datos del usuario (nombre, email, rol, bio, tags).
-- `CorreoPage`: Bandeja de mensajes (lista + detalle + compositor).
-- `MensajeCard`: Tarjeta de mensaje (dirección, de/para, asunto, fecha).
-- `MensajeComposer`: Formulario de envío (destinatario, asunto, cuerpo, adjuntos).
+- `MailPage` (bandeja de mensajes — lista + detalle + compositor).
+- `MensajeCard`: Tarjeta (dirección, de/para, asunto, fecha).
+- `MensajeComposer`: Envío (destinatario, asunto, cuerpo).
 
 **Lógica:**
-- `/perfil`: Solo accesible con sesión válida (E-02).
-- `/correo`: Solo accesible con rol `ADMIN` (E-03).
+- `/mail**: requiere cookie `nomon_mail` + dominio `@rednomon.com` (gate E-mail).
+- `/api/auth/mail-login` rechaza emails que no terminen en `@rednomon.com`.
+- `/login` y `/register` (miembros) permanecen operativos pero **no se promocionan** en la UI pública.
 - Envío de mensajes vía Resend API.
-- Subida de adjuntos a Cloudflare R2.
+- Recepción vía Cloudflare Email Worker → webhook `POST /api/webhooks/incoming-email`.
 
 **Criterios de aceptación:**
-1. `/perfil` muestra los datos del usuario autenticado.
-2. `/correo` muestra la bandeja de mensajes (solo para ADMIN).
-3. El compositor de mensajes funciona (envío + guardado en Postgres).
-4. Los adjuntos se suben a R2 y se vinculan al mensaje.
-5. El diseño es responsive.
+1. `/mail/login` muestra form de entrada y solo acepta correos `@rednomon.com` (403 si no).
+2. `/mail` muestra la bandeja al usuario con sesión corporativa.
+3. El compositor envía y guarda como `direccion: 'ENVIADO'`.
+4. El webhook entrante dedupe por `messageId` y guarda como `RECIBIDO`.
 
 **Verificación:**
 - `npx tsc --noEmit` (tipos).

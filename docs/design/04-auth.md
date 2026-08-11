@@ -1,13 +1,26 @@
-# Auth y Perfil (`/perfil`, modal de login/registro)
+# Auth y Perfil (`/perfil`)
 
 Doc vivo. Comportamiento base tomado de `AuthModal.jsx`/`IdentityProfile.jsx` del repo viejo — **con un problema de seguridad real detectado que no se migra tal cual**.
+
+## Decisión: dos dominios de sesión separados (2026-08-10)
+
+Hubo una contradicción ontológica entre "login de miembros" y "login al correo":
+el buzón corporativo es una herramienta operativa del dueño, no un servicio de socio.
+Se resuelve con dos puertas y dos cookies independientes:
+
+- **Membresía** (`/login`): usuarios aliados con rol `ALIADO`, cookie `nomon_session`.
+  Ruta existente pero **oculta de la UI pública** mientras no haya panel de usuario diseñado.
+- **NOMON Mail** (`/mail`, `/mail/login`): solo correos `@rednomon.com`, cookie `nomon_mail`.
+  Es un servicio paralelo de solo mail, con URL y sesión separadas; los aliados no la ven.
+
+El middleware exige la cookie de su dominio en cada árbol: `nomon_session` para rutas privadas del sitio, `nomon_mail` para `/mail/**`. Ver [05-correo-aliados.md](05-correo-aliados.md) para el detalle del buzón.
 
 ## Comportamiento a preservar
 
 - Registro con: nombre completo, teléfono, área/rama de interés, email (+confirmación), contraseña (+confirmación, mínimo 6 caracteres). Rol asignado: `ALIADO`.
 - Login con: email + contraseña.
 - Perfil (`/perfil`): nombre, email, rol, biografía editable, tags de interés editables.
-- El modal de auth se abre desde cualquier página (botón "Ingresar" / "Únete a NOMON"), no es una ruta propia.
+- Mientras no exista `/perfil` real, la UI pública no expone enlaces a `/login` ni a `/register` (oculto, no eliminado).
 
 ## ⚠️ Problema de seguridad real (NO migrar así)
 
@@ -35,10 +48,10 @@ Usuario {
 }
 ```
 
+El rol `ADMIN` se conserva como campo del esquema (se sigue creando al menos un admin por seed para tareas internas), pero la autorización real al buzón `NOMON Mail` se hace por **dominio de correo** (`@rednomon.com`), no por rol — eso es lo que valida `requireMailAccess` en [05-correo-aliados.md](05-correo-aliados.md).
+
 ## Backend confirmado
 
 Usuarios en Postgres, verificación de contraseña en una función serverless de Vercel (nunca en el cliente) — ver `../06-stack-y-proceso.md`. El hashing debe hacerse con una librería pensada para contraseñas (`bcrypt` o `argon2`, con sal), no `SHA-256` plano como hacía el repo viejo.
 
-## Pregunta abierta
-
-¿Sesión vía JWT (cookie httpOnly) o vía tabla de sesiones en Postgres? Afecta cómo se implementa `bridge.setSessionToken`/logout en el nuevo backend. Recomendado por simplicidad y por poder revocar sesiones de verdad: tabla de sesiones en Postgres en vez de JWT autocontenido.
+Tabla de sesiones en Postgres (no JWT autocontenido) para poder revocarlas de verdad.

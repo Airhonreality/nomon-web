@@ -1,7 +1,7 @@
 "use client";
 
+import { type Slide, slides } from "@/lib/data/simposio";
 import { useEffect, useMemo, useState } from "react";
-import { slides, type Slide } from "@/lib/data/simposio";
 
 // Renderiza **negrita** simple en markdown a <strong>
 function BoldText({ text }: { text: string }) {
@@ -9,7 +9,11 @@ function BoldText({ text }: { text: string }) {
 	return (
 		<>
 			{parts.map((part, i) =>
-				i % 2 === 1 ? <strong key={i}>{part}</strong> : <span key={i}>{part}</span>,
+				i % 2 === 1 ? (
+					<strong key={i}>{part}</strong>
+				) : (
+					<span key={i}>{part}</span>
+				),
 			)}
 		</>
 	);
@@ -102,14 +106,20 @@ export function SimposioDeck() {
 	const isFirst = current === 0;
 	const isLast = current === slides.length - 1;
 
-	const next = useMemo(() => (() => {
-		setCurrent((prev) => (prev < slides.length - 1 ? prev + 1 : 0));
-		setIndexOpen(false);
-	}), []);
-	const prev = useMemo(() => (() => {
-		setCurrent((p) => (p > 0 ? p - 1 : slides.length - 1));
-		setIndexOpen(false);
-	}), []);
+	const next = useMemo(
+		() => () => {
+			setCurrent((prev) => (prev < slides.length - 1 ? prev + 1 : 0));
+			setIndexOpen(false);
+		},
+		[],
+	);
+	const prev = useMemo(
+		() => () => {
+			setCurrent((p) => (p > 0 ? p - 1 : slides.length - 1));
+			setIndexOpen(false);
+		},
+		[],
+	);
 
 	useEffect(() => {
 		const onKey = (e: KeyboardEvent) => {

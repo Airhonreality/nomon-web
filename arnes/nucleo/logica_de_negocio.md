@@ -53,8 +53,8 @@ Ser el referente en ética aplicada para la transformación organizacional y soc
 - **Ubicación:** `/app/middleware.ts` (Next.js).
 - **Función:** Validar sesión en el edge antes de que la request llegue al cliente.
 - **Rutas protegidas:**
-  - `/perfil` (requiere `ALIADO` o `ADMIN`).
-  - `/correo` (requiere `ADMIN`).
+  - `/mail/**` (requiere cookie `nomon_mail` + correo `@rednomon.com`).
+  - Rutas privadas de membresía (requieren cookie `nomon_session`).
 - **Comportamiento:**
   - Si no hay sesión: redirige a `/` (con modal de login).
   - Si hay sesión pero rol insuficiente: redirige a `/` con mensaje de error.
@@ -91,10 +91,10 @@ Ser el referente en ética aplicada para la transformación organizacional y soc
 
 ---
 
-### 4. Bandeja de Correo Corporativo (`/correo`)
+### 4. NOMON Mail — bandeja del correo corporativo (`/mail`)
 
 #### 4.1 Envío de Mensajes
-- **Rol requerido:** `ADMIN`.
+- **Acceso requerido:** cookie `nomon_mail` + usuario con correo `@rednomon.com`.
 - **Flujo:**
   1. Seleccionar destinatario:
      - Aliado registrado (lista de `Usuario` con `rol = ALIADO`).
@@ -176,9 +176,12 @@ export default auth((req) => {
     return NextResponse.redirect(new URL("/", nextUrl));
   }
   
-  // Rutas protegidas por rol
-  if (nextUrl.pathname.startsWith("/correo") && auth?.user?.rol !== "ADMIN") {
-    return NextResponse.redirect(new URL("/", nextUrl));
+  // Rutas del buzón NOMON Mail — protegidas por cookie `nomon_mail` + dominio corporativo.
+  if (nextUrl.pathname.startsWith("/mail") && nextUrl.pathname !== "/mail/login") {
+    const token = req.cookies.get("nomon_mail")?.value;
+    if (!token) {
+      return NextResponse.redirect(new URL("/mail/login", nextUrl));
+    }
   }
   
   return NextResponse.next();
@@ -207,8 +210,8 @@ export const config = {
 | `/api/auth/[...path]` | POST/GET | better-auth endpoints (login, registro, logout) | — |
 | `/api/recursos` | GET | Listado de recursos (con filtros de acceso) | E-01, E-02 |
 | `/api/recursos/:slug` | GET | Detalle de un recurso | E-01, E-02, E-04 |
-| `/api/correo` | GET | Listado de mensajes (bandeja) | E-01, E-02, E-03 |
-| `/api/correo/enviar` | POST | Enviar mensaje | E-01, E-02, E-03 |
+| `/api/correo` | GET | Listado de mensajes (bandeja) | E-mail corporativo (cookie `nomon_mail` + dominio `@rednomon.com`) |
+| `/api/correo/enviar` | POST | Enviar mensaje | E-mail corporativo (`nomon_mail` + `@rednomon.com`) |
 
 **E-04 (Acceso a Recurso):**
 ```sql
@@ -315,7 +318,7 @@ const recurso = RecursoSchema.parse(body); // Lanza error si no válida
 |------|-------------|-----------|--------|
 | E-01 | Usuario registrado | `SELECT * FROM Usuario WHERE email = ?` | Login/Registro |
 | E-02 | Sesión válida | `SELECT * FROM Sesion WHERE user_id = ? AND expires_at > NOW()` | Middleware |
-| E-03 | Rol ADMIN | `SELECT rol FROM Usuario WHERE id = ? AND rol = 'ADMIN'` | Middleware (`/correo`) |
+| E-03 | Acceso a NOMON Mail | Cookie `nomon_mail` válida + usuario con dominio `@rednomon.com` | Middleware (`/mail/**`), API (`/api/correo/*`) |
 | E-04 | Recurso accesible | Ver §2.2 (Acceso a Recurso) | API `/recursos/:slug` |
 | E-05 | Mensaje enviado | `SELECT * FROM Mensaje WHERE id = ? AND direccion = 'ENVIADO'` | API `/correo/enviar` |
 
@@ -340,7 +343,7 @@ flowchart TD
     H -->|LISTA_BLANCA| L[Validar email (E-04)]
     L -->|Autorizado| I
     L -->|No autorizado| M[Mostrar "Contenido reservado"]
-    E -->|/correo (ADMIN)| N[Bandeja de Correo]
+    E -->|/mail (correo corporativo)| N[Bandeja NOMON Mail]     
     N -->|Enviar| O[Crear Mensaje + Resend]
     O -->|Éxito| P[Mensaje guardado (E-05)]
 ```

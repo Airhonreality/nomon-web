@@ -17,3 +17,22 @@ body {
 	color: var(--foreground);
 	font-family: "Plus Jakarta Sans", var(--font-sans), system-ui, sans-serif;
 }
+
+/* Estructura del editor TipTap (P07 Correo) — solo layout, sin tokens nuevos.
+   Sin esto el contenteditable (.ProseMirror) colapsa a altura 0 dentro de la
+   caja visible y los clics caen en el contenedor: el cuerpo queda "bloqueado". */
+.mail-editor .tiptap {
+	min-height: 10rem;
+	width: 100%;
+	outline: none;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.mail-editor .tiptap p.is-editor-empty:first-child::before {
+	content: attr(data-placeholder);
+	float: left;
+	height: 0;
+	pointer-events: none;
+	@apply text-zinc-400;
+}

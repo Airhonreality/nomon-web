@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { MailNavbar } from "@/components/shared/MailNavbar";
+import type { ReactNode } from "react";
 
 // Layout de NOMON Mail (correo corporativo).
 // Puerta separada de la membresía: no usa navbar ni footer públicos.

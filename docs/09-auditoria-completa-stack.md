@@ -19,14 +19,14 @@
 
 | ID | Requisito | Fuente | Prioridad |
 |----|-----------|--------|-----------|
-| **R1** | Sitio web público con 6 rutas (`/`, `/simposio`, `/recursos`, `/recursos/:slug`, `/perfil`, `/correo`) | `00-estructura-del-sitio.md` | **Alta** |
+| **R1** | Sitio web público con rutas públicas (`/`, `/simposio`, `/recursos`, `/recursos/:slug`) + NOMON Mail (`/mail`, `/mail/login`) | `00-estructura-del-sitio.md` | **Alta** |
 | **R2** | Autenticación segura (email + password) con roles (`ALIADO`, `ADMIN`) | `04-auth.md` | **Alta** |
 | **R3** | **NO repetir errores de seguridad**: Verificación de contraseña **en el backend** (nunca en el cliente), hashing con sal (`bcrypt`/`argon2`) | `04-auth.md` §⚠️ | **Crítica** |
 | **R4** | Gestión de recursos dinámicos (biblioteca con acceso controlado: `PUBLICO`, `SOLO_REGISTRADOS`, `LISTA_BLANCA`) | `03-recursos.md` | **Alta** |
 | **R5** | Almacenamiento de archivos (PDFs, imágenes) en Cloudflare R2 | `03-recursos.md`, `02-simposio.md` | **Alta** |
 | **R6** | Bandeja de correo corporativo (1 buzón: `contacto@rednomon.com`) con histórico en Postgres | `05-correo-aliados.md` | **Media** |
 | **R7** | Integración con Resend para envío de correos | `05-correo-aliados.md` | **Media** |
-| **R8** | Middleware de autenticación para proteger rutas (`/perfil`, `/correo`) | `04-auth.md`, `00-estructura-del-sitio.md` | **Alta** |
+| **R8** | Middleware de autenticación para proteger rutas (`/mail**`, y rutas privadas de membresía con `nomon_session`) | `04-auth.md`, `00-estructura-del-sitio.md` | **Alta** |
 | **R9** | Soporte para Server Components (OS interno futuro: dashboards, cronogramas) | `CLAUDE.md` §Alcance | **Media** |
 | **R10** | Validación de datos en el límite (fallar ruidosamente si el dato no tiene la forma esperada) | `06-stack-y-proceso.md` | **Alta** |
 

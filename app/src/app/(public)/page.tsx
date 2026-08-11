@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { BicLogo } from "@/components/landing/BicLogo";
 import { NomonLogo } from "@/components/landing/NomonLogo";
+import Link from "next/link";
 
 const NODOS = [
 	{

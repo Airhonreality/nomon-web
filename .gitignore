@@ -1,0 +1,21 @@
+# dependencies
+node_modules/
+
+# next.js builds
+.next/
+out/
+build/
+*.tsbuildinfo
+
+# env / secrets — NUNCA versionar
+.env
+.env.*
+!.env.example
+
+# cloudflare workers
+workers/**/.wrangler/
+
+# misc
+.DS_Store
+npm-debug.log*
+r2-cors.json

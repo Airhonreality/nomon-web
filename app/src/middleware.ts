@@ -8,8 +8,8 @@
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { esCorreoCorporativo } from "./lib/auth-mail";
 import { getCurrentUser } from "./lib/auth";
+import { esCorreoCorporativo } from "./lib/auth-mail";
 
 // Rutas públicas (no requieren autenticación)
 const PUBLIC_PATHS = [

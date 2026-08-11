@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { SimposioDeck } from "@/components/simposio/SimposioDeck";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
 	title: "Simposio Internacional de Ética",

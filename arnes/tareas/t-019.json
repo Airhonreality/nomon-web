@@ -5,9 +5,7 @@
 	"zona": "docs/",
 	"tipo": "andamiaje",
 	"riesgo": "bajo",
-	"archivos_afectados": [
-		"docs/design/05-correo-aliados.md"
-	],
+	"archivos_afectados": ["docs/design/05-correo-aliados.md"],
 	"criterios_aceptacion": [
 		"El doc elimina la sección 'Pregunta abierta' de recepción y documenta la decisión Cloudflare Worker -> webhook",
 		"El schema de Mensaje del doc incluye messageId y cuerpoHtml"

@@ -140,7 +140,7 @@
 | Código | Mensaje | Contexto | Acción |
 |--------|---------|----------|--------|
 | `AUTH_REQUIRED` | "Debes iniciar sesión para acceder a este contenido." | Middleware | Redirigir a `/` + abrir modal de login |
-| `ADMIN_REQUIRED` | "Esta sección requiere permisos de administrador." | Middleware (`/correo`) | Redirigir a `/` |
+| `MAIL_ACCESS_REQUIRED` | "Esta sección requiere una cuenta @rednomon.com." | Middleware (`/mail/**`) | Redirigir a `/mail/login` |
 | `RESOURCE_RESERVED` | "Contenido reservado. Si crees que deberías tener acceso, contacta a un administrador." | Recurso (LISTA_BLANCA) | Mostrar mensaje + botón "Contactar" |
 | `NOT_FOUND` | "No se encontró el recurso solicitado." | 404 | Mostrar página de error |
 | `SERVER_ERROR` | "Ocurrió un error. Por favor, inténtalo de nuevo más tarde." | 500 | Mostrar página de error |
@@ -158,7 +158,8 @@
 | `/recursos` | Recursos | Listado de la biblioteca |
 | `/recursos/:slug` | Detalle de Recurso | Ficha completa de un recurso |
 | `/perfil` | Perfil | Datos del usuario autenticado |
-| `/correo` | Correo | Bandeja corporativa (solo ADMIN) |
+| `/mail` | NOMON Mail | Bandeja del correo corporativo (solo correos `@rednomon.com`) |
+| `/mail/login` | Puerta del correo corporativo | Acceso a `/mail` |
 
 ---
 

@@ -67,7 +67,7 @@ grep -n "Label natural" arnes/nucleo/glosario.md
 
 | ID | Regla | Validación | Criterio ejecutable |
 |----|-------|------------|---------------------|
-| R1 | Solo usuarios con rol `ADMIN` pueden ver `/correo` | `usuario.rol === 'ADMIN'` | Test: `expect(autorizar('/correo', usuario)).toBe(false)` si `rol !== 'ADMIN'` |
+| R1 | Solo correos `@rednomon.com` pueden entrar a `/mail` | `usuario.email.endsWith('@rednomon.com')` | Test: `expect(autorizar('/mail', usuario)).toBe(true)` solo si termina en `@rednomon.com` |
 | R2 | Los recursos `SOLO_REGISTRADOS` requieren sesión válida | `sesionValida(usuario)` | Test: `expect(accesoRecurso(recurso, usuario)).toBe(false)` si `!sesionValida` |
 
 ---

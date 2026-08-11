@@ -5,9 +5,7 @@
 	"zona": "app/src/lib/",
 	"tipo": "logica_negocio",
 	"riesgo": "alto",
-	"archivos_afectados": [
-		"app/src/lib/auth.ts"
-	],
+	"archivos_afectados": ["app/src/lib/auth.ts"],
 	"criterios_aceptacion": [
 		"npx tsc --noEmit pasa sin errores",
 		"getCurrentUser resuelve el usuario desde la sesión en BD (no verifica JWT sobre un token uuid)",

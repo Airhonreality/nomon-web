@@ -11,7 +11,8 @@ Este archivo se lee al arrancar cualquier sesión. Es un dashboard corto: en qu�
 **Estado:** F0 (schema) **aprobado**. F1 (lógica) **aprobado**. F2–F7 (pantallas) **diseños completos**. F7 (Correo) **en implementación**. F8/F9 (hardening/QA) **pendiente**.
 
 **Rebanada activa — subsistema de correo (t-012 → t-019):**
-- Schema `Mensaje` extendido (messageId, cuerpoHtml), dep `resend`, fix de `getCurrentUser` (gate E-03), webhook de recepción, APIs de bandeja, Worker de Cloudflare versionado, UI `/login` + `/correo`.
+- Schema `Mensaje` extendido (messageId, cuerpoHtml), dep `resend`, arreglo del gate `getCurrentUser`, webhook de recepción, APIs de bandeja, Worker de Cloudflare versionado, UI `/login` (miembros) + `/mail` + `/mail/login` (NOMON Mail, solo `@rednomon.com`).
+- Decisión ontológica: dos dominios de sesión separados (`nomon_session` miembros, `nomon_mail` buzón). `/login` oculto de la UI pública hasta tener panel.
 
 **Próxima acción permitida:**
 - Completar `arnes/nucleo/logica_de_negocio.md` (F1).
@@ -78,7 +79,7 @@ Este archivo se lee al arrancar cualquier sesión. Es un dashboard corto: en qu�
 4. t-015: Webhook `app/src/app/api/webhooks/incoming-email/route.ts`.
 5. t-016: APIs `app/src/app/api/correo/route.ts` y `/enviar/route.ts`.
 6. t-017: Worker `workers/email-handler/`.
-7. t-018: Páginas `/login` y `/correo`.
+7. t-018: Páginas `/login` (miembros), `/mail` y `/mail/login` (NOMON Mail).
 8. t-019: Actualizar `docs/design/05-correo-aliados.md`.
 
 **Verificación al cerrar:** `npx tsc --noEmit`, `npx biome check .`, `npx next build`.

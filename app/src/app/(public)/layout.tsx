@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { PublicFooter, PublicNavbar } from "@/components/shared/PublicNavbar";
+import type { ReactNode } from "react";
 
 export default function PublicLayout({
 	children,

@@ -105,18 +105,20 @@
 - **Bloqueante:** Depende de F5 (Auth) ✅ **Diseño creado**.
 - **Próximo paso:** Revisión del diseño por el Supervisor.
 
-### 🚧 F7: Correo (`/correo`)
-- **Estado:** **En implementación** (2026-08-09).
+### F7: NOMON Mail (`/mail` + `/mail/login`)
+- **Estado:** **Implementado** (2026-08-10).
 - **Diseño:** `arnes/lineas/web-publico/pantallas/disenio_P07_correo.md` ✅ **Creado**.
-- **Decisión recibida:** Recepción vía Cloudflare Email Routing → Worker (`postal-mime`) → `POST /api/webhooks/incoming-email` en Vercel → Postgres. Envío vía Resend. Worker versionado en repo (`workers/email-handler/`), deploy manual.
-- **Tareas:** t-012 → t-019 (schema Mensaje extendido, dep `resend`, fix `getCurrentUser`, webhook, APIs bandeja, worker, UI `/login`+`/correo`, docs).
+- **Decisión ontológica aplicada:** buzón separado de la membresía (servicio paralelo de solo mail). Dos puertas y dos cookies: `nomon_session` para miembros, `nomon_mail` para el buzón.
+- **Acceso:** exclusivamente correos con dominio `@rednomon.com` (gate E-mail corporativo); `/login` de miembros **oculto de la UI pública** hasta que exista panel.
+- **Tareas:** t-012 → t-019 (schema `Mensaje` extendido, dep `resend`, fix `getCurrentUser`, webhook, APIs bandeja, Worker versionado, UI `/mail` y `/mail/login`, docs actualizadas y limpieza de ruido legacy).
 - **Componentes:**
-  - Bandeja: Lista de mensajes (dirección, de/para, asunto, fecha).
-  - Detalle: Cuerpo del mensaje + adjuntos.
-  - Compositor: Formulario de envío (destinatario, asunto, cuerpo).
+  - Bandeja (`/mail`): Lista + detalle + compositor.
+  - Puerta (`/mail/login`): form que exige dominio `@rednomon.com`.
+  - Navbar propio: `MailNavbar` (sin shell pública).
 - **Lógica:**
-  - Solo accesible con rol `ADMIN` (E-03).
+  - Gate E-mail corporativo: cookie `nomon_mail` válida + email termina en `@rednomon.com`.
   - Envío vía Resend API.
+  - Recepción: Cloudflare Email Routing → Worker (`postal-mime`) → webhook `POST /api/webhooks/incoming-email`.
 - **Bloqueante `[SOLO_HUMANO]`:** Configurar `RESEND_API_KEY` y `WEBHOOK_SECRET` en Vercel; desplegar Worker + Email Routing en Cloudflare; aplicar migración Drizzle a Neon.
 - **Próximo paso:** Implementar t-012 → t-019.
 
@@ -191,5 +193,5 @@
 | t-015 | Webhook recepción incoming-email | ⏳ **Creada** (2026-08-09) | — |
 | t-016 | APIs bandeja: GET listar + POST enviar | ⏳ **Creada** (2026-08-09) | — |
 | t-017 | Worker Cloudflare versionado + README | ⏳ **Creada** (2026-08-09) | — |
-| t-018 | Página /login mínima + bandeja /correo | ⏳ **Creada** (2026-08-09) | — |
+| t-018 | Páginas `/login` (miembros) y `/mail` + `/mail/login` (NOMON Mail) | ✅ **Creada** (2026-08-10) | — |
 | t-019 | Actualizar docs/design/05-correo-aliados.md | ⏳ **Creada** (2026-08-09) | — |

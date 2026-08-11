@@ -5,9 +5,7 @@
 	"zona": "app/src/app/api/",
 	"tipo": "integracion_externa",
 	"riesgo": "alto",
-	"archivos_afectados": [
-		"app/src/app/api/webhooks/incoming-email/route.ts"
-	],
+	"archivos_afectados": ["app/src/app/api/webhooks/incoming-email/route.ts"],
 	"criterios_aceptacion": [
 		"Rechaza con 401 si el header Authorization no trae el WEBHOOK_SECRET",
 		"Inserta un Mensaje con direccion RECIBIDO via Drizzle",

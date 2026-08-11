@@ -3,9 +3,9 @@
 // Requiere DATABASE_URL. Los .env viven en app/.env (nunca versionado).
 // Guard: no es idempotente el hash de demo; re-ejecutar no duplica (upsert por email).
 
-import { neon } from "@neondatabase/serverless";
 import { createHash, randomUUID } from "node:crypto";
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { neon } from "@neondatabase/serverless";
 
 function loadEnv(file: string) {
 	if (!existsSync(file)) return;
@@ -15,7 +15,10 @@ function loadEnv(file: string) {
 		const eq = trimmed.indexOf("=");
 		if (eq === -1) continue;
 		const key = trimmed.slice(0, eq).trim();
-		const value = trimmed.slice(eq + 1).trim().replace(/^"|"$/g, "");
+		const value = trimmed
+			.slice(eq + 1)
+			.trim()
+			.replace(/^"|"$/g, "");
 		if (!process.env[key]) process.env[key] = value;
 	}
 }
@@ -26,7 +29,9 @@ loadEnv("app/.env.local");
 
 const DATABASE_URL = process.env.DATABASE_URL;
 if (!DATABASE_URL) {
-	console.error("DATABASE_URL no está configurado. Asegúrate de que app/.env exista.");
+	console.error(
+		"DATABASE_URL no está configurado. Asegúrate de que app/.env exista.",
+	);
 	process.exit(1);
 }
 
@@ -91,7 +96,7 @@ async function seed() {
 	for (const m of mensajes) {
 		await sql`
 			INSERT INTO "Mensaje" (id, message_id, direccion, de, para, asunto, cuerpo, enviado)
-			VALUES (${randomUUID()}, ${m.messageId}, ${m.direccion}, ${m.de}, ${m.para}, ${m.asunto}, ${m.cuerpo}, ${m.direccion === 'ENVIADO'})
+			VALUES (${randomUUID()}, ${m.messageId}, ${m.direccion}, ${m.de}, ${m.para}, ${m.asunto}, ${m.cuerpo}, ${m.direccion === "ENVIADO"})
 		`;
 	}
 	console.log(`  ✔ ${mensajes.length} mensajes demo en ${BUZON}`);

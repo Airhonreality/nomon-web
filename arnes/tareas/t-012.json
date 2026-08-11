@@ -5,9 +5,7 @@
 	"zona": "app/src/lib/db/",
 	"tipo": "datos_contrato",
 	"riesgo": "alto",
-	"archivos_afectados": [
-		"app/src/lib/db/schema.ts"
-	],
+	"archivos_afectados": ["app/src/lib/db/schema.ts"],
 	"criterios_aceptacion": [
 		"npx tsc --noEmit pasa sin errores",
 		"El schema Mensaje incluye messageId (único) y cuerpoHtml",

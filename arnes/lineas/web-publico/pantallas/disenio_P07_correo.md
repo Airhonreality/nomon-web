@@ -244,6 +244,15 @@ npx axe-core http://localhost:3000/correo
 5. **Adjuntos en R2:** No se guardan en DB, solo la URL.
 6. **Recepción futura:** Cloudflare Email Routing → Gmail hoy; webhook a Vercel en el futuro.
 
+### Actualización UI del Compositor (2026-08-10 — benchmark Proton Mail):
+El `MensajeComposer` se rediseñó como **ventana flotante tipo dock** (no modal centrado):
+- **Header oscuro** (`bg-zinc-900 text-white`) con drag handle `⠿`, título, y controles Minimizar/Maximizar/Cerrar (hit targets 48px).
+- **Campos seamless** (Desde estático = buzón único, Para, Asunto) sin cajas: solo separadores `border-b border-zinc-100`.
+- **Editor TipTap** con barra de formato flotante (B/I/U/S, listas, blockquote, link, limpiar) y placeholder.
+- **Footer** con iconos de acción (descartar, adjuntar, toggle formato), indicador "Sin guardar" y **split button Enviar** (Enviar ahora / Programar envío).
+- **Fix crítico:** `.ProseMirror` colapsaba a altura 0 y el cuerpo quedaba bloqueado sin admitir escritura → CSS estructural en `globals.css` (`.mail-editor .tiptap { min-height; outline }`) + `focus()` al click. Solo layout, sin tokens nuevos.
+- **Gaps pendientes:** CC/BCC (la API aún no los soporta), programar envío (backend), plantillas/IA, cifrado.
+
 ### Prioridades de implementación:
 1. **MVP:** Bandeja (lista + detalle) + envío básico sin adjuntos.
 2. **V1:** Añadir adjuntos (upload a R2).

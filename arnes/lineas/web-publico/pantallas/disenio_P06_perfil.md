@@ -77,7 +77,7 @@ grep -n "nombre\|email\|bio\|tags\|rol\|cerrar_sesion" arnes/nucleo/glosario.md
 | R6 | "Cerrar sesión" destruye la sesión y redirige a `/` | `DELETE /api/auth/session` + `cookies.delete` | Test: tras logout, `expect(session).toBeUndefined()` |
 | R7 | Guardar cambios actualiza `Usuario` en DB | `PATCH /api/usuarios/:id` | Test: `expect(usuarioActualizado.bio).toBe(nuevaBio)` |
 | R8 | Badge de rol visible: "Aliado" o "Administrador" | Renderiza `Badge` con `usuario.rol` | Inspección visual |
-| R9 | Si `usuario.rol === 'ADMIN'`, muestra link a `/correo` en la página | `rol === 'ADMIN'` | Test: `expect(screen.getByText('Correo corporativo')).toBeInTheDocument()` solo para ADMIN |
+| R9 | Pendiente: una vez haya un panel de miembro real, decidir si el link a NOMON Mail (`/mail`) se muestra desde el perfil o sigue oculto para aliados. Hoy el buzón solo se accede por URL directa. | — | — |
 
 ---
 
@@ -113,7 +113,7 @@ interface PerfilFormData {
 | `click` | Botón "Guardar cambios" | `PATCH /api/usuarios/:id` con `PerfilFormData` | Si éxito: `modoEdicion = false`, toast "Perfil actualizado". Si error: toast de error | `expect(toast).toHaveTextContent('Perfil actualizado')` |
 | `click` | Botón "Cancelar" | `modoEdicion = false`, descarta cambios | Campos vuelven a solo lectura | `expect(nombreInput).toBeDisabled()` |
 | `click` | Botón "Cerrar sesión" | `DELETE /api/auth/session` | Destruye sesión, redirige a `/` | `expect(window.location.pathname).toBe('/')` |
-| `click` | Link "Correo corporativo" (solo ADMIN) | Navega a `/correo` | URL cambia | `expect(window.location.pathname).toBe('/correo')` |
+| `click` | (futuro) Link "NOMON Mail" si el acceso del usuario lo permite | Navega a `/mail` | URL cambia | `expect(window.location.pathname).toBe('/mail')` |
 | `add_tag` | Input de tag + Enter (en modo edición) | Añade tag al array si < 10 tags | Nuevo chip visible | `expect(screen.getByText(nuevoTag)).toBeInTheDocument()` |
 | `remove_tag` | Click en X del chip (en modo edición) | Elimina tag del array | Chip desaparece | `expect(screen.queryByText(tagEliminado)).not.toBeInTheDocument()` |
 
@@ -148,10 +148,10 @@ interface PerfilFormData {
    - Destruye sesión, redirige a `/`.
    - **Verificación:** Prueba manual + verificar que navbar muestra "Ingresar".
 
-7. **Link ADMIN:**
-   - Solo visible para usuarios con `rol === 'ADMIN'`.
-   - Navega a `/correo`.
-   - **Verificación:** Prueba manual con usuario ADMIN y ALIADO.
+7. **(futuro) Link a NOMON Mail:**
+   - Decidir si se expone desde el panel del miembro o permanece oculto.
+   - Navega a `/mail`.
+   - **Verificación:** Pendiente hasta que exista `/perfil` real.
 
 8. **Responsive:**
    - Layout de 1 columna en mobile, 2 columnas en desktop (datos + acciones).
@@ -223,7 +223,7 @@ curl http://localhost:3000/perfil | grep -i "noindex"
 2. **Modo lectura por defecto:** Los datos se muestran en modo lectura. El usuario debe hacer click en "Editar perfil" para modificar.
 3. **Campos de solo lectura:** `email` y `rol` no son editables por el usuario (el rol lo asigna el sistema).
 4. **Tags como chips:** Los tags se muestran como chips con botón de eliminar en modo edición.
-5. **Link ADMIN condicional:** Solo usuarios con `rol === 'ADMIN'` ven el link a `/correo`.
+5. **(futuro) Link a NOMON Mail condicional:** Solo usuarios con correo `@rednomon.com` ven el link a `/mail`. (No implementado en tanto no haya panel de miembro.)
 6. **Toast de feedback:** Notificación temporal tras guardar cambios o cerrar sesión.
 
 ### Prioridades de implementación:

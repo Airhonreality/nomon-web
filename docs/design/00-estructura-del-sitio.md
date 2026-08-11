@@ -11,9 +11,10 @@ Doc vivo — mapa de páginas y navegación para el alcance confirmado. Se actua
 | `/recursos` | Listado de la biblioteca de recursos | Público (algunos ítems pueden requerir login) |
 | `/recursos/:slug` | Detalle de un recurso | Depende del `access.strategy` del recurso — ver [03-recursos.md](03-recursos.md) |
 | `/perfil` | Perfil del usuario autenticado | Requiere login |
-| `/correo` | Bandeja del correo corporativo | Requiere login + rol admin — ver [05-correo-aliados.md](05-correo-aliados.md) |
+| `/mail` | Bandeja de NOMON Mail (correo corporativo) | Sesión `nomon_mail` + correo `@rednomon.com` — ver [05-correo-aliados.md](05-correo-aliados.md) |
+| `/mail/login` | Puerta del correo corporativo | Pública (sin sesión) |
 
-Login/registro no tiene ruta propia — es un modal (`AuthModal`) que se abre desde el botón "Ingresar" / "Únete a NOMON" en cualquier página. Se mantiene ese patrón porque ya funciona bien en el sitio actual.
+Login de usuarios existe en `/login` y `/register` (rutas vivas) pero **no se promociona** en la UI pública mientras no haya panel de usuario diseñado; ver [04-auth.md](04-auth.md).
 
 **Fuera de alcance** (no se migra): rutas comerciales `/comercialFilbo`, `/comercialAuditoria` y todo lo asociado a pagos/feria del libro.
 
@@ -21,7 +22,7 @@ Login/registro no tiene ruta propia — es un modal (`AuthModal`) que se abre de
 
 - Logo NOMON (SVG, marca) a la izquierda, navega a `/`.
 - Links: Simposio, Recursos.
-- A la derecha: toggle de tema claro/oscuro, y estado de sesión (botón "Ingresar" si no hay sesión, o email + botón "Salir" si la hay).
+- En el sitio público no se exponen enlaces a `/login` ni a `/mail` — `/mail` es un servicio paralelo de solo mail, y `/login` no tiene panel de usuario diseñado todavía.
 
 Esto reproduce el comportamiento real de `Navbar.jsx` del repo viejo, sin el sistema de links dinámicos vía schema (que solo tenía 1 link real: Simposio → `/presentacion`) — con 2-3 links fijos no hace falta que sean data-driven.
 

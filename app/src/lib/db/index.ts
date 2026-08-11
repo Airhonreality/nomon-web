@@ -1,5 +1,5 @@
-import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
 // Configuración del cliente Neon (usar DATABASE_URL de entorno)
