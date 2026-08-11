@@ -25,6 +25,7 @@ export interface NuevoMensaje {
 	cuerpo: string;
 	cuerpoHtml?: string;
 	aliadoRef?: string;
+	adjuntos?: string[];
 }
 
 export async function insertarMensaje(data: NuevoMensaje) {
@@ -40,6 +41,7 @@ export async function insertarMensaje(data: NuevoMensaje) {
 			cuerpo: data.cuerpo,
 			cuerpoHtml: data.cuerpoHtml,
 			aliadoRef: data.aliadoRef,
+			adjuntos: data.adjuntos,
 			enviado: data.direccion === "ENVIADO",
 		})
 		.returning();

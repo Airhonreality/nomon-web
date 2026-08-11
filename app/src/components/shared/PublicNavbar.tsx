@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { NomonLogo } from "../landing/NomonLogo";
 
-// Navbar del sitio público. El correo corporativo queda fuera de esta navegación.
+// Navbar del sitio público. NOMON Mail queda fuera de esta navegación.
 export function PublicNavbar() {
 	return (
 		<header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-white/85 backdrop-blur">
@@ -16,14 +16,6 @@ export function PublicNavbar() {
 							className="uppercase tracking-widest transition-colors hover:text-zinc-900"
 						>
 							Simposio
-						</Link>
-					</li>
-					<li>
-						<Link
-							href="/login"
-							className="rounded-sm border border-zinc-300 px-4 py-2 uppercase tracking-widest transition-colors hover:border-zinc-900"
-						>
-							Ingresar
 						</Link>
 					</li>
 				</ul>

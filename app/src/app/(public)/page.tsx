@@ -65,12 +65,6 @@ export default function HomePage() {
 
 				<div className="mt-12 flex flex-wrap gap-5">
 					<Link
-						href="/login"
-						className="rounded-sm bg-[#002d62] px-8 py-3 text-xs font-bold uppercase tracking-[0.1em] text-white transition-all hover:-translate-y-0.5 hover:bg-[#003d80]"
-					>
-						Únete a NOMON →
-					</Link>
-					<Link
 						href="/simposio"
 						className="rounded-sm border border-zinc-300 px-8 py-3 text-xs font-bold uppercase tracking-[0.1em] text-zinc-900 transition-all hover:border-zinc-900"
 					>
