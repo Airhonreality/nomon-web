@@ -76,9 +76,21 @@ export function Composer({
 			"application/pdf": [".pdf"],
 			"image/png": [".png"],
 			"image/jpeg": [".jpg", ".jpeg"],
+			"image/webp": [".webp"],
+			"image/gif": [".gif"],
+			"text/plain": [".txt"],
+			"text/csv": [".csv"],
+			"application/zip": [".zip"],
+			"application/msword": [".doc"],
+			"application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+				[".docx"],
+			"application/vnd.ms-excel": [".xls"],
 			"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
 				".xlsx",
 			],
+			"application/vnd.ms-powerpoint": [".ppt"],
+			"application/vnd.openxmlformats-officedocument.presentationml.presentation":
+				[".pptx"],
 		},
 		maxSize: 5 * 1024 * 1024, // 5 MB
 		onDrop: async (acceptedFiles) => {
@@ -103,7 +115,9 @@ export function Composer({
 			}
 		},
 		onDropRejected: () => {
-			setError("Archivo inválido o excede 5 MB (PDF, PNG, JPG, XLSX)");
+			setError(
+				"Archivo inválido o excede 5 MB (PDF, DOC(X), XLS(X), PPT(X), TXT, CSV, ZIP, PNG, JPG, WEBP, GIF)",
+			);
 		},
 	});
 
@@ -150,6 +164,7 @@ export function Composer({
 		setError(null);
 		setMenuEnvio(false);
 		const cuerpo = editor?.getText() ?? "";
+		const cuerpoHtml = editor?.getHTML() ?? "";
 
 		if (!para.trim() || !asunto.trim() || !cuerpo.trim()) {
 			setError("Para, asunto y cuerpo son requeridos");
@@ -165,6 +180,7 @@ export function Composer({
 					para,
 					asunto,
 					cuerpo,
+					cuerpoHtml,
 					adjuntos: adjuntos.map((a) => a.key),
 				}),
 			});
@@ -489,7 +505,7 @@ export function Composer({
 							type="button"
 							onClick={() => open()}
 							aria-label="Adjuntar archivos"
-							title="Adjuntar archivos (PDF, PNG, JPG, XLSX — máx 5 MB)"
+							title="Adjuntar archivos (documentos e imágenes — máx 5 MB)"
 							className="flex h-12 w-12 items-center justify-center rounded-lg text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
 						>
 							<Paperclip className="size-icon-lg" aria-hidden="true" />

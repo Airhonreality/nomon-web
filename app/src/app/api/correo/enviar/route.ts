@@ -2,6 +2,7 @@
 // POST /api/correo/enviar (solo correos @rednomon.com) → Resend → guarda en DB como ENVIADO
 
 import { requireMailAccess } from "@/lib/auth-mail";
+import { buildCorreoHtml } from "@/lib/email-template";
 import { BUZON, getResend, insertarMensaje } from "@/lib/mail";
 import { R2_BUCKET, r2 } from "@/lib/r2";
 import { GetObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
@@ -15,6 +16,7 @@ export async function POST(req: NextRequest) {
 		para?: string;
 		asunto?: string;
 		cuerpo?: string;
+		cuerpoHtml?: string;
 		adjuntos?: string[];
 	};
 	try {
@@ -26,6 +28,7 @@ export async function POST(req: NextRequest) {
 	const para = body.para?.trim();
 	const asunto = body.asunto?.trim();
 	const cuerpo = body.cuerpo?.trim();
+	const cuerpoHtml = body.cuerpoHtml?.trim();
 	const adjuntosKeys = body.adjuntos;
 
 	if (!para || !asunto || !cuerpo) {
@@ -86,6 +89,7 @@ export async function POST(req: NextRequest) {
 			to: [para],
 			subject: asunto,
 			text: cuerpo,
+			html: buildCorreoHtml({ cuerpoHtml: cuerpoHtml || `<p>${cuerpo}</p>` }),
 			attachments: resendAttachments.length > 0 ? resendAttachments : undefined,
 		});
 
@@ -104,6 +108,7 @@ export async function POST(req: NextRequest) {
 			para,
 			asunto,
 			cuerpo,
+			cuerpoHtml,
 			adjuntos: adjuntosKeys,
 		});
 

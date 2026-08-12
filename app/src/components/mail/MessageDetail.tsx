@@ -65,7 +65,7 @@ export function MessageDetail({
 	onReply: () => void;
 }) {
 	const publicDomain =
-		process.env.NEXT_PUBLIC_R2_PUBLIC_DOMAIN || "archivos.rednomon.com";
+		process.env.NEXT_PUBLIC_R2_PUBLIC_DOMAIN || "assets.rednomon.com";
 
 	return (
 		<article className="flex flex-col gap-6 p-6 bg-white rounded-xl border border-zinc-200 shadow-sm">
