@@ -4,6 +4,7 @@
 import { requireMailAccess } from "@/lib/auth-mail";
 import { buildCorreoHtml } from "@/lib/email-template";
 import { BUZON, getResend, insertarMensaje } from "@/lib/mail";
+import { nombreDesdeKey } from "@/lib/mail-display";
 import { R2_BUCKET, r2 } from "@/lib/r2";
 import { GetObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
 import { type NextRequest, NextResponse } from "next/server";
@@ -65,7 +66,7 @@ export async function POST(req: NextRequest) {
 					new GetObjectCommand({ Bucket: R2_BUCKET, Key: key }),
 				);
 				const bytes = await getObj.Body?.transformToByteArray();
-				const filename = key.split("/").pop() ?? "adjunto";
+				const filename = nombreDesdeKey(key);
 				if (bytes) {
 					resendAttachments.push({
 						filename,

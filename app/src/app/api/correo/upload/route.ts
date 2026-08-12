@@ -29,8 +29,14 @@ export async function POST(req: NextRequest) {
 		return NextResponse.json({ error: "Archivo excede 5 MB" }, { status: 413 });
 	}
 
-	const ext = nombre.split(".").pop() ?? "bin";
-	const key = `mail/${new Date().getFullYear()}/${randomUUID()}.${ext}`;
+	// Conserva el nombre original (sanitizado) en la key para no perderlo:
+	// mail/<año>/<uuid>__<nombre-original>
+	const nombreSeguro = nombre
+		.normalize("NFKD")
+		.replace(/\p{Diacritic}/gu, "")
+		.replace(/[^a-zA-Z0-9._-]+/g, "-")
+		.slice(0, 80);
+	const key = `mail/${new Date().getFullYear()}/${randomUUID()}__${nombreSeguro}`;
 
 	const cmd = new PutObjectCommand({
 		Bucket: R2_BUCKET,

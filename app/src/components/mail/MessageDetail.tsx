@@ -1,5 +1,6 @@
 "use client";
 
+import { nombreDesdeKey } from "@/lib/mail-display";
 import { FileText, Reply } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
@@ -113,7 +114,7 @@ export function MessageDetail({
 					</h3>
 					<ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
 						{mensaje.adjuntos.map((key) => {
-							const filename = key.split("/").pop() || "archivo";
+							const filename = nombreDesdeKey(key);
 							const fileUrl = `https://${publicDomain}/${key}`;
 							return (
 								<li key={key}>
